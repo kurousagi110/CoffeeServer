@@ -110,20 +110,21 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
 };
 
 //sửa vòng quay
-const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri ,ngay_ket_thuc, hinh_anh ) => {
+const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh ) => {
     try {
         const vongquay = await modelVongQuay.findById(id_vong_quay);
         if (!vongquay) {
             return false;
         }
-        vongquay.ten_vong_quay = ten_vong_quay;
-        vongquay.mo_ta = mo_ta;
-        vongquay.ten_voucher = ten_voucher;
-        vongquay.ma_voucher = ma_voucher;
-        vongquay.diem = diem;
-        vongquay.gia_tri = gia_tri;
-        vongquay.ngay_ket_thuc = ngay_ket_thuc;
-        vongquay.hinh_anh = hinh_anh;
+        vongquay.ten_vong_quay = ten_vong_quay || vongquay.ten_vong_quay;
+        vongquay.mo_ta = mo_ta || vongquay.mo_ta;
+        vongquay.ten_voucher = ten_voucher || vongquay.ten_voucher;
+        vongquay.ma_voucher = ma_voucher || vongquay.ma_voucher;
+        vongquay.diem = diem || vongquay.diem;
+        vongquay.gia_tri = gia_tri || vongquay.gia_tri;
+        vongquay.ngay_bat_dau = new Date();
+        vongquay.ngay_ket_thuc = new Date(new Date().getTime() + (30 * 24 * 60 * 60 * 1000));
+        vongquay.hinh_anh = hinh_anh || vongquay.hinh_anh;
         await vongquay.save();
         return true;
     } catch (error) {

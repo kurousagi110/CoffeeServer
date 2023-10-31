@@ -462,6 +462,7 @@ router.post('/sua-size', async (req, res) => {
     try {
         const {id_san_pham, id_size, ten_size, gia, giam_gia} = req.body;
         const san_pham = await sanPhamController.suaSize(id_san_pham, id_size, ten_size, gia, giam_gia);
+        console.log(san_pham);
         if (san_pham) {
             res.status(200).json({
                 success: true,

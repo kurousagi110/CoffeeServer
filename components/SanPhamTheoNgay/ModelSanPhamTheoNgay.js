@@ -15,6 +15,7 @@ const schema = new Schema({
         ten_size: {type: String},
         gia: {type: Number},
         giam_gia: {type: Number},
+        gia_da_giam: {type: Number},
         isSelected: {type: Boolean},
     }],
     mo_ta: {type: String},

@@ -230,6 +230,7 @@ const themSize = async (id_san_pham, ten_size, gia, giam_gia) => {
                 ten_size: ten_size,
                 gia: gia,
                 giam_gia: giam_gia,
+                gia_da_giam: gia - (gia * giam_gia / 100),
                 isSelected: false,
             }
             san_pham.size.push(size);
@@ -248,10 +249,19 @@ const suaSize = async (id_san_pham, id_size, ten_size, gia, giam_gia) => {
         if (san_pham) {
             const size = san_pham.size.find((item) => item._id == id_size);
             if (size) {
-                size.ten_size = ten_size;
-                size.gia = gia;
-                size.giam_gia = giam_gia;
-                isSelected = false;
+                let isSelected = false;
+                if (ten_size === 'M') {
+                    isSelected = true;
+                }
+                else{
+                    isSelected = false;
+                }
+                size.ten_size = ten_size || size.ten_size;
+                size.gia = gia || size.gia;
+                size.giam_gia = giam_gia || size.giam_gia;
+                console.log('gia: ', giam_gia);
+                size.gia_da_giam = gia - (gia * giam_gia / 100) || size.gia -(size.gia * size.giam_gia / 100);
+                
                 await san_pham.save();
                 return san_pham;
             }
@@ -310,6 +320,22 @@ const themSanPhamAll = async (san_pham) => {
             ten_loai_san_pham: san_pham.ten_loai_san_pham,
 
         };
+        const size= []
+        for(let i = 0; i < san_pham.size.length; i++){
+            let select = false;
+            if(san_pham.size[i].ten_size === 'M'){
+                select = true;
+            }else{
+                select = false;
+            }
+            size.push({
+                ten_size: san_pham.size[i].ten_size,
+                gia: san_pham.size[i].gia,
+                giam_gia: san_pham.size[i].giam_gia,
+                gia_da_giam: san_pham.size[i].gia - (san_pham.size[i].gia * san_pham.size[i].giam_gia / 100),
+                isSelected: select,
+            })
+        }
         const result = new sanPhamModel({
             ten_san_pham: san_pham.ten_san_pham,
             mo_ta: san_pham.mo_ta,
