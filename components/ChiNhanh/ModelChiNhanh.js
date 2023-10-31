@@ -12,6 +12,10 @@ const schema = new Schema({
         ten_ban: {type: String},
         trang_thai: {type: Number},
     }],
+    location: {
+        x: {type: String},
+        y: {type: String}
+    },
     status: {type: Number}
 });
 

@@ -1,10 +1,30 @@
 const serviceLoaiSanPham = require('./ServiceLoaiSanPham');
 
 
-//thêm loại sản phẩm
-const themLoaiSanPham = async (ten_loai_san_pham) => {
+//lấy tất cả loại sản phẩm
+const layTatCaLoaiSanPham = async () => {
     try {
-        const san_pham = await serviceLoaiSanPham.themLoaiSanPham(ten_loai_san_pham);
+        const loai_san_phams = await serviceLoaiSanPham.layTatCaLoaiSanPham();
+        return loai_san_phams;
+    } catch (error) {
+        throw error;
+    }
+};
+
+//lấy loại sản phẩm theo id
+const layLoaiSanPhamTheoId = async (id_loai_san_pham) => {
+    try {
+        const loai_san_pham = await serviceLoaiSanPham.layLoaiSanPhamTheoId(id_loai_san_pham);
+        return loai_san_pham;
+    } catch (error) {
+        throw error;
+    }
+};
+
+//thêm loại sản phẩm
+const themLoaiSanPham = async (ten_loai_san_pham, ma_loai_san_pham) => {
+    try {
+        const san_pham = await serviceLoaiSanPham.themLoaiSanPham(ten_loai_san_pham, ma_loai_san_pham);
         if (san_pham) {
             return san_pham;
         }
@@ -39,4 +59,4 @@ const suaLoaiSanPham = async (id_loai_san_pham, ten_loai_san_pham) => {
     return false;
 };
 
-module.exports = { themLoaiSanPham, xoaLoaiSanPham, suaLoaiSanPham };
+module.exports = { themLoaiSanPham, xoaLoaiSanPham, suaLoaiSanPham, layTatCaLoaiSanPham, layLoaiSanPhamTheoId };

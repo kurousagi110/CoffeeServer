@@ -43,10 +43,10 @@ const layChiNhanhTheoTen = async (ten_chi_nhanh) => {
 };
 
 //thêm chi nhánh
-const themChiNhanh = async (ten_chi_nhanh, dia_chi) => {
+const themChiNhanh = async (ten_chi_nhanh, dia_chi, location) => {
     try {
         
-        const result = await serviceChiNhanh.themChiNhanh(ten_chi_nhanh, dia_chi);
+        const result = await serviceChiNhanh.themChiNhanh(ten_chi_nhanh, dia_chi, location);
         if (result) {
             return result;
         }
@@ -59,9 +59,9 @@ const themChiNhanh = async (ten_chi_nhanh, dia_chi) => {
 
 
 //cập nhật chi nhánh
-const suaChiNhanh = async (id_chi_nhanh, ten_chi_nhanh, dia_chi) => {
+const suaChiNhanh = async (id_chi_nhanh, ten_chi_nhanh, dia_chi, location) => {
     try {
-        const result = await serviceChiNhanh.suaChiNhanh(id_chi_nhanh, ten_chi_nhanh, dia_chi);
+        const result = await serviceChiNhanh.suaChiNhanh(id_chi_nhanh, ten_chi_nhanh, dia_chi, location);
         if (result) {
             return result;
         }
@@ -129,9 +129,9 @@ const xoaBan = async (id_chi_nhanh, id_ban) => {
 };
 
 //thêm all
-const themAll = async (ten_chi_nhanh, dia_chi, ban) => {
+const themAll = async (ten_chi_nhanh, dia_chi, danh_sach_ban, location) => {
     try {
-        const result = await serviceChiNhanh.themAll(ten_chi_nhanh, dia_chi, ban);
+        const result = await serviceChiNhanh.themAll(ten_chi_nhanh, dia_chi, danh_sach_ban, location);
         if (result) {
             return result;
         }

@@ -15,7 +15,7 @@ function AuthenToken(req, res, next) {
     const key = "iloveyou";
     jwt.verify(token, key, (err, user) => {
         if (err) {
-            return res.status(403).json({ message: 'Token invalid' });
+            return res.status(401).json({ message: 'Token invalid' });
         }
         console.log(err);
         next();

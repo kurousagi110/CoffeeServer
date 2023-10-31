@@ -1,8 +1,31 @@
 const e = require('express');
 const modelFavorite = require('./ModelFavorite');
 const modelUser = require('../User/ModelUser');
+const modelSanPham = require('../SanPham/ModelSanPham');
 
 
+//lấy danh sách sản phẩm yêu thích theo user
+const layDanhSachSanPhamYeuThich = async (id_user) => {
+    try {
+        const result = await modelFavorite.findOne({ id_user: id_user });
+        console.log('result: ', result);
+        if(!result){
+            return null;
+        }else{
+            let danh_sach_san_pham = [];
+            for(let i = 0; i < result.san_pham.length; i++){
+                const san_pham = await modelSanPham.findById(result.san_pham[i].id_san_pham);
+                if(san_pham){
+                    danh_sach_san_pham.push(san_pham);
+                }
+            }
+            return danh_sach_san_pham;
+        }
+    } catch (error) {
+        console.log('Lỗi tại layDanhSachSanPhamYeuThich service: ', error)
+        throw error;
+    }
+};
 
 //thêm danh sách yêu thích
 const themDanhSachYeuThich = async (id_user, id_san_pham) => {
@@ -50,4 +73,4 @@ const layDanhSachYeuThich = async (id_user) => {
 
 
 
-module.exports = { themDanhSachYeuThich, layDanhSachYeuThich };
+module.exports = { themDanhSachYeuThich, layDanhSachYeuThich, layDanhSachSanPhamYeuThich };

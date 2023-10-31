@@ -1,6 +1,75 @@
 const sanPhamServices = require('./ServiceSanPham');
 
 
+
+
+//sửa sản phẩm
+const suaDuLieu = async (id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban) => {
+    try {
+        const san_pham = await sanPhamServices.suaDuLieu(id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban);
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
+
+//danh sách sản phẩm đánh giá tốt nhất giới hạn 10 sản phẩm
+const danhSachSanPhamDanhGiaTotNhat = async () => {
+    try {
+        const san_pham = await sanPhamServices.danhSachSanPhamDanhGiaTotNhat();
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
+//nhận danh sách đánh giá theo sản phẩm
+const danhSachDanhGiaTheoSanPham = async (id_san_pham) => {
+    try {
+        const san_pham = await sanPhamServices.danhSachDanhGiaTheoSanPham(id_san_pham);
+        if (san_pham) {
+            return san_pham.danh_gia;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
+
+//trả về sản phẩm theo list category
+const timKiemSanPhamTheoListCategory = async () => {
+    try {
+        const san_pham = await sanPhamServices.timKiemSanPhamTheoListCategory();
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
+//tìm kiếm sản phẩm theo category
+const timKiemSanPhamTheoCategory = async (ten_loai_san_pham) => {
+    try {
+        const san_pham = await sanPhamServices.timKiemSanPhamTheoCategory(ten_loai_san_pham);
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
 //tìm kiếm san pham
 const timKiemSanPham = async (ten_san_pham) => {
     try {
@@ -56,9 +125,9 @@ const getAllSanPham = async () => {
 
 
 //thêm loại sản phẩm
-const themLoaiSanPham = async (id_san_pham, ten_loai_san_pham) => {
+const themLoaiSanPham = async (id_san_pham, ten_loai_san_pham, ma_loai_san_pham) => {
     try {
-        const san_pham = await sanPhamServices.themLoaiSanPham(id_san_pham, ten_loai_san_pham);
+        const san_pham = await sanPhamServices.themLoaiSanPham(id_san_pham, ten_loai_san_pham, ma_loai_san_pham);
         if (san_pham) {
             return san_pham;
         }
@@ -68,6 +137,19 @@ const themLoaiSanPham = async (id_san_pham, ten_loai_san_pham) => {
     return false;
 };
 
+
+//sửa loại sản phẩm
+const suaLoaiSanPham = async (id_san_pham, id_loai_san_pham, ten_loai_san_pham, ma_loai_san_pham) => {
+    try {
+        const san_pham = await sanPhamServices.suaLoaiSanPham(id_san_pham, id_loai_san_pham, ten_loai_san_pham, ma_loai_san_pham);
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
 
 //xóa loại sản phẩm
 const xoaLoaiSanPham = async (id_san_pham, id_loai_san_pham) => {
@@ -179,4 +261,6 @@ const themSanPhamAll = async (san_pham) => {
 
 module.exports = { themSize, themSanPham, themLoaiSanPham, 
     themHinhAnh, xoaHinhAnh, suaSize, xoaSize,  xoaLoaiSanPham,
-    getAllSanPham, getSanPhamById, locSanPhamTheoGiaTuThapDenCao, timKiemSanPham, themSanPhamAll };
+    getAllSanPham, getSanPhamById, locSanPhamTheoGiaTuThapDenCao, timKiemSanPham, themSanPhamAll,
+    timKiemSanPhamTheoCategory, timKiemSanPhamTheoListCategory,
+    danhSachDanhGiaTheoSanPham, danhSachSanPhamDanhGiaTotNhat, suaDuLieu, suaLoaiSanPham };

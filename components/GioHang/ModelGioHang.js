@@ -9,8 +9,16 @@ const schema = new Schema({
         {
             id : {type: ObjectID},
             id_san_pham: {type: String},
+            ten_san_pham: {type: String},
             size : {type: String},
+            gia: {type: Number},
             so_luong: {type: Number},
+            topping: [
+                {
+                    ten_topping: {type: String},
+                    gia: {type: Number},
+                }
+            ]
         }
     ]
 });

@@ -15,7 +15,6 @@ const schema = new Schema({
         ten_size: {type: String},
         gia: {type: Number},
         giam_gia: {type: Number},
-        gia_da_giam: {type: Number},
         isSelected: {type: Boolean},
     }],
     mo_ta: {type: String},
@@ -40,7 +39,7 @@ const schema = new Schema({
     status: {type: Number},
 });
 
-module.exports =mongoose.models.sanphams|| mongoose.model('sanpham', schema);
+module.exports =mongoose.models.sanphamtheongays|| mongoose.model('sanphamtheongay', schema);
 //category => categories trong database
 // 
 //  * collections = table

@@ -5,6 +5,145 @@ const sanPhamController = require('../../components/SanPham/ControllerSanPham');
 const AuthenToken = require('../../components/MiddleWare/AuthenToken');
 
 
+
+//sửa sản phẩm
+//http://localhost:3000/api/san-pham/sua-san-pham
+router.post('/sua-san-pham', async (req, res) => {
+    try {
+        const { id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban } = req.body;
+        const result = await sanPhamController.suaDuLieu(id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban);
+        if (result) {
+            res.status(200).json({
+                success: true,
+                message: 'Sửa sản phẩm thành công'
+            });
+        } else {
+            res.status(200).json({
+                success: false,
+                message: 'Sửa sản phẩm thất bại'
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Sửa sản phẩm thất bại',
+            error: error.message
+        });
+    }
+});
+
+//danh sách đánh giá theo sản phẩm
+//http://localhost:3000/api/san-pham/danh-sach-danh-gia-theo-san-pham
+router.get('/danh-sach-danh-gia-theo-san-pham/:id_san_pham', async (req, res) => {
+    try {
+        const { id_san_pham } = req.params;
+        const danh_gia = await sanPhamController.danhSachDanhGiaTheoSanPham(id_san_pham);
+        if (danh_gia) {
+            res.status(200).json({
+                success: true,
+                message: 'Lấy danh sách đánh giá thành công',
+                data: danh_gia
+            });
+        } else {
+            res.status(200).json({
+                success: false,
+                message: 'Lấy danh sách đánh giá thất bại',
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Lấy danh sách đánh giá thất bại',
+            error: error.message
+        });
+    }
+});
+
+//danh sách sản phẩm đánh giá tốt nhất giới hạn 10 sản phẩm
+//http://localhost:3000/api/san-pham/danh-sach-san-pham-danh-gia-tot-nhat
+router.get('/danh-sach-san-pham-danh-gia-tot-nhat', async (req, res) => {
+    try {
+        const san_pham = await sanPhamController.danhSachSanPhamDanhGiaTotNhat();
+        if (san_pham) {
+            res.status(200).json({
+                success: true,
+                message: 'Lấy danh sách sản phẩm thành công',
+                data: san_pham
+            });
+        } else {
+            res.status(200).json({
+                success: false,
+                message: 'Lấy danh sách sản phẩm thất bại',
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Lấy danh sách sản phẩm thất bại',
+            error: error.message
+        });
+    }
+});
+
+
+//trả về sản phẩm theo list category
+//http://localhost:3000/api/san-pham/tim-kiem-san-pham-theo-list-category
+router.get('/tim-kiem-san-pham-theo-list-category', async (req, res) => {
+    try {
+        const san_pham = await sanPhamController.timKiemSanPhamTheoListCategory();
+        if (san_pham) {
+            res.status(200).json({
+                success: true,
+                message: 'Tìm kiếm sản phẩm thành công',
+                data: san_pham
+            });
+        } else {
+            res.status(200).json({
+                success: false,
+                message: 'Tìm kiếm sản phẩm thất bại',
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Tìm kiếm sản phẩm thất bại',
+            error: error.message
+        });
+    }
+});
+
+//tìm kiếm sản phẩm theo category
+//http://localhost:3000/api/san-pham/tim-kiem-san-pham-theo-category
+router.post('/tim-kiem-san-pham-theo-category', async (req, res) => {
+    try {
+        const { ten_loai_san_pham } = req.body;
+        const san_pham = await sanPhamController.timKiemSanPhamTheoCategory(ten_loai_san_pham);
+        if (san_pham) {
+            res.status(200).json({
+                success: true,
+                message: 'Tìm kiếm sản phẩm thành công',
+                data: {
+                    loai_san_pham: ten_loai_san_pham,
+                    san_pham: san_pham
+                }
+                    
+                
+            });
+        } else {
+            res.status(200).json({
+                success: false,
+                message: 'Tìm kiếm sản phẩm thất bại',
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Tìm kiếm sản phẩm thất bại',
+            error: error.message
+        });
+    }
+});
+
 //tìm kiếm san pham
 //http://localhost:3000/api/san-pham/tim-kiem-san-pham
 router.get('/tim-kiem-san-pham/:ten_san_pham', async (req, res) => {
@@ -17,13 +156,13 @@ router.get('/tim-kiem-san-pham/:ten_san_pham', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Tìm kiếm sản phẩm thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Tìm kiếm sản phẩm thất bại',
             error: error.message
@@ -43,13 +182,13 @@ router.get('/loc-san-pham-theo-gia-tu-thap-den-cao', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Lọc sản phẩm thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Lọc sản phẩm thất bại',
             error: error.message
@@ -69,13 +208,13 @@ router.get('/get-san-pham-by-id/:id_san_pham', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Lấy sản phẩm thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Lấy sản phẩm thất bại',
             error: error.message
@@ -85,7 +224,7 @@ router.get('/get-san-pham-by-id/:id_san_pham', async (req, res) => {
 
 //get all product
 //http://localhost:3000/api/san-pham/get-all-san-pham
-router.get('/get-all-san-pham', AuthenToken , async (req, res) => {
+router.get('/get-all-san-pham' , async (req, res) => {
     try {
         const san_pham = await sanPhamController.getAllSanPham();
         if (san_pham) {
@@ -101,7 +240,7 @@ router.get('/get-all-san-pham', AuthenToken , async (req, res) => {
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Lấy sản phẩm thất bại',
             error: error.message
@@ -113,8 +252,8 @@ router.get('/get-all-san-pham', AuthenToken , async (req, res) => {
 //http://localhost:3000/api/san-pham/them-loai-san-pham
 router.post('/them-loai-san-pham', async (req, res) => {
     try {
-        const { id_san_pham, ten_loai_san_pham} = req.body
-        const san_pham = await sanPhamController.themLoaiSanPham(id_san_pham, ten_loai_san_pham);
+        const { id_san_pham, ten_loai_san_pham, ma_loai_san_pham} = req.body
+        const san_pham = await sanPhamController.themLoaiSanPham(id_san_pham, ten_loai_san_pham, ma_loai_san_pham);
         if (san_pham) {
             res.status(200).json({
                 success: true,
@@ -122,15 +261,42 @@ router.post('/them-loai-san-pham', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Thêm loại sản phẩm thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Thêm loại sản phẩm thất bại',
+            error: error.message
+        });
+    }
+});
+
+//sửa loại sản phẩm
+//http://localhost:3000/api/san-pham/sua-loai-san-pham
+router.post('/sua-loai-san-pham', async (req, res) => {
+    try {
+        const { id_san_pham, id_loai_san_pham, ten_loai_san_pham, ma_loai_san_pham} = req.body
+        const san_pham = await sanPhamController.suaLoaiSanPham(id_san_pham, id_loai_san_pham, ten_loai_san_pham, ma_loai_san_pham);
+        if (san_pham) {
+            res.status(200).json({
+                success: true,
+                message: 'Sửa loại sản phẩm thành công',
+                data: san_pham
+            });
+        } else {
+            res.status(200).json({
+                success: false,
+                message: 'Sửa loại sản phẩm thất bại',
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Sửa loại sản phẩm thất bại',
             error: error.message
         });
     }
@@ -149,13 +315,13 @@ router.post('/xoa-loai-san-pham', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Xóa loại sản phẩm thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Xóa loại sản phẩm thất bại',
             error: error.message
@@ -177,13 +343,13 @@ router.post('/them-anh', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Thêm ảnh thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Thêm ảnh thất bại',
             error: error.message
@@ -204,13 +370,13 @@ router.post('/xoa-anh', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Xóa ảnh thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Xóa ảnh thất bại',
             error: error.message
@@ -228,11 +394,11 @@ router.post('/upload-anh', [uploadAnh.single('image')], async (req, res) => {
             res.status(200).json({ result: true, message: 'Upload ảnh thành công', data: path });
         }
         else {
-            res.status(400).json({ result: false, message: 'Upload ảnh thất bại' });
+            res.status(200).json({ result: false, message: 'Upload ảnh thất bại' });
         }
     }
     catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Upload ảnh thất bại',
             error: error.message
@@ -252,11 +418,11 @@ router.post('/upload-nhieu-anh', [uploadAnh.array('image', 10)], async (req, res
             res.status(200).json({ result: true, message: 'Upload ảnh thành công', data: paths });
         }
         else {
-            res.status(400).json({ result: false, message: 'Upload ảnh thất bại' });
+            res.status(200).json({ result: false, message: 'Upload ảnh thất bại' });
         }
     }
     catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Upload ảnh thất bại',
             error: error.message
@@ -276,13 +442,13 @@ router.post('/them-size', async (req, res) => {
                 message: 'Thêm size thành công'
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Thêm size thất bại'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Thêm size thất bại',
             error: error.message
@@ -303,13 +469,13 @@ router.post('/sua-size', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Sửa size thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Sửa size thất bại',
             error: error.message
@@ -330,13 +496,13 @@ router.post('/xoa-size', async (req, res) => {
                 data: san_pham
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Xóa size thất bại',
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Xóa size thất bại',
             error: error.message
@@ -357,13 +523,13 @@ router.post('/them-san-pham', async (req, res) => {
                 message: 'Thêm sản phẩm thành công'
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Thêm sản phẩm thất bại'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Thêm sản phẩm thất bại',
             error: error.message
@@ -383,13 +549,13 @@ router.post('/them-full-san-pham', async (req, res) => {
                 message: 'Thêm sản phẩm thành công'
             });
         } else {
-            res.status(400).json({
+            res.status(200).json({
                 success: false,
                 message: 'Thêm sản phẩm thất bại'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             message: 'Thêm sản phẩm thất bại',
             error: error.message

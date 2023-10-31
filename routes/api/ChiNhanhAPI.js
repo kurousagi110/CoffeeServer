@@ -15,13 +15,13 @@ router.get('/lay-danh-sach-chi-nhanh', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Lấy danh sách chi nhánh thất bại!'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             status: false,
             message: error.message
         });
@@ -43,13 +43,13 @@ router.post('/lay-chi-nhanh-theo-id', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Lấy chi nhánh theo id thất bại!'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             status: false,
             message: error.message
         });
@@ -71,13 +71,13 @@ router.post('/lay-chi-nhanh-theo-ten', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Tìm chi nhánh theo tên thất bại!'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             status: false,
             message: error.message
         });
@@ -88,8 +88,8 @@ router.post('/lay-chi-nhanh-theo-ten', async function (req, res, next) {
 //http://localhost:3000/api/chi-nhanh/them-chi-nhanh
 router.post('/them-chi-nhanh', async function (req, res, next) {
     try {
-        const { ten_chi_nhanh, dia_chi } = req.body;
-        const result = await chiNhanhController.themChiNhanh(ten_chi_nhanh, dia_chi);
+        const { ten_chi_nhanh, dia_chi, location } = req.body;
+        const result = await chiNhanhController.themChiNhanh(ten_chi_nhanh, dia_chi, location);
         if (result) {
             res.status(200).json({
                 status: true,
@@ -98,13 +98,13 @@ router.post('/them-chi-nhanh', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Thêm chi nhánh thất bại!'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             status: false,
             message: error.message
         });
@@ -116,8 +116,8 @@ router.post('/them-chi-nhanh', async function (req, res, next) {
 //http://localhost:3000/api/chi-nhanh/cap-nhat-chi-nhanh
 router.post('/cap-nhat-chi-nhanh', async function (req, res, next) {
     try {
-        const { id_chi_nhanh, ten_chi_nhanh, dia_chi } = req.body;
-        const result = await chiNhanhController.suaChiNhanh(id_chi_nhanh, ten_chi_nhanh, dia_chi);
+        const { id_chi_nhanh, ten_chi_nhanh, dia_chi, location } = req.body;
+        const result = await chiNhanhController.suaChiNhanh(id_chi_nhanh, ten_chi_nhanh, dia_chi, location);
         if (result) {
             res.status(200).json({
                 status: true,
@@ -126,13 +126,13 @@ router.post('/cap-nhat-chi-nhanh', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Cập nhật chi nhánh thất bại!'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             status: false,
             message: error.message
         });
@@ -153,13 +153,13 @@ router.post('/xoa-chi-nhanh', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Xóa chi nhánh thất bại!'
             });
         }
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             status: false,
             message: error.message
         });
@@ -180,14 +180,16 @@ router.post('/them-ban', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Thêm bàn thất bại!'
             });
         }
     } catch (error) {
-        console.log('themBan error: ', error);
-        throw error;
+        res.status(400).json({
+            status: false,
+            message: error.message
+        });
     }
 });
 
@@ -205,14 +207,16 @@ router.post('/sua-ban', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Sửa bàn thất bại!'
             });
         }
     } catch (error) {
-        console.log('suaBan error: ', error);
-        throw error;
+        res.status(400).json({
+            status: false,
+            message: error.message
+        });
     }
 });
 
@@ -230,14 +234,16 @@ router.post('/xoa-ban', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Xóa bàn thất bại!'
             });
         }
     } catch (error) {
-        console.log('xoaBan error: ', error);
-        throw error;
+        res.status(400).json({
+            status: false,
+            message: error.message
+        });
     }
 });
 
@@ -246,8 +252,8 @@ router.post('/xoa-ban', async function (req, res, next) {
 //http://localhost:3000/api/chi-nhanh/them-all
 router.post('/them-all', async function (req, res, next) {
     try {
-        const { ten_chi_nhanh, dia_chi, ban } = req.body;
-        const result = await chiNhanhController.themAll(ten_chi_nhanh, dia_chi, ban);
+        const { ten_chi_nhanh, dia_chi, danh_sach_ban, location } = req.body;
+        const result = await chiNhanhController.themAll(ten_chi_nhanh, dia_chi, danh_sach_ban, location);
         if (result) {
             res.status(200).json({
                 status: true,
@@ -256,14 +262,16 @@ router.post('/them-all', async function (req, res, next) {
             });
         }
         else {
-            res.status(400).json({
+            res.status(200).json({
                 status: false,
                 message: 'Thêm all thất bại!'
             });
         }
     } catch (error) {
-        console.log('themAll error: ', error);
-        throw error;
+        res.status(400).json({
+            status: false,
+            message: error.message
+        });
     }
 });
 

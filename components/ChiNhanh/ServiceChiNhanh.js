@@ -46,16 +46,22 @@ const layChiNhanhTheoTen = async (ten_chi_nhanh) => {
 };
 
 //thêm chi nhánh
-const themChiNhanh = async (ten_chi_nhanh, dia_chi) => {
+const themChiNhanh = async (ten_chi_nhanh, dia_chi, location) => {
     try {
         const check = await modelChiNhanh.findOne({ ten_chi_nhanh: ten_chi_nhanh });
         if (check) {
             return false;
         }
-        const result = await modelChiNhanh.create({ ten_chi_nhanh, dia_chi,status: 1 });
+        const result = await modelChiNhanh.create({ 
+            ten_chi_nhanh, 
+            dia_chi,
+            status: 1,
+            location: location
+        });
         if (result) {
             return result;
         }
+        
         return false;
     } catch (error) {
         console.log('themChiNhanh error: ', error);
@@ -64,18 +70,20 @@ const themChiNhanh = async (ten_chi_nhanh, dia_chi) => {
 };
 
 //cập nhật chi nhánh
-const suaChiNhanh = async (id_chi_nhanh, ten_chi_nhanh, dia_chi) => {
+const suaChiNhanh = async (id_chi_nhanh, ten_chi_nhanh, dia_chi, location) => {
     try {
         const check = await modelChiNhanh.findOne({ ten_chi_nhanh: ten_chi_nhanh });
-        if (check) {
+        const chiNhanh = await modelChiNhanh.findById(id_chi_nhanh);
+        console.log('chiNhanh: ', chiNhanh);
+        if (check && check._id != id_chi_nhanh) {
             return false;
         }
-        const chiNhanh = await modelChiNhanh.findById(id_chi_nhanh);
         if (!chiNhanh) {
             return false;
         }
-        chiNhanh.ten_chi_nhanh = ten_chi_nhanh;
-        chiNhanh.dia_chi = dia_chi;
+        chiNhanh.ten_chi_nhanh = ten_chi_nhanh || chiNhanh.ten_chi_nhanh;
+        chiNhanh.dia_chi = dia_chi || chiNhanh.dia_chi;
+        chiNhanh.location = location || chiNhanh.location;
         await chiNhanh.save();
         return chiNhanh;
       
@@ -171,7 +179,7 @@ const xoaBan = async (id_chi_nhanh, id_ban) => {
 };
 
 //thêm all
-const themAll = async (ten_chi_nhanh, dia_chi, danh_sach_ban) => {
+const themAll = async (ten_chi_nhanh, dia_chi, danh_sach_ban, location) => {
     try {
         const check = await modelChiNhanh.findOne({ ten_chi_nhanh: ten_chi_nhanh });
         if (check) {
@@ -181,7 +189,8 @@ const themAll = async (ten_chi_nhanh, dia_chi, danh_sach_ban) => {
             ten_chi_nhanh: ten_chi_nhanh,
             dia_chi: dia_chi,
             ban: [],
-            status: 1
+            status: 1,
+            location:  location
         };
         danh_sach_ban.forEach((ban) => {
             chiNhanh.ban.push({

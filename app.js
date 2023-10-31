@@ -15,6 +15,12 @@ var loaiSanPhamRouter = require('./routes/api/LoaiSanPhamAPI');
 var favoriteRouter = require('./routes/api/FavoriteAPI');
 var gioHangRouter = require('./routes/api/GioHangAPI');
 var chiNhanhRouter = require('./routes/api/ChiNhanhAPI');
+var donHangRouter = require('./routes/api/DonHangAPI');
+var toppingRouter = require('./routes/api/ToppingAPI');
+var voucherRouter = require('./routes/api/VoucherAPI');
+var vongQuayRouter = require('./routes/api/VongQuayAPI');
+var sanPhamTheoNgayRouter = require('./routes/api/SanPhamTheoNgayAPI');
+
 
 var app = express();
 
@@ -49,7 +55,7 @@ app.listen(PORT, () => {
   console.log('>>>>>>>>>> Server is running on port ' + PORT + ' <<<<<<<<<<');
 });
 
-mongoose.connect('mongodb+srv://hoatrinh14020:vPdywMZuFprMcTde@coffee.zdrgcwk.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://hoatrinh14020:KFPqSyMahPWlJ5qV@coffee.zdrgcwk.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -64,6 +70,11 @@ app.use('/api/loai-san-pham', loaiSanPhamRouter);
 app.use('/api/favorite', favoriteRouter);
 app.use('/api/gio-hang', gioHangRouter);
 app.use('/api/chi-nhanh', chiNhanhRouter);
+app.use('/api/don-hang', donHangRouter);
+app.use('/api/topping', toppingRouter);
+app.use('/api/voucher', voucherRouter);
+app.use('/api/vong-quay', vongQuayRouter);
+app.use('/api/san-pham-theo-ngay', sanPhamTheoNgayRouter);
 
 
 // catch 404 and forward to error handler
