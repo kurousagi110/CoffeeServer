@@ -69,8 +69,8 @@ router.post('/xoa-topping', AuthenToken, async function (req, res, next) {
 //http://localhost:3000/api/gio-hang/them-gio-hang
 router.post('/them-gio-hang', AuthenToken, async function (req, res, next) {
     try {
-        const { id_user, id_san_pham, size, so_luong, ten_san_pham, gia, topping } = req.body;
-        const result = await giohangController.themDanhSachGioHang(id_user, id_san_pham, size, so_luong, ten_san_pham, gia, topping);
+        const { id_user, id_san_pham, size, so_luong, ten_san_pham, topping } = req.body;
+        const result = await giohangController.themDanhSachGioHang(id_user, id_san_pham, size, so_luong, ten_san_pham, topping);
         if (result) {
             res.status(200).json({
                 status: true,
@@ -154,8 +154,8 @@ router.get('/lay-danh-sach-gio-hang/:id_user', AuthenToken, async function (req,
 //http://localhost:3000/api/gio-hang/cap-nhat-gio-hang
 router.post('/cap-nhat-gio-hang', AuthenToken, async function (req, res, next) {
     try {
-        const { id_user, _id, size, so_luong,topping,gia, ten_san_pham } = req.body;
-        const result = await giohangController.capNhatSoLuongSanPhamGioHang(id_user, _id, size, so_luong,topping,gia, ten_san_pham);
+        const { id_user, _id, id_san_pham, size, so_luong,topping } = req.body;
+        const result = await giohangController.capNhatSoLuongSanPhamGioHang(id_user, _id, id_san_pham, size, so_luong,topping);
         if (result) {
             res.status(200).json({
                 status: true,

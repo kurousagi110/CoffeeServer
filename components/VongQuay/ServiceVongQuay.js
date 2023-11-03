@@ -12,7 +12,8 @@ const suDungVongQuay = async (id_user) => {
         if (user.diem < 100) {
             return false;
         }
-        user.diem = user.diem - 100;
+        user.tich_diem = user.tich_diem - 100;
+        console.log(user.tich_diem);
         user.doi_diem.push({
             ngay_doi: new Date(),
             ten_doi_diem: "Sử dụng vòng quay",
@@ -50,12 +51,12 @@ const themVoucherUser = async (id_user, id_vong_quay) => {
             ten_voucher: vongquay.ten_voucher,
             ma_voucher: vongquay.ma_voucher,
             diem: vongquay.diem,
+            giam_gia: vongquay.giam_gia,
             gia_tri: vongquay.gia_tri,
             mo_ta: vongquay.mo_ta,
             hinh_anh: vongquay.hinh_anh,
             ngay_bat_dau: vongquay.ngay_bat_dau,
             ngay_ket_thuc: vongquay.ngay_ket_thuc,
-
             status: 1,
         };
         user.voucher_user.push(voucher);
@@ -82,7 +83,7 @@ const layDanhSachVongQuay = async () => {
 };
 
 //thêm vòng quay
-const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh ) => {
+const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh,giam_gia ) => {
     try {
         const check = await modelVongQuay.findOne({ ma_voucher: ma_voucher });
         if (check) {
@@ -94,6 +95,7 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
             ten_voucher: ten_voucher,
             ma_voucher: ma_voucher,
             diem: diem,
+            giam_gia: giam_gia,
             gia_tri: gia_tri,
             ngay_bat_dau: new Date(),
             ngay_ket_thuc: new Date(new Date().getTime() + (30 * 24 * 60 * 60 * 1000)),
@@ -110,7 +112,7 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
 };
 
 //sửa vòng quay
-const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh ) => {
+const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh,giam_gia ) => {
     try {
         const vongquay = await modelVongQuay.findById(id_vong_quay);
         if (!vongquay) {
@@ -121,6 +123,7 @@ const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_v
         vongquay.ten_voucher = ten_voucher || vongquay.ten_voucher;
         vongquay.ma_voucher = ma_voucher || vongquay.ma_voucher;
         vongquay.diem = diem || vongquay.diem;
+        vongquay.giam_gia = giam_gia || vongquay.giam_gia;
         vongquay.gia_tri = gia_tri || vongquay.gia_tri;
         vongquay.ngay_bat_dau = new Date();
         vongquay.ngay_ket_thuc = new Date(new Date().getTime() + (30 * 24 * 60 * 60 * 1000));

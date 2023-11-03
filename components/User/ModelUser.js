@@ -25,7 +25,7 @@ const userSchema = new Schema({
     doi_diem:[{
         id_doi_diem: {type: ObjectID},
         ten_doi_diem: {type: String},
-        ngay_doi: {type: String},
+        ngay_doi: {type: Number},
         so_diem: {type: Number}
     }],
     voucher_user: [{
@@ -33,10 +33,11 @@ const userSchema = new Schema({
         ten_voucher: {type: String},
         ma_voucher: {type: String},
         diem: {type: Number},
+        giam_gia: {type: Number},
         gia_tri: {type: Number},
         mo_ta: {type: String},
-        ngay_bat_dau: {type: String},
-        ngay_ket_thuc: {type: String},
+        ngay_bat_dau: {type: Date},
+        ngay_ket_thuc: {type: Date},
         trang_thai: {type: Number},
         hinh_anh: { type: String },
         status: {type: Number},

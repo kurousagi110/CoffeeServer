@@ -118,9 +118,9 @@ router.get('/lay-thong-tin-voucher/:id_voucher',AuthenToken, async (req, res) =>
 //http://localhost:3000/api/voucher/doi-diem-thanh-voucher
 router.post('/doi-diem-thanh-voucher',AuthenToken, async (req, res) => {
     try {
-        const {id_user, so_diem, id_voucher, ten_voucher, gia_tri, mo_ta , ngay_ket_thuc, ma_voucher, hinh_anh} = req.body;
+        const {id_user, id_voucher} = req.body;
 
-        const result = await serviceVoucher.doiDiemThanhVoucher(id_user, so_diem, id_voucher, ten_voucher, gia_tri, mo_ta , ngay_ket_thuc, ma_voucher, hinh_anh);
+        const result = await serviceVoucher.doiDiemThanhVoucher(id_user, id_voucher);
         if (result) {
             res.status(200).json({
                 trang_thai : true,
@@ -172,8 +172,8 @@ router.post('/su-dung-voucher',AuthenToken, async (req, res) => {
 //http://localhost:3000/api/voucher/them-voucher
 router.post('/them-voucher',AuthenToken, async (req, res) => {
     try {
-        const {ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, hinh_anh } = req.body;
-        const result = await serviceVoucher.themVoucher(ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, hinh_anh);
+        const {ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, hinh_anh, giam_gia } = req.body;
+        const result = await serviceVoucher.themVoucher(ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, hinh_anh, giam_gia);
         if (result) {
             res.status(200).json({
                 trang_thai : true,
@@ -198,8 +198,8 @@ router.post('/them-voucher',AuthenToken, async (req, res) => {
 //http://localhost:3000/api/voucher/sua-voucher
 router.post('/sua-voucher',AuthenToken, async (req, res) => {
     try {
-        const {id_voucher, ten_voucher, ma_voucher, gia_tri, giam_gia, ngay_ket_thuc, hinh_anh} = req.body;
-        const result = await serviceVoucher.suaVoucher(id_voucher, ten_voucher, ma_voucher, gia_tri, giam_gia, ngay_ket_thuc, hinh_anh);
+        const {id_voucher, ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, hinh_anh, giam_gia} = req.body;
+        const result = await serviceVoucher.suaVoucher(id_voucher, ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, hinh_anh, giam_gia);
         if(result){
             res.status(200).json({
                 trang_thai: true,

@@ -9,8 +9,8 @@ const layDanhSachVoucherUser = async (id_user) => {
         const currentDate = new Date();
         const voucher = await modelVoucher.find();
 
-        const VoucherHieuLuc = [];
-        const VoucherHetHieuLuc = [];
+        let VoucherHieuLuc = [];
+        let VoucherHetHieuLuc = [];
 
         for (const item of voucher) {
             if (item.ngay_ket_thuc < currentDate) {
@@ -20,21 +20,28 @@ const layDanhSachVoucherUser = async (id_user) => {
                     await item.save();
                 }
                 // Kiểm tra nếu voucher có điểm thì bỏ qua
-                if (item.diem) {
+                if (!item.diem) {
                     continue;
                 }
-                VoucherHetHieuLuc.push(item);
             } else {
                 // Kiểm tra nếu voucher có điểm thì bỏ qua
-                if (item.diem) {
-                    continue;
+                if (!item.diem) {
+                    VoucherHieuLuc.push(item);
                 }
-                VoucherHieuLuc.push(item);
             }
         }
-
-        const userVoucherHieuLuc = user.voucher_user.filter((item) => item.status === 1 && !item.diem);
-        const userVoucherHetHieuLuc = user.voucher_user.filter((item) => item.status !== 1 && !item.diem);
+        let userVoucherHieuLuc = [];
+        let userVoucherHetHieuLuc = [];
+        for (let i = 0; i < user.voucher_user.length; i++) {
+            const item = user.voucher_user[i];
+            if (item.status > 0) {
+                userVoucherHieuLuc.push(item);
+            }else{
+                userVoucherHetHieuLuc.push(item);
+            }
+        }
+        // const userVoucherHieuLuc = user.voucher_user.filter((item) => item.status > 0 && !item.diem);
+        // const userVoucherHetHieuLuc = user.voucher_user.filter((item) => item.status < 1 && !item.diem);
 
         // Ghép lại thành VoucherHieuLuc và VoucherHetHieuLuc
         VoucherHieuLuc.push(...userVoucherHieuLuc);
@@ -50,6 +57,7 @@ const layDanhSachVoucherUser = async (id_user) => {
         throw new Error(error);
     }
 };
+
 
 
 
@@ -111,29 +119,44 @@ const layThongTinVoucher = async (id_voucher) => {
 };  
 
 //đổi điểm thành voucher
-const doiDiemThanhVoucher = async (id_user, so_diem, id_voucher, ten_voucher, gia_tri, mo_ta , ngay_ket_thuc, ma_voucher, hinh_anh) => {
+const doiDiemThanhVoucher = async (id_user, id_voucher) => {
     try {
         const user = await modelUser.findById(id_user);
-        if (user.tich_diem < so_diem) {
+        const checkVoucher = await modelVoucher.findById(id_voucher);
+        console.log(checkVoucher);
+        if (!checkVoucher || !checkVoucher) {
             return false;
         }
-        user.tich_diem = user.tich_diem - so_diem;
+        if (user.tich_diem < checkVoucher.diem) {
+            return false;
+        }
+        user.tich_diem = user.tich_diem - checkVoucher.diem;
         user.doi_diem.push({
             ngay_doi: new Date(),
             ten_doi_diem: "Đổi điểm thành voucher",
-            so_diem: -so_diem,
+            so_diem: -checkVoucher.diem,
         });
+        // let status = 1;
+        // let sosanh = "Miễn phí vận chuyển"
+        // if (ten_voucher.toLowerCase() === sosanh.toLowerCase()){
+        //     status = 1;
+        // }else if (giam_gia === 0){
+        //     status = 2;
+        // }else{
+        //     status = 3;
+        // }
         const voucher = {
             id_voucher: id_voucher,
-            ten_voucher: ten_voucher,
-            ma_voucher: ma_voucher,
-            diem : so_diem,
-            gia_tri: gia_tri,
-            mo_ta: mo_ta,
+            ten_voucher: checkVoucher.ten_voucher,
+            ma_voucher: checkVoucher.ma_voucher,
+            diem : checkVoucher.diem,
+            giam_gia: checkVoucher.giam_gia,
+            gia_tri: checkVoucher.gia_tri,
+            mo_ta: checkVoucher.mo_ta,
             ngay_bat_dau: new Date(),
-            ngay_ket_thuc: ngay_ket_thuc,
-            hinh_anh: hinh_anh,
-            status: 1,
+            ngay_ket_thuc: checkVoucher.ngay_ket_thuc,
+            hinh_anh: checkVoucher.hinh_anh,
+            status: checkVoucher.status,
         };
         user.voucher_user.push(voucher);
         await user.save();
@@ -155,7 +178,7 @@ const suDungVoucher = async (id_user, id_voucher) => {
         }
         if (user.voucher_user.length > 0) {
             for (const item of user.voucher_user) {
-                if (item.id_voucher === id_voucher && item.status === 1) {
+                if (item.id_voucher === id_voucher && item.status > 0) {
                     item.status = 0;
                     await user.save();
                     return true;
@@ -167,10 +190,14 @@ const suDungVoucher = async (id_user, id_voucher) => {
         user.voucher_user.push({
             id_voucher: id_voucher,
             ten_voucher: voucher.ten_voucher,
+            ma_voucher: voucher.ma_voucher,
+            diem: voucher.diem,
+            giam_gia: voucher.giam_gia,
             gia_tri: voucher.gia_tri,
             mo_ta: voucher.mo_ta,
             ngay_bat_dau: voucher.ngay_bat_dau,
             ngay_ket_thuc: voucher.ngay_ket_thuc,
+            trang_thai: voucher.trang_thai,
             hinh_anh: voucher.hinh_anh,
             status: 0,
         });
@@ -183,23 +210,33 @@ const suDungVoucher = async (id_user, id_voucher) => {
 };
 
 //thêm voucher
-const  themVoucher = async (ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, hinh_anh) => {
+const  themVoucher = async (ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, hinh_anh, giam_gia) => {
     try {
         const check = await modelVoucher.findOne({ ma_voucher: ma_voucher });
         if (check) {
             return false;
+        }
+        let status = 1;
+        let kitu = "Miễn phí vận chuyển"
+        if (ten_voucher.toLowerCase() === kitu.toLowerCase()){
+            status = 1
+        }else if (giam_gia === 0){
+            status = 2
+        }else{
+            status = 3
         }
         const voucher = new modelVoucher({
             ten_voucher: ten_voucher,
             ma_voucher: ma_voucher,
             gia_tri: gia_tri,
             diem: diem,
+            giam_gia: giam_gia,
             mo_ta: mo_ta,
             ngay_bat_dau: new Date(),
             ngay_ket_thuc: new Date(new Date().getTime() + (ngay_ket_thuc * 24 * 60 * 60 * 1000)), // Thay vì new Date.now() + ngay_ket_thuc
             trang_thai: "Còn hiệu lực",
             hinh_anh:  hinh_anh,
-            status: 1,
+            status: status,
         });
         await voucher.save();
         return true;
@@ -210,14 +247,24 @@ const  themVoucher = async (ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_th
 };
 
 //sửa voucher
-const  suaVoucher = async (id_voucher, ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, hinh_anh) => {
+const  suaVoucher = async (id_voucher, ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, hinh_anh, giam_gia) => {
     try {
         const voucher = await modelVoucher.findById(id_voucher);
-        voucher.ten_voucher = ten_voucher;
-        voucher.ma_voucher = ma_voucher;
-        voucher.gia_tri = gia_tri;
-        voucher.mo_ta = mo_ta;
-        voucher.hinh_anh = hinh_anh;
+        if (!voucher) {
+            return false;
+        }
+        let sosanh = "Miễn phí vận chuyển";
+        if(ten_voucher.toLowerCase() === sosanh.toLowerCase()){
+            voucher.status = 1;
+        }else{
+            voucher.status = 2;
+        }
+        voucher.ten_voucher = ten_voucher || voucher.ten_voucher;
+        voucher.ma_voucher = ma_voucher || voucher.ma_voucher;
+        voucher.gia_tri = gia_tri || voucher.gia_tri;
+        voucher.mo_ta = mo_ta || voucher.mo_ta;
+        voucher.giam_gia = giam_gia || voucher.giam_gia;
+        voucher.hinh_anh = hinh_anh || voucher.hinh_anh;
         voucher.ngay_ket_thuc = new Date(voucher.ngay_ket_thuc.getTime() + (ngay_ket_thuc * 24 * 60 * 60 * 1000));
         await voucher.save();
         return true;

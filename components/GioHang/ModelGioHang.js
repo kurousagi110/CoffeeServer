@@ -12,6 +12,8 @@ const schema = new Schema({
             ten_san_pham: {type: String},
             size : {type: String},
             gia: {type: Number},
+            giam_gia: {type: Number},
+            gia_da_giam: {type: Number},
             so_luong: {type: Number},
             topping: [
                 {

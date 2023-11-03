@@ -9,6 +9,7 @@ const schema = new Schema({
     ten_voucher: {type: String},
     ma_voucher: {type: String},
     diem: {type: Number},
+    giam_gia: {type: Number},
     gia_tri: {type: Number},
     ngay_bat_dau: {type: Date},
     ngay_ket_thuc: {type: Date},

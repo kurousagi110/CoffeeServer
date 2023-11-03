@@ -51,7 +51,7 @@ const themTopping = async (id_user, id_san_pham_gio_hang, ten_topping, gia) => {
 };
 
 //thêm danh sách giỏ hàng
-const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san_pham, gia, topping) => {
+const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san_pham, topping) => {
     try {
         console.log(id_user, id_san_pham, size, so_luong);
         const result = await modelGioHang.findOne({ id_user: id_user });
@@ -59,6 +59,20 @@ const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san
         if (!sanPham) {
             return false;
         }
+        let data = {};
+        for(let i=0; i < sanPham.size.length; i++) {
+            if(sanPham.size[i].ten_size === size) {
+                console.log(sanPham.size[i].ten_size +"ssss");
+                data = {
+                    ten_size : sanPham.size[i].ten_size,
+                    gia: sanPham.size[i].gia,
+                    giam_gia: sanPham.size[i].giam_gia,
+                    gia_da_giam: sanPham.size[i].gia_da_giam,
+                    isSelected: sanPham.size[i].isSelected
+                }
+            }
+        }
+        console.log(data);
         if (!result) {
             const giohang = {
                 id_user: id_user,
@@ -68,13 +82,14 @@ const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san
                         size: size,
                         so_luong: so_luong,
                         ten_san_pham: ten_san_pham,
-                        gia: gia,
+                        gia: data.gia,
+                        giam_gia: data.giam_gia,
+                        gia_da_giam: data.gia_da_giam,
                         topping: topping
                     }
                 ]
             };
             const check = await modelGioHang.create(giohang);
-            console.log(check);
             return check;
         } else {
             let found = false;
@@ -97,7 +112,9 @@ const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san
                     ten_san_pham: ten_san_pham,
                     size: size,
                     so_luong: so_luong,
-                    gia: gia,
+                    gia: data.gia,
+                    giam_gia: data.giam_gia,
+                    gia_da_giam: data.gia_da_giam,
                     topping: topping
                 });
                 await result.save();
@@ -149,31 +166,51 @@ const xoaSanPhamGioHang = async (id_user, _id) => {
 };
 
 //cập nhật số lượng sản phẩm giỏ hàng
-const capNhatSoLuongSanPhamGioHang = async (id_user, id_san_pham, size, so_luong, topping, gia, ten_san_pham) => {
+const capNhatSoLuongSanPhamGioHang = async (id_user, _id, id_san_pham, size, so_luong,topping) => {
     try {
         const result = await modelGioHang.findOne({ id_user: id_user });
+        const sanPhamResult = await modelSanPham.findById(id_san_pham);
         console.log(result);
-        const sanPham = {
-            _id: id_san_pham,
-            ten_san_pham: ten_san_pham,
-            size: size,
-            so_luong: so_luong,
-            gia: gia,
-            topping: topping
+        let data = {};
+        for(let i=0; i < sanPhamResult.size.length; i++) {
+            if(sanPhamResult.size[i].ten_size === size) {
+                data = {
+                    ten_size : sanPhamResult.size[i].ten_size,
+                    gia: sanPhamResult.size[i].gia,
+                    giam_gia: sanPhamResult.size[i].giam_gia,
+                    gia_da_giam: sanPhamResult.size[i].gia_da_giam,
+                    isSelect: sanPhamResult.size[i].isSelect
+                }
+                break;
+            }
         }
 
+        const sanPham = {
+            _id: _id,
+            ten_san_pham: sanPhamResult.ten_san_pham,
+            id_san_pham: id_san_pham,
+            size: size,
+            so_luong: so_luong,
+            gia: data.gia,
+            giam_gia: data.giam_gia,
+            gia_da_giam: data.gia_da_giam,
+            topping: topping
+        }
+        console.log("day la san pham"+sanPham);
         if (result) {
             let found = false;
 
             for (let i = 0; i < result.san_pham.length; i++) {
                 if (areSanPhamEqual(result.san_pham[i], sanPham)) {
                     // If the item is the same, update its quantity and mark it as found  
-                    if(result.san_pham[i]._id == id_san_pham) {
+                    if(result.san_pham[i]._id == _id) {
                         result.san_pham[i].so_luong = so_luong;
                         result.san_pham[i].size = size;
-                        result.san_pham[i].gia = gia;
+                        result.san_pham[i].gia = data.gia;
+                        result.san_pham[i].giam_gia = data.giam_gia;
+                        result.san_pham[i].gia_da_giam = data.gia_da_giam;
                         result.san_pham[i].topping = topping;
-                        result.san_pham[i].ten_san_pham = ten_san_pham;
+                        result.san_pham[i].ten_san_pham = sanPhamResult.ten_san_pham;
                         await result.save();
                         return result;
                     }
@@ -184,7 +221,7 @@ const capNhatSoLuongSanPhamGioHang = async (id_user, id_san_pham, size, so_luong
 
             if (found) {
                 for (let i = 0; i < result.san_pham.length; i++) {
-                    if (result.san_pham[i]._id == id_san_pham) {
+                    if (result.san_pham[i]._id == _id) {
                         result.san_pham.splice(i, 1);
                         break; // Stop after removing the first matching item
                     }
@@ -194,12 +231,14 @@ const capNhatSoLuongSanPhamGioHang = async (id_user, id_san_pham, size, so_luong
             if (!found) {
                 console.log('not found');
                 for(let j = 0; j < result.san_pham.length; j++) {
-                    if(result.san_pham[j]._id == id_san_pham) {
+                    if(result.san_pham[j]._id == _id) {
                         result.san_pham[j].so_luong = so_luong;
                         result.san_pham[j].size = size;
-                        result.san_pham[j].gia = gia;
+                        result.san_pham[j].gia = data.gia;
+                        result.san_pham[j].giam_gia = data.giam_gia;
+                        result.san_pham[j].gia_da_giam = data.gia_da_giam;
                         result.san_pham[j].topping = topping;
-                        result.san_pham[j].ten_san_pham = ten_san_pham;
+                        result.san_pham[j].ten_san_pham = sanPhamResult.ten_san_pham;
                         await result.save();
                         return result;
                     }
@@ -223,6 +262,8 @@ function areSanPhamEqual(sanPham1, sanPham2) {
         sanPham1.ten_san_pham === sanPham2.ten_san_pham &&
         sanPham1.size === sanPham2.size &&
         sanPham1.gia === sanPham2.gia &&
+        sanPham1.giam_gia === sanPham2.giam_gia &&
+        sanPham1.gia_da_giam === sanPham2.gia_da_giam &&
         areToppingsEqual1(sanPham1.topping, sanPham2.topping)
     );
 }
@@ -240,7 +281,6 @@ function areToppingsEqual1(topping1, topping2) {
 
     return true;
 }
-
 
 
 
