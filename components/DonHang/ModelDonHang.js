@@ -50,6 +50,11 @@ const schema = new Schema({
     ten_user: { type: String },
     ngay_danh_gia: { type: Date },
     status: { type: Number },
+    thanh_toan: {
+        ten_thanh_toan: {type: String},
+        ma_thanh_toan: {type: String},
+        trang_thai: {type: Number},
+    }
 });
 
 module.exports = mongoose.models.donhangs || mongoose.model('donhang', schema);

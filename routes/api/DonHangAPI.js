@@ -65,8 +65,8 @@ router.get('/lay-danh-sach-san-pham-chua-danh-gia/:id_user', AuthenToken, async 
 //http://localhost:3000/api/don-hang/them-don-hang
 router.post('/them-don-hang', AuthenToken, async function (req, res, next) {
     try {
-        const { id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen } = req.body;
-        const result = await DonHangController.themDonHang(id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen);
+        const { id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen,thanh_toan } = req.body;
+        const result = await DonHangController.themDonHang(id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen,thanh_toan);
         if (result) {
             res.status(200).json({
                 status: true,

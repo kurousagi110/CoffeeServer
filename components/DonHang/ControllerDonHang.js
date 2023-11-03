@@ -23,9 +23,9 @@ const layDanhSachSanPhamChuaDanhGia = async ( id_user ) => {
 
 
 //thêm đơn hàng
-const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen) => {
+const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_toan) => {
     try {
-        const donHang = await serviceDonHang.themDonHang(id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen);
+        const donHang = await serviceDonHang.themDonHang(id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_toan);
         return donHang;
     } catch (error) {
         throw new Error(error);

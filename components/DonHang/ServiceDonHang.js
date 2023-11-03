@@ -72,7 +72,7 @@ const layDanhSachSanPhamChuaDanhGia = async (id_user) => {
 };
 
 
-const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen) => {
+const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_toan) => {
     try {
         let tong_san_pham = 0;
         let thanh_tien = 0;
@@ -108,6 +108,8 @@ const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_ph
             ten_user: "",
             so_sao: null,
             danh_gia: "",
+            thanh_toan: thanh_toan,
+            
         };
         const donHang = await modelDonHang.create(duLieu);
         return donHang;
