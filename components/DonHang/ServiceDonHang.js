@@ -5,27 +5,16 @@ const moment = require('moment');
 
 
 //sửa đơn hàng
-const suaDonHang = async (id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen) => {
+const suaDonHang = async (id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
     try {
         const donHang = await modelDonHang.findById(id_don_hang);
         if (!donHang) {
             return false;
         }
         let tong_san_pham = 0;
-        let thanh_tien = 0;
         for (let i = 0; i < san_pham.length; i++) {
-            if (san_pham[i].topping.length === 0) {
-                thanh_tien += san_pham[i].gia * san_pham[i].so_luong;
-            } else {
-                for (let j = 0; j < san_pham[i].topping.length; j++) {
-                    thanh_tien += san_pham[i].topping[j].gia * san_pham[i].so_luong;
-                }
-            }
             tong_san_pham += san_pham[i].so_luong;
-            thanh_tien += san_pham[i].gia * san_pham[i].so_luong;
         }
-        let thanh_toan = thanh_tien - giam_gia + phi_van_chuyen;
-
         // Truy vấn đơn hàng theo id_don_hang và cập nhật dữ liệu
         const donHangToUpdate = await modelDonHang.findByIdAndUpdate(id_don_hang, {
             id_user: id_user || donHang.id_user,
@@ -34,11 +23,13 @@ const suaDonHang = async (id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia
             dia_chi: dia_chi || donHang.dia_chi,
             san_pham: san_pham || donHang.san_pham,
             ghi_chu: ghi_chu || donHang.ghi_chu,
-            so_diem_tich_luy: Math.floor(thanh_toan / 2500),
+            so_diem_tich_luy: Math.floor(thanh_tien / 2500),
             giam_gia: giam_gia || donHang.giam_gia,
             phi_van_chuyen: phi_van_chuyen || donHang.phi_van_chuyen,
             tong_san_pham: tong_san_pham || donHang.tong_san_pham,
-            thanh_tien: thanh_toan || donHang.thanh_tien
+            thanh_tien: thanh_tien || donHang.thanh_tien,
+            thanh_toan: thanh_toan || donHang.thanh_toan,
+
         }, { new: true }); // { new: true } để lấy dữ liệu đã cập nhật
 
         return donHangToUpdate;
@@ -72,22 +63,12 @@ const layDanhSachSanPhamChuaDanhGia = async (id_user) => {
 };
 
 
-const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_toan) => {
+const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
     try {
         let tong_san_pham = 0;
-        let thanh_tien = 0;
         for (let i = 0; i < san_pham.length; i++) {
-            if (san_pham[i].topping.length === 0) {
-                thanh_tien += san_pham[i].gia * san_pham[i].so_luong;
-            } else {
-                for (let j = 0; j < san_pham[i].topping.length; j++) {
-                    thanh_tien += san_pham[i].topping[j].gia * san_pham[i].so_luong;
-                }
-            }
             tong_san_pham += san_pham[i].so_luong;
-            thanh_tien += san_pham[i].gia * san_pham[i].so_luong;
         }
-        let thanh_toan = thanh_tien - giam_gia + phi_van_chuyen;
         const duLieu = {
             id_user: id_user,
             id_chi_nhanh: id_chi_nhanh,
@@ -96,14 +77,14 @@ const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_ph
             ngay_dat: new Date(),
             san_pham: san_pham,
             ghi_chu: ghi_chu,
-            so_diem_tich_luy: Math.floor(thanh_toan / 2500),
+            so_diem_tich_luy: Math.floor(thanh_tien / 2500),
             giam_gia: giam_gia,
             phi_van_chuyen: phi_van_chuyen,
             ma_trang_thai: 1,
             ten_trang_thai: "Đang xử lý",
             ngay_cap_nhat_1: new Date(),
             tong_san_pham: tong_san_pham,
-            thanh_tien: thanh_toan,
+            thanh_tien: thanh_tien,
             email: "",
             ten_user: "",
             so_sao: null,
@@ -167,6 +148,9 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             donHang.ma_trang_thai = ma_trang_thai,
             donHang.ten_trang_thai= "Đang giao",
             donHang.ngay_cap_nhat_3= new Date(),
+            // donHang.san_pham.forEach(sanPham => async () => {
+            //     await modelSanPham.findByIdAndUpdate(sanPham.id_san_pham, { $inc: { so_luong_da_mua: sanPham.so_luong } }, { new: true });
+            // });
             await donHang.save();
             return donHang;
         }
@@ -174,6 +158,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             donHang.ma_trang_thai = ma_trang_thai,
             donHang.ten_trang_thai= "Đã giao",
             donHang.ngay_cap_nhat_4= new Date(),
+            
             await donHang.save();
             return donHang;
         }
@@ -225,7 +210,7 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
                     return [];
                 }
                 sanPham.danh_gia.push({ so_sao: so_sao, danh_gia: danh_gia, hinh_anh_danh_gia: hinh_anh_danh_gia, email: email, ten_user: ten_user, ngay_danh_gia: new Date() });
-                sanPham.so_luong_da_mua = sanPham.so_luong_da_mua + donHang.san_pham[i].so_luong;
+                sanPham.so_luong_da_ban = sanPham.so_luong_da_ban + donHang.san_pham[i].so_luong;
                 let tong_sao = 0; // Khai báo biến tong_sao ở đây và gán giá trị 0
                 for (let j = 0; j < sanPham.danh_gia.length; j++) {
                     tong_sao = tong_sao + sanPham.danh_gia[j].so_sao;
