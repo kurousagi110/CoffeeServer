@@ -306,10 +306,27 @@ const layDanhSachGioHang = async (id_user) => {
     }
 };
 
+//xóa giỏ hàng
+const xoaGioHang = async (id_user) => {
+    try {
+        const result = await modelGioHang.findOneAndDelete({ id_user: id_user });
+        if (result) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    } catch (error) {
+        console.log('Lỗi tại xoaGioHang service: ', error)
+        throw error;
+    }
+
+}
 
 
 
 module.exports = {
     themDanhSachGioHang, layDanhSachGioHang, xoaSanPhamGioHang, capNhatSoLuongSanPhamGioHang,
-    themTopping, xoaTopping
+    themTopping, xoaTopping, xoaGioHang
 };

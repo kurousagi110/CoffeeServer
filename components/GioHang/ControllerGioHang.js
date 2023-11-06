@@ -82,5 +82,18 @@ const capNhatSoLuongSanPhamGioHang = async (id_user, _id, id_san_pham, size, so_
     }
 };
 
+//xóa giỏ hàng
+const xoaGioHang = async (id_user) => {
+    try {
+        const result = await serviceGioHang.xoaGioHang(id_user);
+        if (result) {
+            return result;
+        }
+        return false;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = { themDanhSachGioHang, layDanhSachGioHang, xoaSanPhamGioHang, capNhatSoLuongSanPhamGioHang
-                    , themTopping, xoaTopping };
+                    , themTopping, xoaTopping, xoaGioHang };

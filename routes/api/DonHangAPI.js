@@ -147,43 +147,16 @@ router.post('/cap-nhat-trang-thai', AuthenToken, async function (req, res, next)
     try {
         const { id_don_hang, ma_trang_thai } = req.body;
         const result = await DonHangController.capNhatTrangThai(id_don_hang, ma_trang_thai);
-        if (isNaN(result)) {
+        if (result) {
             res.status(200).json({
                 status: true,
                 message: 'Cập nhật trạng thái thành công!',
                 result: result
             });
-        }else if (result === 10) {
+        }else {
             res.status(200).json({
                 status: false,
-                message: 'Trùng trạng thái!'
-            });
-        }else if (result === 100) {
-            res.status(200).json({
-                status: false,
-                message: 'Đơn hàng đã được đánh giá!'
-            });
-        }else if (result === 1000) {
-            res.status(200).json({
-                status: false,
-                message: 'Không tìm thấy đơn hàng!'
-            });
-        }else if (result === 10000) {
-            res.status(200).json({
-                status: false,
-                message: 'Không thể chuyển trạng thái qua đánh giá'
-            });
-        }else if (result === 100000) {
-            res.status(200).json({
-                status: false,
-                message: 'Đơn hàng đã được giao không thể hủy!'
-            });
-        }
-
-        else {
-            res.status(200).json({
-                status: false,
-                message: 'Trạng thái phải theo thứ tự!'
+                message: 'Cập nhật trạng thái thất bại!'
             });
         }
     } catch (error) {

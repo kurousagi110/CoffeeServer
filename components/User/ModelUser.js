@@ -22,6 +22,8 @@ const userSchema = new Schema({
         nguoi_nhan: {type: String},
     }],
     tich_diem: {type: Number},
+    diem_thanh_vien: {type: Number},
+    hang_thanh_vien: {type: String},
     doi_diem:[{
         id_doi_diem: {type: ObjectID},
         ten_doi_diem: {type: String},
