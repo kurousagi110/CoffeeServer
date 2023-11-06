@@ -151,6 +151,11 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             donHang.ten_trang_thai= "Đã giao",
             donHang.ngay_cap_nhat_4= new Date(),
             await donHang.save();
+            if(user.diem_tich_luy === undefined){
+                user.diem_tich_luy = 0;
+                user.diem_thanh_vien = 0;
+                user.hang_thanh_vien = "Thành viên mới";
+            }
             user.diem_tich_luy = user.diem_tich_luy + donHang.so_diem_tich_luy;
             user.diem_thanh_vien = user.diem_thanh_vien + donHang.so_diem_tich_luy;
             switch (true) {
@@ -170,8 +175,10 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
                     user.hang_thanh_vien = "Thành viên kim cương đặc biệt";
                     break;
                 default:
+                    user.hang_thanh_vien = "Thành viên mới";
                     break;
             }
+            await user.save();
             return donHang;
         }
         else if (ma_trang_thai === 2) {

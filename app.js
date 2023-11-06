@@ -20,6 +20,7 @@ var toppingRouter = require('./routes/api/ToppingAPI');
 var voucherRouter = require('./routes/api/VoucherAPI');
 var vongQuayRouter = require('./routes/api/VongQuayAPI');
 var sanPhamTheoNgayRouter = require('./routes/api/SanPhamTheoNgayAPI');
+var sanPhamCpanelRouter = require('./routes/cpanel/SanPhamCpanel');
 
 
 var app = express();
@@ -75,6 +76,7 @@ app.use('/api/topping', toppingRouter);
 app.use('/api/voucher', voucherRouter);
 app.use('/api/vong-quay', vongQuayRouter);
 app.use('/api/san-pham-theo-ngay', sanPhamTheoNgayRouter);
+app.use('/cpanel/san-pham', sanPhamCpanelRouter);
 
 
 // catch 404 and forward to error handler

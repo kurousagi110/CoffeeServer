@@ -4,6 +4,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 
+//login cpanel
+const loginCpanel = async (tai_khoan, mat_khau) => {
+    try {
+        const user = await userModel.findOne({ tai_khoan: tai_khoan });
+        if (user.status === 100) {
+            const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
+            if (isMatch) {
+                return user;
+            }
+        }
+    } catch (error) {
+        console.log('Lỗi tại loginCpanel service: ', error)
+    }
+    return false;
+};
+
 // Sửa lịch sử tìm kiếm: Thêm từ khóa vào mảng lịch sử
 const themLichSuTimKiem = async (id_user, tu_khoa) => {
     try {
@@ -533,5 +549,5 @@ module.exports = {
     themDiaChi, suaDiaChi, xoaDiaChi, suaThongTinUser, xoaTaiKhoan,
     tichDiem, doiMatKhauOTP, doiMatKhau, suDungDiem, themEmail,
     xoaLichSuTimKiem, themLichSuTimKiem, kiemTraOTP, layLichSuDiem,
-    chinhDiaChiMacDinh, 
+    chinhDiaChiMacDinh, loginCpanel
 };
