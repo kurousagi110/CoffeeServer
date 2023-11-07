@@ -16,6 +16,10 @@ router.get('/login',[AuthenWeb], async(req, res, next) => {
   res.render('login');
 });
 
+//http://localhost:3000/them-san-pham
+router.get('/them-san-pham',[AuthenWeb], async function (req, res, next) {
+  res.render('sanpham/themsanpham');
+});
 
 //login
 router.post('/login', async (req, res, next) => {
