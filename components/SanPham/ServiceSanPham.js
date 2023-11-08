@@ -60,13 +60,12 @@ const timKiemSanPhamTheoListCategory = async () => {
                 } else {
                     result.push({
                         ten_loai_san_pham: item1.ten_loai_san_pham,
-                        hinh_anh: item1.hinh_anh,
+                        hinh_anh: item.hinh_anh_sp[0].hinh_anh_sp,
                         san_pham: [ item ],
                     });
                 }
             });
         });
-
         return result;
     } catch (error) {
         console.log('Lỗi tại timKiemSanPhamTheoListCategory service: ', error);
@@ -315,11 +314,7 @@ const themSanPhamAll = async (san_pham) => {
             return false;
         }
 
-        let loai_san_pham = {
-            ma_loai_san_pham: san_pham.ma_loai_san_pham,
-            ten_loai_san_pham: san_pham.ten_loai_san_pham,
-
-        };
+        
         const size= []
         for(let i = 0; i < san_pham.size.length; i++){
             let select = false;
@@ -340,7 +335,7 @@ const themSanPhamAll = async (san_pham) => {
             ten_san_pham: san_pham.ten_san_pham,
             mo_ta: san_pham.mo_ta,
             size: san_pham.size,
-            loai_san_pham: loai_san_pham,
+            loai_san_pham: san_pham.loai_san_pham,
             hinh_anh_sp: san_pham.hinh_anh_sp,
             status: 1,
             tong_sao: 0,

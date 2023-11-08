@@ -7,11 +7,15 @@ const jwt = require('jsonwebtoken');
 //login cpanel
 const loginCpanel = async (tai_khoan, mat_khau) => {
     try {
-        const user = await userModel.findOne({ tai_khoan: tai_khoan });
+        let user = await userModel.findOne({ tai_khoan: tai_khoan });
         if (user.status === 100) {
             const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
+            const token = await taoToken(tai_khoan);
             if (isMatch) {
+                user = {...user, token};
+                console.log('User service loginCpanel: ', user);
                 return user;
+                
             }
         }
     } catch (error) {

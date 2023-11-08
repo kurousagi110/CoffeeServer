@@ -2,7 +2,24 @@ var express = require('express');
 var router = express.Router();
 const userController = require('../../components/User/ControllerUser');
 const AuthenToken = require('../../components/MiddleWare/AuthenToken');
+const serviceUser = require('../../components/User/ServiceUser');
 
+
+//login cpanel
+//http://localhost:3000/users/login-cpanel
+router.post('/login-cpanel', async (req, res, next) => {
+    try {
+        const { username, password } = req.body;
+        const result = await serviceUser.loginCpanel(username, password);
+        if (result) {
+        res.status(200).json({ trang_thai: true, data: result });
+        } else {
+        res.status(200).json({ trang_thai: false, message: 'Đăng nhập thất bại' });
+        }
+    } catch (error) {
+        res.status(400).json({ trang_thai: false, message: error.message });
+    }
+});
 
 //thêm lịch sử tìm kiếm
 //http://localhost:3000/users/them-lich-su-tim-kiem
