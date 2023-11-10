@@ -80,9 +80,9 @@ const chinhDiaChiMacDinh = async (id_user, id_dia_chi) => {
     return false;
 };
 //thêm xóa sửa địa chỉ
-const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan) => {
+const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , nguoi_nhan, latitude, longitude) => {
     try {
-        const user = await userServices.themDiaChi(id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan);
+        const user = await userServices.themDiaChi(id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , nguoi_nhan, latitude, longitude);
         if (user) {
             return user;
         }
@@ -92,9 +92,9 @@ const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, ng
     return false;
 };
 
-const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan) => {
+const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude) => {
     try {
-        const user = await userServices.suaDiaChi(id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan);
+        const user = await userServices.suaDiaChi(id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude);
         if (user) {
             return user;
         }

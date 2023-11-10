@@ -177,8 +177,8 @@ router.post('/xoa-dia-chi', AuthenToken, async (req, res, next) => {
 //http://localhost:3000/users/sua-dia-chi
 router.post('/sua-dia-chi', AuthenToken, async (req, res, next) => {
     try {
-        const { id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan } = req.body;
-        const result = await userController.suaDiaChi(id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan);
+        const { id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude } = req.body;
+        const result = await userController.suaDiaChi(id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude);
         if (result) {
         res.status(200).json({ 
             trang_thai: true, 
@@ -199,8 +199,8 @@ router.post('/sua-dia-chi', AuthenToken, async (req, res, next) => {
 //http://localhost:3000/users/them-dia-chi
 router.post('/them-dia-chi', AuthenToken, async (req, res, next) => {
     try {
-        const { id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan } = req.body;
-        const result = await userController.themDiaChi(id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan);
+        const { id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude } = req.body;
+        const result = await userController.themDiaChi(id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan, latitude, longitude);
         if (result) {
         res.status(200).json({ 
             trang_thai: true, 

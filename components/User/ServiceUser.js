@@ -180,7 +180,7 @@ const xoaDiaChi = async (id_user, id_dia_chi) => {
 
 
 //sửa địa chỉ
-const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan  ) => {
+const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude  ) => {
     try {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
@@ -191,6 +191,8 @@ const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nh
                 dia_chi.so_nha = so_nha || dia_chi.so_nha;
                 dia_chi.tinh = tinh || dia_chi.tinh;
                 dia_chi.nguoi_nhan = nguoi_nhan || dia_chi.nguoi_nhan;
+                dia_chi.latitude = latitude || dia_chi.latitude;
+                dia_chi.longitude = longitude || dia_chi.longitude;
                 await user.save();
                 return user;
             }
@@ -203,7 +205,7 @@ const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nh
 };
 
 //thêm địa chỉ
-const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , nguoi_nhan) => {
+const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , nguoi_nhan, latitude, longitude) => {
     try {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
@@ -215,6 +217,8 @@ const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , n
                 mac_dinh: 0,
                 status: 1,
                 nguoi_nhan: nguoi_nhan,
+                latitude: latitude,
+                longitude: longitude,
             };
             user.dia_chi.push(dia_chi);
             await user.save();

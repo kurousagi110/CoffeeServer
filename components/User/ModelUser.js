@@ -20,6 +20,8 @@ const userSchema = new Schema({
         mac_dinh: {type: Number},
         status: {type: Number},
         nguoi_nhan: {type: String},
+        latitude: {type: String},
+        longitude: {type: String},
     }],
     tich_diem: {type: Number},
     diem_thanh_vien: {type: Number},
