@@ -7,12 +7,14 @@ const jwt = require('jsonwebtoken');
 //login cpanel
 const loginCpanel = async (tai_khoan, mat_khau) => {
     try {
+        console.log('User service loginCpanel: ', tai_khoan, mat_khau);
         let user = await userModel.findOne({ tai_khoan: tai_khoan });
+        console.log('User service loginCpanel: ', user);
         if (user.status === 100) {
             const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
             const token = await taoToken(tai_khoan);
             if (isMatch) {
-                user = {...user, token};
+                user = {user, token};
                 console.log('User service loginCpanel: ', user);
                 return user;
                 
@@ -262,7 +264,9 @@ const layThongTinUser = async (id_user) => {
                 doi_diem: user.doi_diem,
                 voucher_user: user.voucher_user,
                 status: user.status,
-
+                diem_thanh_vien: user.diem_thanh_vien,
+                hang_thanh_vien: user.hang_thanh_vien,
+                
             };
             return result;
         }

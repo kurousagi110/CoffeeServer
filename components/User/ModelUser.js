@@ -29,7 +29,7 @@ const userSchema = new Schema({
     doi_diem:[{
         id_doi_diem: {type: ObjectID},
         ten_doi_diem: {type: String},
-        ngay_doi: {type: Number},
+        ngay_doi: {type: Date},
         so_diem: {type: Number}
     }],
     voucher_user: [{
@@ -51,7 +51,7 @@ const userSchema = new Schema({
     lich_su: [{
         id_lich_su: {type: ObjectID},
         tu_khoa: {type: String},
-    },]
+    }]
  });
 
 

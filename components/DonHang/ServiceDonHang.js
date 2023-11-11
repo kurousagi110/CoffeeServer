@@ -151,11 +151,17 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             donHang.ten_trang_thai= "Đã giao",
             donHang.ngay_cap_nhat_4= new Date(),
             await donHang.save();
-            if(user.diem_tich_luy === undefined){
-                user.diem_tich_luy = 0;
-                user.diem_thanh_vien = 0;
-                user.hang_thanh_vien = "Thành viên mới";
+            //tich diem
+            let doi_diem ={
+                ten_doi_diem: "Cộng điểm đơn hàng ",
+                ngay_doi: new Date(),
+                so_diem: donHang.so_diem_tich_luy
             }
+            console.log(" diem thanh vien truoc" +user.diem_thanh_vien);
+            console.log(" diem tich luy truoc" +user.hang_thanh_vien);
+
+            user.tich_diem = user.tich_diem + donHang.so_diem_tich_luy;
+            user.doi_diem = doi_diem;
             user.diem_tich_luy = user.diem_tich_luy + donHang.so_diem_tich_luy;
             user.diem_thanh_vien = user.diem_thanh_vien + donHang.so_diem_tich_luy;
             switch (true) {
@@ -179,6 +185,8 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
                     break;
             }
             await user.save();
+            console.log("aaaaaaaa tv sau" +user.diem_thanh_vien);
+            console.log("aaaaaaaaa hang sau" +user.hang_thanh_vien);
             return donHang;
         }
         else if (ma_trang_thai === 2) {

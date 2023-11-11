@@ -9,10 +9,10 @@ const serviceUser = require('../../components/User/ServiceUser');
 //http://localhost:3000/users/login-cpanel
 router.post('/login-cpanel', async (req, res, next) => {
     try {
-        const { username, password } = req.body;
-        const result = await serviceUser.loginCpanel(username, password);
+        const { tai_khoan, mat_khau } = req.body;
+        const result = await serviceUser.loginCpanel(tai_khoan, mat_khau);
         if (result) {
-        res.status(200).json({ trang_thai: true, data: result });
+        res.status(200).json({ trang_thai: true, data: { id_user : result.user._id, token: result.token } });
         } else {
         res.status(200).json({ trang_thai: false, message: 'Đăng nhập thất bại' });
         }
