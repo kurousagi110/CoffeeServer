@@ -89,8 +89,18 @@ const timKiemSanPhamTheoCategory = async (ten_loai_san_pham) => {
 //tìm kiếm san pham
 const timKiemSanPham = async (ten_san_pham) => {
     try {
-        const san_pham = await sanPhamModel.find({ ten_san_pham: { $regex: ten_san_pham, $options: 'i' } });
-        return san_pham;
+        const san_pham = await sanPhamModel.find({
+            ten_san_pham: { $regex: new RegExp(ten_san_pham, 'i', 'g') }
+        });
+
+        if (san_pham.length === 0) {
+            const san_pham_sua_khac = await sanPhamModel.find({
+                ten_san_pham: { $regex: new RegExp(ten_san_pham.split(' ')[0], 'i', 'g') }
+            });
+            return san_pham_sua_khac;
+        } else {
+            return san_pham;
+        }
     } catch (error) {
         console.log('Lỗi tại timKiemSanPham service: ', error)
     }
