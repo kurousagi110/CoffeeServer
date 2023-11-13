@@ -93,17 +93,27 @@ const timKiemSanPham = async (ten_san_pham) => {
             ten_san_pham: { $regex: new RegExp(ten_san_pham, 'i', 'g') }
         });
 
-        if (san_pham.length === 0) {
-            const san_pham_sua_khac = await sanPhamModel.find({
+        if (!san_pham.length) {
+            const san_pham_chua_tu_dau = await sanPhamModel.find({
                 ten_san_pham: { $regex: new RegExp(ten_san_pham.split(' ')[0], 'i', 'g') }
             });
-            return san_pham_sua_khac;
-        } else {
-            return san_pham;
+
+            if (!san_pham_chua_tu_dau.length) {
+                const san_pham_final = await sanPhamModel.find({
+                    ten_san_pham: { $regex: new RegExp(ten_san_pham[0], 'i', 'g') }
+                });
+
+                return san_pham_final;
+            }
+
+            return san_pham_chua_tu_dau;
         }
+
+        return san_pham;
     } catch (error) {
-        console.log('Lỗi tại timKiemSanPham service: ', error)
+        console.log('Lỗi tại timKiemSanPham service: ', error);
     }
+
     return false;
 };
 
