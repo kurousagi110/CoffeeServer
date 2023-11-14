@@ -187,15 +187,15 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
 
                 // Your switch case logic for user.hang_thanh_vien here
                 if(user.diem_thanh_vien >= 0 && user.diem_thanh_vien < 200){
-                    user.hang_thanh_vien = "Thành viên mới";
+                    user.hang_thanh_vien = "Khách hàng mới";
                 }else if(user.diem_thanh_vien >= 200 && user.diem_thanh_vien < 500){
-                    user.hang_thanh_vien = "Thành viên đồng";
+                    user.hang_thanh_vien = "Hạng đồng";
                 }else if(user.diem_thanh_vien >= 500 && user.diem_thanh_vien < 1000){
-                    user.hang_thanh_vien = "Thành viên bạc";
+                    user.hang_thanh_vien = "Hạng bạc";
                 }else if(user.diem_thanh_vien >= 1000 && user.diem_thanh_vien < 2000){
-                    user.hang_thanh_vien = "Thành viên vàng";
+                    user.hang_thanh_vien = "Hạng vàng";
                 }else if(user.diem_thanh_vien >= 2000 && user.diem_thanh_vien < 5000){
-                    user.hang_thanh_vien = "Thành viên kim cương";
+                    user.hang_thanh_vien = "Hạng kim cương";
                 }else if(user.diem_thanh_vien >= 5000){
                     user.hang_thanh_vien = "Khách hàng VIP";
                 }
