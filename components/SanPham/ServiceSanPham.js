@@ -1,5 +1,6 @@
 const sanPhamModel = require('./ModelSanPham');
-
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //them du lieu
 const suaDuLieu = async (id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban ) => {

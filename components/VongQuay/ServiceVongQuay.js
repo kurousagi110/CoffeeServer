@@ -1,6 +1,8 @@
 const modelVongQuay = require('./ModelVongQuay');
 const modelUser = require('../User/ModelUser');
 
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //sử dụng vòng quay
 const suDungVongQuay = async (id_user) => {
@@ -14,11 +16,13 @@ const suDungVongQuay = async (id_user) => {
         }
         user.tich_diem = user.tich_diem - 100;
         console.log(user.tich_diem);
+        console.log (vietNamdate);
         user.doi_diem.push({
-            ngay_doi: new Date(),
+            ngay_doi: vietNamdate,
             ten_doi_diem: "Sử dụng vòng quay",
             so_diem: -100,
         });
+        console.log(user.doi_diem);
         await user.save();
         return true;
     } catch (error) {
@@ -39,7 +43,7 @@ const themVoucherUser = async (id_user, id_vong_quay) => {
         if (vongquay.diem > 0) {
             user.diem = user.diem + vongquay.diem;
             user.doi_diem.push({
-                ngay_doi: new Date(),
+                ngay_doi: vietNamdate,
                 ten_doi_diem: "Nhận điểm từ vòng quay",
                 so_diem: vongquay.diem,
             });
@@ -97,8 +101,8 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
             diem: diem,
             giam_gia: giam_gia,
             gia_tri: gia_tri,
-            ngay_bat_dau: new Date(),
-            ngay_ket_thuc: new Date(new Date().getTime() + (30 * 24 * 60 * 60 * 1000)),
+            ngay_bat_dau: vietNamdate,
+            ngay_ket_thuc: new Date(vietNamdate.getTime() + (30 * 24 * 60 * 60 * 1000)),
             trang_thai: "Còn hiệu lực",
             hinh_anh: hinh_anh,
             status: 1,
@@ -125,10 +129,11 @@ const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_v
         vongquay.diem = diem || vongquay.diem;
         vongquay.giam_gia = giam_gia || vongquay.giam_gia;
         vongquay.gia_tri = gia_tri || vongquay.gia_tri;
-        vongquay.ngay_bat_dau = new Date();
-        vongquay.ngay_ket_thuc = new Date(new Date().getTime() + (30 * 24 * 60 * 60 * 1000));
+        vongquay.ngay_bat_dau = vietNamdate;
+        vongquay.ngay_ket_thuc = new Date(vietNamdate.getTime() + (30 * 24 * 60 * 60 * 1000));
         vongquay.hinh_anh = hinh_anh || vongquay.hinh_anh;
         await vongquay.save();
+        console.log(vongquay);
         return true;
     } catch (error) {
         console.log(error);

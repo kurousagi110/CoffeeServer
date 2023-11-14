@@ -2,7 +2,8 @@ const userModel = require('./ModelUser');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //login cpanel
 const loginCpanel = async (tai_khoan, mat_khau) => {
@@ -95,7 +96,7 @@ const suDungDiem = async (id_user, diem) => {
         if (user) {
             user.tich_diem -= diem;
             user.doi_diem = {
-                ngay_doi: new Date(),
+                ngay_doi: vietNamdate,
                 so_diem : diem,
             }
             await user.save();

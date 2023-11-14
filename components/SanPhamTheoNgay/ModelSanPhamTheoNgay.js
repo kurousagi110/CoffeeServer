@@ -40,7 +40,7 @@ const schema = new Schema({
     status: {type: Number},
 });
 
-module.exports =mongoose.models.sanphamtheongays|| mongoose.model('sanphamtheongay', schema);
+module.exports =mongoose.models.sanphams|| mongoose.model('sanpham', schema);
 //category => categories trong database
 // 
 //  * collections = table

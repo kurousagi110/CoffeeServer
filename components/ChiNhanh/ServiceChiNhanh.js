@@ -1,6 +1,7 @@
 const modelChiNhanh = require('./ModelChiNhanh');
 
-
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 
 //lấy danh sách chi nhánh

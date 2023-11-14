@@ -2,7 +2,8 @@ const e = require('express');
 const modelFavorite = require('./ModelFavorite');
 const modelUser = require('../User/ModelUser');
 const modelSanPham = require('../SanPham/ModelSanPham');
-
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //lấy danh sách sản phẩm yêu thích theo user
 const layDanhSachSanPhamYeuThich = async (id_user) => {

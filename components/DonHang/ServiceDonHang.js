@@ -2,7 +2,8 @@ const modelDonHang = require('./ModelDonHang');
 const modelSanPham = require('../SanPham/ModelSanPham');
 const modelUser = require('../User/ModelUser');
 const moment = require('moment');
-
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //sửa đơn hàng
 const suaDonHang = async (id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
@@ -74,7 +75,7 @@ const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_ph
             id_chi_nhanh: id_chi_nhanh,
             loai_don_hang: loai_don_hang,
             dia_chi: dia_chi,
-            ngay_dat: new Date(),
+            ngay_dat: vietNamdate,
             san_pham: san_pham,
             ghi_chu: ghi_chu,
             so_diem_tich_luy: Math.floor(thanh_tien / 2500),
@@ -82,7 +83,7 @@ const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_ph
             phi_van_chuyen: phi_van_chuyen,
             ma_trang_thai: 1,
             ten_trang_thai: "Đang xử lý",
-            ngay_cap_nhat_1: new Date(),
+            ngay_cap_nhat_1: vietNamdate,
             tong_san_pham: tong_san_pham,
             thanh_tien: thanh_tien,
             email: "",
@@ -140,7 +141,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
         if (ma_trang_thai === 3) {
             donHang.ma_trang_thai = ma_trang_thai;
             donHang.ten_trang_thai = "Đang giao";
-            donHang.ngay_cap_nhat_3 = new Date();
+            donHang.ngay_cap_nhat_3 = vietNamdate;
 
             const productUpdates = donHang.san_pham.map(async (sanPham) => {
                 const updatedProduct = await modelSanPham.findByIdAndUpdate(
@@ -171,11 +172,11 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             if (donHang.ma_trang_thai !== ma_trang_thai) {
                 donHang.ma_trang_thai = ma_trang_thai;
                 donHang.ten_trang_thai = "Đã giao";
-                donHang.ngay_cap_nhat_4 = new Date();
+                donHang.ngay_cap_nhat_4 = vietNamdate;
 
                 const doi_diem = {
                     ten_doi_diem: "Cộng điểm đơn hàng",
-                    ngay_doi: new Date(),
+                    ngay_doi: vietNamdate,
                     so_diem: donHang.so_diem_tich_luy
                 };
 
@@ -200,7 +201,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             if (donHang.ma_trang_thai !== ma_trang_thai) {
                 donHang.ma_trang_thai = ma_trang_thai;
                 donHang.ten_trang_thai = statusUpdates[ma_trang_thai].ten_trang_thai;
-                donHang[statusUpdates[ma_trang_thai].ngay_cap_nhat] = new Date();
+                donHang[statusUpdates[ma_trang_thai].ngay_cap_nhat] = vietNamdate;
 
                 await donHang.save();
             }
@@ -231,14 +232,14 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
             donHang.hinh_anh_danh_gia = hinh_anh_danh_gia;
             donHang.email = email;
             donHang.ten_user = ten_user;
-            donHang.ngay_danh_gia = new Date();
+            donHang.ngay_danh_gia = vietNamdate;
             donHang.ma_trang_thai = 5,
             donHang.ten_trang_thai= "Đã đánh giá",
-            donHang.ngay_cap_nhat_5= new Date(),
+            donHang.ngay_cap_nhat_5= vietNamdate,
             await donHang.save();
             for (let i = 0; i < donHang.san_pham.length; i++) {
                 const sanPham = await modelSanPham.findById(donHang.san_pham[i].id_san_pham);
-                sanPham.danh_gia.push({ so_sao: so_sao, danh_gia: danh_gia, hinh_anh_danh_gia: hinh_anh_danh_gia, email: email, ten_user: ten_user, ngay_danh_gia: new Date() });
+                sanPham.danh_gia.push({ so_sao: so_sao, danh_gia: danh_gia, hinh_anh_danh_gia: hinh_anh_danh_gia, email: email, ten_user: ten_user, ngay_danh_gia: vietNamdate });
                 sanPham.so_luong_danh_gia = sanPham.danh_gia.length;
                 let tong_sao = 0; // Khai báo biến tong_sao ở đây và gán giá trị 0
                 for (let j = 0; j < sanPham.danh_gia.length; j++) {
