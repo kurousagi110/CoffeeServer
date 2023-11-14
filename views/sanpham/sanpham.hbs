@@ -1,3 +1,6 @@
+<header>
+    <link rel="stylesheet" href="/dist/css/dialog.css" />
+</header>
 <div class="preloader">
   <div class="lds-ripple">
     <div class="lds-pos"></div>
@@ -221,7 +224,7 @@
                   </thead>
                   <tbody>
                     {{#each sanpham}}
-                    <tr onclick="openDialog()" class="table-success">
+                    <tr onclick="openDialog()">
                       <th scope="row"><span class="stt"></span></th>
                       <td>{{this.ten_san_pham}}</td>
                       <td>{{this.mo_ta}}</td>

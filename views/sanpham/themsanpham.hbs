@@ -15,7 +15,7 @@
   <!-- ============================================================== -->
   <!-- Topbar header - style you can find in pages.scss -->
   <!-- ============================================================== -->
-  <header class="topbar" data-navbarbg="skin6" style="background-color: rgba(20, 11, 11, 0)">
+  <header class="topbar" data-navbarbg="skin6">
     <nav class="navbar top-navbar navbar-expand-md navbar-light">
       <div class="navbar-header" data-logobg="skin5">
         <!-- This is for the sidebar toggle which is visible on mobile only -->
@@ -237,45 +237,34 @@
                 <label>Số Điện Thoại</label>
                 <input type="text" class="form-control" placeholder="" />
               </div>
-
+              <div class="form-group" id="ThemMang" class="d-flex align-items-center">
+                <div class="form-group">
+                  <div class="btn btn-primary" onclick="themTruongInput()"><i class="mdi mdi-plus-box me-2"></i> Thêm
+                    size</div>
+                </div>
+              </div>
               <div class="form-group">
                 <label>Giới Tính</label>
                 <select class="form-select shadow-none col-12" id="inlineFormCustomSelect">
                   <option selected>Chọn...</option>
                   <option value="1">nam</option>
                   <option value="2">nữ</option>
-                  <option value="3">bê đê</option>
+                  <option value="0">không xác định</option>
                 </select>
               </div>
               <div class="custom-file">
-                <input type="file" class="custom-file-input" id="inputGroupFile01" />
-                <label class="custom-file-label" for="inputGroupFile01">Thêm File</label>
+                <input type="file" multiple class="custom-file-input" id="inputGroupFile01" />
               </div>
-            </form>
+              <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
+                <button type="submit" class="btn btn-primary" style="width: 95%">Lưu</button>
+              </div>
           </div>
+
         </div>
+
+        </form>
       </div>
     </div>
   </div>
 
-  <!-- ============================================================== -->
-  <!-- End PAge Content -->
-  <!-- ============================================================== -->
-  <!-- ============================================================== -->
-  <!-- Right sidebar -->
-  <!-- ============================================================== -->
-  <!-- .right-sidebar -->
-  <!-- ============================================================== -->
-  <!-- End Right sidebar -->
-  <!-- ============================================================== -->
-</div>
-<!-- ============================================================== -->
-<!-- End Container fluid  -->
-<!-- ============================================================== -->
-<!-- ============================================================== -->
-<!-- footer -->
-<!-- ============================================================== -->
-<!-- ============================================================== -->
-<!-- End footer -->
-<!-- ============================================================== -->
 </div>
