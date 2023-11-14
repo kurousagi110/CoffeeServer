@@ -224,15 +224,18 @@
                   </thead>
                   <tbody>
                     {{#each sanpham}}
-                    <tr onclick="openDialog()">
-                      <th scope="row"><span class="stt"></span></th>
-                      <td>{{this.ten_san_pham}}</td>
-                      <td>{{this.mo_ta}}</td>
-                      <td>{{this.so_luong_da_ban}}</td>
-                      <td>{{this.so_luong_danh_gia}}</td>
-                      <td>{{this.tong_sao}}</td>
+                    <tr>
+                      <th scope="row" onclick="openDialog()"><span class="stt"></span></th>
+                      <td onclick="openDialog()">{{this.ten_san_pham}}</td>
+                      <td onclick="openDialog()">{{this.mo_ta}}</td>
+                      <td onclick="openDialog()">{{this.so_luong_da_ban}}</td>
+                      <td onclick="openDialog()">{{this.so_luong_danh_gia}}</td>
+                      <td onclick="openDialog()">{{this.tong_sao}}</td>
                       <td>
-                        <i class="me-1 font-18 mdi mdi-account-multiple-minus"></i>
+                        <i class="me-1 font-18 mdi mdi-account-multiple-minus">
+                          <a href="http://localhost:3000/cpanel/san-pham/xoa-san-pham/{{this.id}}"><span
+                              ></span></a>
+                        </i>
                       </td>
                     </tr>
                     {{/each}}

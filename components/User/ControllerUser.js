@@ -142,9 +142,9 @@ const layThongTinUser = async (id_user) => {
     return false;
 };
 //sửa thông tin user
-const suaThongTinUser = async (id_user, ho_ten, avatar , email, so_dien_thoai) => {
+const suaThongTinUser = async (id_user, ho_ten, avatar , email, so_dien_thoai, device_token) => {
     try {
-        const user = await userServices.suaThongTinUser(id_user, ho_ten, avatar , email, so_dien_thoai);
+        const user = await userServices.suaThongTinUser(id_user, ho_ten, avatar , email, so_dien_thoai, device_token);
         if (user) {
             return user;
         }
