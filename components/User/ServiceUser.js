@@ -266,7 +266,7 @@ const layThongTinUser = async (id_user) => {
                 status: user.status,
                 diem_thanh_vien: user.diem_thanh_vien,
                 hang_thanh_vien: user.hang_thanh_vien,
-                
+                device_token: user.device_token,
             };
             return result;
         }

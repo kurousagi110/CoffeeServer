@@ -357,8 +357,12 @@ const themSanPhamAll = async (san_pham) => {
             size: san_pham.size,
             loai_san_pham: san_pham.loai_san_pham,
             hinh_anh_sp: san_pham.hinh_anh_sp,
+            danh_gia: [],
             status: 1,
             tong_sao: 0,
+            so_luong_da_ban: 0,
+            so_luong_danh_gia: 0,
+            
         });
         await result.save();
         return result;
