@@ -2,8 +2,11 @@ const sanPhamModel = require('./ModelSanPham');
 let vietNamdate = new Date();
 vietNamdate.setHours(vietNamdate.getHours() + 7);
 
+
+
+
 //them du lieu
-const suaDuLieu = async (id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban ) => {
+const suaDuLieu = async (id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban) => {
     try {
         const san_pham = await sanPhamModel.findOne({ _id: id_san_pham });
         if (san_pham) {
@@ -30,7 +33,7 @@ const danhSachDanhGiaTheoSanPham = async (id_san_pham) => {
         }
     } catch (error) {
         console.log('Lỗi tại danhSachDanhGiaTheoSanPham service: ', error)
-        throw error;    
+        throw error;
     }
     return false;
 };
@@ -62,7 +65,7 @@ const timKiemSanPhamTheoListCategory = async () => {
                     result.push({
                         ten_loai_san_pham: item1.ten_loai_san_pham,
                         hinh_anh: item.hinh_anh_sp[0].hinh_anh_sp,
-                        san_pham: [ item ],
+                        san_pham: [item],
                     });
                 }
             });
@@ -139,16 +142,92 @@ const getSanPhamById = async (id_san_pham) => {
     }
     return false;
 };
+//get sản phẩm giảm giá
+const getSanPhamGiamGia = async () => {
+    try {
+        const san_pham = await sanPhamModel.find({ check_gia_giam: true });
+        return san_pham;
+    } catch (error) {
+        console.log('Lỗi tại getSanPhamGiamGia service: ', error)
+    }
+    return false;
+};
 
 //get all product
 const getAllSanPham = async () => {
     try {
-        const san_pham = await sanPhamModel.find();
-        return san_pham;
+        const sanPham = await sanPhamModel.find();
+        let check = false;
+        if(sanPham.ngay_san_pham_moi < vietNamdate){
+            sanPham.is_san_pham_moi = false;
+        }
+        for (let i = 0; i < sanPham.length; i++) {
+            const sanPhamItem = sanPham[i];
+
+            // Check if the product has a discount expiration date
+            if (sanPhamItem.ngay_giam === null) {
+                continue;
+            }
+
+            // Check if the discount expiration date has passed
+            if (sanPhamItem.ngay_giam < vietNamdate) {
+                // Set the product's discount status to inactive
+                sanPhamItem.check_gia_giam = false;
+                sanPhamItem.ngay_giam = null;
+                for (let j = 0; j < sanPhamItem.size.length; j++) {
+                    sanPhamItem.size[j].giam_gia = 0;
+                    sanPhamItem.size[j].gia_da_giam = sanPhamItem.size[j].gia + (sanPhamItem.size[j].gia * sanPhamItem.size[j].giam_gia / 100);
+                }
+                // Save the updated product
+                await sanPhamItem.save();
+                console.log('sanPhamItem: ', sanPhamItem);
+                check = true;
+            }
+        }
+
+        // If any product's discount has expired, generate new discounted products
+        if (check) {
+            const sanPhamNgauNhien = await sanPhamModel.aggregate([
+                { $match: { is_san_pham_moi: false } },
+                { $sample: { size: 5 } }
+            ]);
+
+            // Set the discount expiration date for the new discounted products
+            const ngay_mai = new Date(vietNamdate.getTime() + (24 * 60 * 60 * 1000));
+            ngay_mai.setHours(0,0,0,0);
+
+            for (let i = 0; i < sanPhamNgauNhien.length; i++) {
+                const sanPhamNgauNhienItem = sanPhamNgauNhien[i];
+                sanPhamNgauNhienItem.ngay_giam = ngay_mai;
+                sanPhamNgauNhienItem.check_gia_giam = true;
+            }
+            console.log('sanPhamNgauNhien: ', sanPhamNgauNhien);
+            // Save the new discounted products
+            for (let i = 0; i < sanPhamNgauNhien.length; i++) {
+                for (let j = 0; j < sanPham.length; j++) {
+                    if (sanPhamNgauNhien[i].ten_san_pham === sanPham[j].ten_san_pham) {
+                        sanPham[j].check_gia_giam = sanPhamNgauNhien[i].check_gia_giam;
+                        sanPham[j].ngay_giam = sanPhamNgauNhien[i].ngay_giam;
+                        for (let k = 0; k < sanPhamNgauNhien[i].size.length; k++) {
+                            sanPham[j].size[k].giam_gia = 30;
+                            sanPham[j].size[k].gia_da_giam = sanPham[j].size[k].gia - (sanPham[j].size[k].gia * sanPham[j].size[k].giam_gia / 100);
+                        }
+                        await sanPham[j].save();
+                    }
+                }
+            }
+        }
+        // Return all products
+        return await sanPhamModel.find();
     } catch (error) {
-        console.log('Lỗi tại getAllSanPham service: ', error)
+        console.error('Error in getAllSanPham service:', error);
+        return false;
     }
-    return false;
+};
+
+//lấy sản phẩm ngãu nhiên theo ngày
+const getSanPhamNgauNhienTheoNgay = async () => {
+
 };
 
 //thêm loại sản phẩm
@@ -158,7 +237,7 @@ const themLoaiSanPham = async (id_san_pham, ten_loai_san_pham, ma_loai_san_pham)
         if (san_pham) {
             const loai_san_pham = {
                 ten_loai_san_pham: ten_loai_san_pham,
-                ma_loai_san_pham:  ma_loai_san_pham,
+                ma_loai_san_pham: ma_loai_san_pham,
             }
             san_pham.loai_san_pham.push(loai_san_pham);
             await san_pham.save();
@@ -273,15 +352,15 @@ const suaSize = async (id_san_pham, id_size, ten_size, gia, giam_gia) => {
                 if (ten_size === 'M') {
                     isSelected = true;
                 }
-                else{
+                else {
                     isSelected = false;
                 }
                 size.ten_size = ten_size || size.ten_size;
                 size.gia = gia || size.gia;
                 size.giam_gia = giam_gia || size.giam_gia;
                 console.log('gia: ', giam_gia);
-                size.gia_da_giam = gia - (gia * giam_gia / 100) || size.gia -(size.gia * size.giam_gia / 100);
-                
+                size.gia_da_giam = gia - (gia * giam_gia / 100) || size.gia - (size.gia * size.giam_gia / 100);
+
                 await san_pham.save();
                 return san_pham;
             }
@@ -310,7 +389,7 @@ const xoaSize = async (id_san_pham, id_size) => {
 };
 
 //thêm sản phẩm
-const themSanPham = async (ten_san_pham,  mo_ta) => {
+const themSanPham = async (ten_san_pham, mo_ta) => {
     try {
         const san_pham = new sanPhamModel({
             ten_san_pham: ten_san_pham,
@@ -335,13 +414,13 @@ const themSanPhamAll = async (san_pham) => {
             return false;
         }
 
-        
-        const size= []
-        for(let i = 0; i < san_pham.size.length; i++){
+
+        const size = []
+        for (let i = 0; i < san_pham.size.length; i++) {
             let select = false;
-            if(san_pham.size[i].ten_size === 'M'){
+            if (san_pham.size[i].ten_size === 'M') {
                 select = true;
-            }else{
+            } else {
                 select = false;
             }
             size.push({
@@ -363,7 +442,8 @@ const themSanPhamAll = async (san_pham) => {
             tong_sao: 0,
             so_luong_da_ban: 0,
             so_luong_danh_gia: 0,
-            
+            check_gia_giam: false,
+            ngay_giam: null,
         });
         await result.save();
         return result;
@@ -373,8 +453,11 @@ const themSanPhamAll = async (san_pham) => {
     return false;
 };
 
-module.exports = { themLoaiSanPham, xoaLoaiSanPham, themHinhAnh, xoaHinhAnh, 
-    themSize, suaSize, xoaSize, themSanPham, timKiemSanPham, 
-    locSanPhamTheoGiaTuThapDenCao, getSanPhamById, getAllSanPham , themSanPhamAll,
+module.exports = {
+    themLoaiSanPham, xoaLoaiSanPham, themHinhAnh, xoaHinhAnh,
+    themSize, suaSize, xoaSize, themSanPham, timKiemSanPham,
+    locSanPhamTheoGiaTuThapDenCao, getSanPhamById, getAllSanPham, themSanPhamAll,
     timKiemSanPhamTheoCategory, timKiemSanPhamTheoListCategory,
-    danhSachSanPhamDanhGiaTotNhat, danhSachDanhGiaTheoSanPham, suaDuLieu,suaLoaiSanPham  };
+    danhSachSanPhamDanhGiaTotNhat, danhSachDanhGiaTheoSanPham, suaDuLieu, suaLoaiSanPham,
+    getSanPhamGiamGia
+};

@@ -22,7 +22,7 @@ router.get('/lay-danh-sach-voucher-user/:id_user',AuthenToken, async (req, res) 
             });
         }else{
             res.status(200).json({
-                trang_thai : true,
+                trang_thai : false,
                 message: 'Lấy danh sách voucher thất bại',
             });
         }

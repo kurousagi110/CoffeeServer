@@ -48,6 +48,10 @@ const layDanhSachVoucherUser = async (id_user) => {
         VoucherHieuLuc.push(...userVoucherHieuLuc);
         VoucherHetHieuLuc.push(...userVoucherHetHieuLuc);
 
+        VoucherHieuLuc.sort((a, b) => {
+            return a.ngay_ket_thuc - b.ngay_ket_thuc;
+        });
+        console.log(VoucherHieuLuc);
         return {
             VoucherHieuLuc,
             VoucherHetHieuLuc,

@@ -38,6 +38,10 @@ const schema = new Schema({
     so_luong_danh_gia: {type: Number},
     so_luong_da_ban: {type: Number},
     status: {type: Number},
+    check_gia_giam: {type: Boolean},
+    ngay_giam: {type: Date},
+    is_san_pham_moi: {type: Boolean},
+    ngay_san_pham_moi: {type: Date},
 });
 
 module.exports =mongoose.models.sanphams|| mongoose.model('sanpham', schema);

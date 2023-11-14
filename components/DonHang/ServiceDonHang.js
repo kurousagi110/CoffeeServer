@@ -186,7 +186,19 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
                 user.diem_thanh_vien += donHang.so_diem_tich_luy;
 
                 // Your switch case logic for user.hang_thanh_vien here
-
+                if(user.diem_thanh_vien >= 0 && user.diem_thanh_vien < 200){
+                    user.hang_thanh_vien = "Thành viên mới";
+                }else if(user.diem_thanh_vien >= 200 && user.diem_thanh_vien < 500){
+                    user.hang_thanh_vien = "Thành viên đồng";
+                }else if(user.diem_thanh_vien >= 500 && user.diem_thanh_vien < 1000){
+                    user.hang_thanh_vien = "Thành viên bạc";
+                }else if(user.diem_thanh_vien >= 1000 && user.diem_thanh_vien < 2000){
+                    user.hang_thanh_vien = "Thành viên vàng";
+                }else if(user.diem_thanh_vien >= 2000 && user.diem_thanh_vien < 5000){
+                    user.hang_thanh_vien = "Thành viên kim cương";
+                }else if(user.diem_thanh_vien >= 5000){
+                    user.hang_thanh_vien = "Khách hàng VIP";
+                }
                 await user.save();
                 await donHang.save();
             }
