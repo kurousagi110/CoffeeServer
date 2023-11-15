@@ -171,8 +171,8 @@ router.post('/cap-nhat-trang-thai', AuthenToken, async function (req, res, next)
 //http://localhost:3000/api/don-hang/danh-gia
 router.post('/danh-gia', AuthenToken, async function (req, res, next) {
     try {
-        const { id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user } = req.body;
-        const result = await DonHangController.danhGia(id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user);
+        const { id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user, hinh_anh_user } = req.body;
+        const result = await DonHangController.danhGia(id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user, hinh_anh_user);
         if (isNaN(result)) {
             res.status(200).json({
                 status: true,
