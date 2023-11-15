@@ -74,15 +74,69 @@ const sendNotificationOrderStatusDelivering = async ({don_hang}) => {
 
     const message = {
       notification: {
-        title: `Coffee.Love`,
+        title: `${user.ho_ten} ơi`,
         body: "Đơn hàng của bạn đang được giao đến bạn đó",
         image: imageUrl,
       },
       data: {
-        type: "OrderStatus",
-        title: "Coffee.Love",
+        type: "OrderDelivering",
+        title: `${user.ho_ten} ơi`,
         message: "Đơn hàng của bạn đang được giao đến bạn đó",
         bigText: `Bạn đợi nhé, đơn hàng đang giao đến bạn trong thời gian sớm nhất`,
+        image: imageUrl,
+      },
+      token: user.device_token,
+    };
+
+    getMessaging()
+      .send(message)
+      .then((response) => {
+        console.log("Successfully sent message:", response);
+      })
+      .catch((error) => {
+        console.log("Error sending message:", error);
+        return false;
+      });
+
+    return true;
+  } catch (error) {
+    console.log("ERROR NOTIFICATION DELIVERING: ", error);
+
+    return false;
+  }
+};
+
+// gửi thông báo trạng thái đơn hàng cho thiết bị cụ thể (đã giao hàng)
+const sendNotificationOrderStatusArrived = async ({don_hang}) => {
+  console.log("ID DON HANG: ", don_hang);
+
+  const user = await modelUser.findById(don_hang.id_user);
+  console.log("USER: ", user.device_token);
+
+  try {
+    // một chút nhớ đổi sản phẩm thành đơn hàng
+    // let imageUrl = "https://dogifood.vn/Images/product/2201050907-ca-phe-den-da.webp";
+    //=====================
+    if (don_hang.san_pham.length > 0) {
+      imageUrl = don_hang.san_pham[0].hinh_anh_sp;
+      console.log("URL IMAGE: ", imageUrl);
+    }
+    console.log("DON HANG: ", don_hang._id.toString())
+    console.log("USER: ", don_hang.id_user)
+
+    const message = {
+      notification: {
+        title: `${user.ho_ten} ơi`,
+        body: "Đơn hàng đã giao thành công",
+        image: imageUrl,
+      },
+      data: {
+        type: "OrderArrived",
+        title: `${user.ho_ten} ơi`,
+        message: "Đơn hàng của bạn đã giao thành công",
+        bigText: `Cảm ơn bạn đã tin tưởng vào Coffee.Love`,
+        idDonHang: don_hang._id.toString(),
+        idUser: don_hang.id_user,
         image: imageUrl,
       },
       token: user.device_token,
@@ -109,4 +163,5 @@ const sendNotificationOrderStatusDelivering = async ({don_hang}) => {
 module.exports = {
   sendNotificationNewProduct,
   sendNotificationOrderStatusDelivering,
+  sendNotificationOrderStatusArrived
 };
