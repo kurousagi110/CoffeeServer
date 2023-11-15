@@ -212,9 +212,9 @@ router.post(
       if (result) {
         // gửi thông báo đơn trạng thái đơn hàng cho thiết bị cụ thể (đang vận chuyển)
         //==========================
-        // if (ma_trang_thai === 3) {
-        //   sendNotificationOrderStatusDelivering({ id_don_hang });
-        // }
+        if (ma_trang_thai === 3) {
+          sendNotificationOrderStatusDelivering({ id_don_hang });
+        }
         res.status(200).json({
           status: true,
           message: "Cập nhật trạng thái thành công!",

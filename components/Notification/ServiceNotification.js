@@ -2,8 +2,8 @@ const { initializeApp, applicationDefault } = require("firebase-admin/app");
 const { getMessaging } = require("firebase-admin/messaging");
 const admin = require("firebase-admin");
 const express = require("express");
-const modelDonHang = require('../DonHang/ModelDonHang')
-const modelUser = require('../User/ModelUser')
+const modelDonHang = require("../DonHang/ModelDonHang");
+const modelUser = require("../User/ModelUser");
 
 const serviceAccount = require("../../login-143c8-firebase-adminsdk-mgzik-6009768ec8.json");
 
@@ -60,17 +60,17 @@ const sendNotificationNewProduct = async (san_pham) => {
 const sendNotificationOrderStatusDelivering = async ({ id_don_hang }) => {
   console.log("ID DON HANG: ", id_don_hang);
 
-  const donHang = await modelDonHang.findById(id_don_hang);
+  const donHang = await modelDonHang.findById(id_don_hang).populate("san_pham");
   console.log("DON HANG: ", donHang);
 
   const user = await modelUser.findById(donHang.id_user);
-  console.log("USER: ", user);
-  
+  console.log("USER: ", user.device_token);
+
   try {
     // một chút nhớ đổi sản phẩm thành đơn hàng
     let imageUrl = "";
-    if (san_pham.hinh_anh_sp.length > 0) {
-      imageUrl = san_pham.hinh_anh_sp[0].hinh_anh_sp;
+    if (donHang.san_pham.length > 0) {
+      imageUrl = donHang.san_pham[0].hinh_anh_sp;
     }
 
     const message = {
@@ -83,10 +83,10 @@ const sendNotificationOrderStatusDelivering = async ({ id_don_hang }) => {
         type: "OrderStatus",
         title: "Coffee.Love",
         message: "Đơn hàng của bạn đang được giao đến bạn đó",
-        bigText: `${san_pham.ten_san_pham} là sản phẩm mới nhất của Coffee.Love đó, thử ngay nhé.`,
+        bigText: `Bạn đợi nhé, đơn hàng đang giao đến bạn trong thời gian sớm nhất`,
         image: imageUrl,
       },
-      token: "",
+      token: user.device_token,
     };
 
     getMessaging()
@@ -107,4 +107,7 @@ const sendNotificationOrderStatusDelivering = async ({ id_don_hang }) => {
   }
 };
 
-module.exports = { sendNotificationNewProduct, sendNotificationOrderStatusDelivering };
+module.exports = {
+  sendNotificationNewProduct,
+  sendNotificationOrderStatusDelivering,
+};
