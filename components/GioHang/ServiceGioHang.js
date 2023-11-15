@@ -2,6 +2,8 @@ const modelGioHang = require('./ModelGioHang');
 const modelUser = require('../User/ModelUser');
 const modelSanPham = require('../SanPham/ModelSanPham');
 
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //xóa toping
 const xoaTopping = async (id_user, id_san_pham, size, ten_topping) => {

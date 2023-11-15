@@ -265,8 +265,8 @@ router.get('/lay-thong-tin-tat-ca-user', async (req, res, next) => {
 //http://localhost:3000/users/sua-user
 router.post('/sua-user', AuthenToken, async (req, res, next) => {
     try {
-        const { id_user, ho_ten, avatar, email, so_dien_thoai } = req.body;
-        const result = await userController.suaThongTinUser(id_user, ho_ten, avatar , email, so_dien_thoai);
+        const { id_user, ho_ten, avatar, email, so_dien_thoai, device_token } = req.body;
+        const result = await userController.suaThongTinUser(id_user, ho_ten, avatar , email, so_dien_thoai, device_token);
         if (result) {
         res.status(200).json({ 
             trang_thai: true, 

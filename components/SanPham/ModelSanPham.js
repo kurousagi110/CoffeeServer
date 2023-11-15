@@ -28,16 +28,21 @@ const schema = new Schema({
         danh_gia: {type: String},
         hinh_anh_danh_gia:[{
             id_hinh_anh_danh_gia: {type: ObjectID},
-            hinh_anh_danh_gia: {type: String},
+            ten_hinh_anh: {type: String},
         }],
         email: {type: String},
         ten_user: {type: String},
+        hinh_anh_user: {type: String},
         ngay_danh_gia: {type: Date},
     }],
     tong_sao: {type: Number},
     so_luong_danh_gia: {type: Number},
     so_luong_da_ban: {type: Number},
     status: {type: Number},
+    check_gia_giam: {type: Boolean},
+    ngay_giam: {type: Date},
+    is_san_pham_moi: {type: Boolean},
+    ngay_san_pham_moi: {type: Date},
 });
 
 module.exports =mongoose.models.sanphams|| mongoose.model('sanpham', schema);

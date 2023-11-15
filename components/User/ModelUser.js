@@ -51,7 +51,8 @@ const userSchema = new Schema({
     lich_su: [{
         id_lich_su: {type: ObjectID},
         tu_khoa: {type: String},
-    }]
+    }],
+    device_token: {type: String},
  });
 
 

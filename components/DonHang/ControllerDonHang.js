@@ -61,9 +61,9 @@ const capNhatTrangThai = async (id_don_hang,ma_trang_thai) => {
 
 
 //danh gia
-const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user) => {
+const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user, hinh_anh_user) => {
     try {
-        const donHang = await serviceDonHang.danhGia(id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user);
+        const donHang = await serviceDonHang.danhGia(id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user, hinh_anh_user);
         return donHang;
     } catch (error) {
         throw new Error(error);

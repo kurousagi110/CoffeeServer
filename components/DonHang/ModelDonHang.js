@@ -25,6 +25,7 @@ const schema = new Schema({
             ten_topping: { type: String },
             gia: { type: Number },
         }],
+        hinh_anh_sp: { type: String },
     }],
     ghi_chu: { type: String },
     so_diem_tich_luy: { type: Number },
@@ -48,6 +49,7 @@ const schema = new Schema({
     }],
     email: { type: String },
     ten_user: { type: String },
+    hinh_anh_user: { type: String },
     ngay_danh_gia: { type: Date },
     status: { type: Number },
     thanh_toan: {

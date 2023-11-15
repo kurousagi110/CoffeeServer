@@ -1,8 +1,30 @@
 const sanPhamServices = require('./ServiceSanPham');
 
+//get sản phẩm mới
+const getSanPhamMoi = async () => {
+    try {
+        const san_pham = await sanPhamServices.getSanPhamMoi();
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
 
-
-
+//lấy danh sách sản phẩm giảm giá
+const layDanhSachSanPhamGiamGia = async () => {
+    try {
+        const san_pham = await sanPhamServices.getSanPhamGiamGia();
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
 //sửa sản phẩm
 const suaDuLieu = async (id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban) => {
     try {
@@ -263,4 +285,5 @@ module.exports = { themSize, themSanPham, themLoaiSanPham,
     themHinhAnh, xoaHinhAnh, suaSize, xoaSize,  xoaLoaiSanPham,
     getAllSanPham, getSanPhamById, locSanPhamTheoGiaTuThapDenCao, timKiemSanPham, themSanPhamAll,
     timKiemSanPhamTheoCategory, timKiemSanPhamTheoListCategory,
-    danhSachDanhGiaTheoSanPham, danhSachSanPhamDanhGiaTotNhat, suaDuLieu, suaLoaiSanPham };
+    danhSachDanhGiaTheoSanPham, danhSachSanPhamDanhGiaTotNhat, suaDuLieu, suaLoaiSanPham,
+    layDanhSachSanPhamGiamGia, getSanPhamMoi };

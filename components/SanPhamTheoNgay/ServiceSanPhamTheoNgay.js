@@ -1,6 +1,7 @@
 const modelSanPhamTheoNgay = require('./ModelSanPhamTheoNgay');
 const modelSanPham = require('../SanPham/ModelSanPham');
-
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 
 //đặt danh sách sản phẩm theo ngày

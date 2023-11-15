@@ -2,7 +2,8 @@ const userModel = require('./ModelUser');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //login cpanel
 const loginCpanel = async (tai_khoan, mat_khau) => {
@@ -95,7 +96,7 @@ const suDungDiem = async (id_user, diem) => {
         if (user) {
             user.tich_diem -= diem;
             user.doi_diem = {
-                ngay_doi: new Date(),
+                ngay_doi: vietNamdate,
                 so_diem : diem,
             }
             await user.save();
@@ -266,7 +267,7 @@ const layThongTinUser = async (id_user) => {
                 status: user.status,
                 diem_thanh_vien: user.diem_thanh_vien,
                 hang_thanh_vien: user.hang_thanh_vien,
-                
+                device_token: user.device_token,
             };
             return result;
         }
@@ -276,7 +277,7 @@ const layThongTinUser = async (id_user) => {
     return false;
 };
 //sửa thông tin user 
-const suaThongTinUser = async (id_user, ho_ten, avatar , email, so_dien_thoai) => {
+const suaThongTinUser = async (id_user, ho_ten, avatar , email, so_dien_thoai,device_token) => {
     try {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
@@ -284,6 +285,7 @@ const suaThongTinUser = async (id_user, ho_ten, avatar , email, so_dien_thoai) =
             user.avatar = avatar || user.avatar;
             user.email = email || user.email;
             user.so_dien_thoai = so_dien_thoai || user.so_dien_thoai;
+            user.device_token = device_token || user.device_token;
             await user.save();
             return user;
         }
@@ -347,6 +349,7 @@ const dangKyBangSoDienThoai = async (so_dien_thoai, mat_khau, ho_ten) => {
                 voucher_user: [],
                 otp: 0,
                 status: 1,
+                device_token: "",
             });
             return user;
         }
@@ -395,6 +398,7 @@ const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten) => {
                 otp: 0,
                 status: 1,
                 ma_khach_hang: ma_khach_hang,
+                device_token: "",
             });
             return user;
         }
@@ -456,6 +460,7 @@ const loginEmail = async (email, avatar, ho_ten) => {
                 otp: 0,
                 status: 1,
                 ma_khach_hang: ma_khach_hang,
+                device_token: "",
             });
             console.log(user1, "221312313");
             return { success: true, user: user1 };

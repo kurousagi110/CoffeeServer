@@ -1,6 +1,7 @@
 const modelLoaiSanPham = require('./ModelLoaiSanPham');
 
-
+let vietNamdate = new Date();
+vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //lấy tất cả loại sản phẩm
 const layTatCaLoaiSanPham = async () => {

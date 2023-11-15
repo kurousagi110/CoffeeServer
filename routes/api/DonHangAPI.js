@@ -237,50 +237,43 @@ router.post(
 
 //danh gia
 //http://localhost:3000/api/don-hang/danh-gia
-router.post("/danh-gia", AuthenToken, async function (req, res, next) {
-  try {
-    const {
-      id_don_hang,
-      so_sao,
-      danh_gia,
-      hinh_anh_danh_gia,
-      email,
-      ten_user,
-    } = req.body;
-    const result = await DonHangController.danhGia(
-      id_don_hang,
-      so_sao,
-      danh_gia,
-      hinh_anh_danh_gia,
-      email,
-      ten_user
-    );
-    if (isNaN(result)) {
-      res.status(200).json({
-        status: true,
-        message: "Đánh giá thành công!",
-        result: result,
-      });
-    } else if (result === 10) {
-      res.status(200).json({
-        status: false,
-        message: "Đơn hàng đã được đánh giá!",
-      });
-    } else if (result === 100) {
-      res.status(200).json({
-        status: false,
-        message: "không tìm thấy đơn hàng!",
-      });
-    } else if (result === 1000) {
-      res.status(200).json({
-        status: false,
-        message: "Đơn hàng chưa được giao!",
-      });
-    } else {
-      res.status(200).json({
-        status: false,
-        message: "Đánh giá thất bại!",
-      });
+router.post('/danh-gia', AuthenToken, async function (req, res, next) {
+    try {
+        const { id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user, hinh_anh_user } = req.body;
+        const result = await DonHangController.danhGia(id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user, hinh_anh_user);
+        if (isNaN(result)) {
+            res.status(200).json({
+                status: true,
+                message: 'Đánh giá thành công!',
+                result: result
+            });
+        }else if (result === 10) {
+            res.status(200).json({
+                status: false,
+                message: 'Đơn hàng đã được đánh giá!'
+            });
+        }else if (result === 100) { 
+            res.status(200).json({
+                status: false,
+                message: 'không tìm thấy đơn hàng!'
+            });
+         }else if (result === 1000) {
+            res.status(200).json({
+                status: false,
+                message: 'Đơn hàng chưa được giao!'
+            });
+         }
+        else {
+            res.status(200).json({
+                status: false,
+                message: 'Đánh giá thất bại!'
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            status: false,
+            message: error.message
+        });
     }
   } catch (error) {
     res.status(400).json({
