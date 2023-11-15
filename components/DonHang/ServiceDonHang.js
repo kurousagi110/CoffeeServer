@@ -7,287 +7,288 @@ vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //sửa đơn hàng
 const suaDonHang = async (id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
-    try {
-        const donHang = await modelDonHang.findById(id_don_hang);
-        if (!donHang) {
-            return false;
-        }
-        let tong_san_pham = 0;
-        for (let i = 0; i < san_pham.length; i++) {
-            tong_san_pham += san_pham[i].so_luong;
-        }
-        // Truy vấn đơn hàng theo id_don_hang và cập nhật dữ liệu
-        const donHangToUpdate = await modelDonHang.findByIdAndUpdate(id_don_hang, {
-            id_user: id_user || donHang.id_user,
-            id_chi_nhanh: id_chi_nhanh || donHang.id_chi_nhanh,
-            loai_don_hang: loai_don_hang || donHang.loai_don_hang,
-            dia_chi: dia_chi || donHang.dia_chi,
-            san_pham: san_pham || donHang.san_pham,
-            ghi_chu: ghi_chu || donHang.ghi_chu,
-            so_diem_tich_luy: Math.floor(thanh_tien / 2500),
-            giam_gia: giam_gia || donHang.giam_gia,
-            phi_van_chuyen: phi_van_chuyen || donHang.phi_van_chuyen,
-            tong_san_pham: tong_san_pham || donHang.tong_san_pham,
-            thanh_tien: thanh_tien || donHang.thanh_tien,
-            thanh_toan: thanh_toan || donHang.thanh_toan,
-
-        }, { new: true }); // { new: true } để lấy dữ liệu đã cập nhật
-
-        return donHangToUpdate;
-    } catch (error) {
-        throw new Error(error);
+  try {
+    const donHang = await modelDonHang.findById(id_don_hang);
+    if (!donHang) {
+      return false;
     }
-};
+    let tong_san_pham = 0;
+    for (let i = 0; i < san_pham.length; i++) {
+      tong_san_pham += san_pham[i].so_luong;
+    }
+    // Truy vấn đơn hàng theo id_don_hang và cập nhật dữ liệu
+    const donHangToUpdate = await modelDonHang.findByIdAndUpdate(
+      id_don_hang,
+      {
+        id_user: id_user || donHang.id_user,
+        id_chi_nhanh: id_chi_nhanh || donHang.id_chi_nhanh,
+        loai_don_hang: loai_don_hang || donHang.loai_don_hang,
+        dia_chi: dia_chi || donHang.dia_chi,
+        san_pham: san_pham || donHang.san_pham,
+        ghi_chu: ghi_chu || donHang.ghi_chu,
+        so_diem_tich_luy: Math.floor(thanh_tien / 2500),
+        giam_gia: giam_gia || donHang.giam_gia,
+        phi_van_chuyen: phi_van_chuyen || donHang.phi_van_chuyen,
+        tong_san_pham: tong_san_pham || donHang.tong_san_pham,
+        thanh_tien: thanh_tien || donHang.thanh_tien,
+        thanh_toan: thanh_toan || donHang.thanh_toan,
+      },
+      { new: true }
+    ); // { new: true } để lấy dữ liệu đã cập nhật
 
+    return donHangToUpdate;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 //lấy danh sách sản phẩm chưa đánh giá
 const layDanhSachSanPhamChuaDanhGia = async (id_user) => {
-    try {
-        const donHang = await modelDonHang.find({ id_user: id_user });
-        if (!donHang || donHang.length === 0) {
-            return [];
-        }
-
-        const danhSachSanPhamChuaDanhGia = [];
-
-        for (let i = 0; i < donHang.length; i++) {
-            donHang[i].san_pham.forEach(sanPham => {
-                if(sanPham.ma_trang_thai === 4){
-                    danhSachSanPhamChuaDanhGia.push(sanPham);
-                }
-            });
-        }
-        return danhSachSanPhamChuaDanhGia;
-    } catch (error) {
-        throw new Error(error);
+  try {
+    const donHang = await modelDonHang.find({ id_user: id_user });
+    if (!donHang || donHang.length === 0) {
+      return [];
     }
-};
 
+    const danhSachSanPhamChuaDanhGia = [];
+
+    for (let i = 0; i < donHang.length; i++) {
+      donHang[i].san_pham.forEach((sanPham) => {
+        if (sanPham.ma_trang_thai === 4) {
+          danhSachSanPhamChuaDanhGia.push(sanPham);
+        }
+      });
+    }
+    return danhSachSanPhamChuaDanhGia;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
-    try {
-        let tong_san_pham = 0;
-        for (let i = 0; i < san_pham.length; i++) {
-            tong_san_pham += san_pham[i].so_luong;
-        }
-        const duLieu = {
-            id_user: id_user,
-            id_chi_nhanh: id_chi_nhanh,
-            loai_don_hang: loai_don_hang,
-            dia_chi: dia_chi,
-            ngay_dat: vietNamdate,
-            san_pham: san_pham,
-            ghi_chu: ghi_chu,
-            so_diem_tich_luy: Math.floor(thanh_tien / 2500),
-            giam_gia: giam_gia,
-            phi_van_chuyen: phi_van_chuyen,
-            ma_trang_thai: 1,
-            ten_trang_thai: "Đang xử lý",
-            ngay_cap_nhat_1: vietNamdate,
-            tong_san_pham: tong_san_pham,
-            thanh_tien: thanh_tien,
-            email: "",
-            ten_user: "",
-            so_sao: null,
-            danh_gia: "",
-            thanh_toan: thanh_toan,
-            
-        };
-        const donHang = await modelDonHang.create(duLieu);
-        return donHang;
-    } catch (error) {
-        throw new Error(error);
+  try {
+    let tong_san_pham = 0;
+    for (let i = 0; i < san_pham.length; i++) {
+      tong_san_pham += san_pham[i].so_luong;
     }
+    const duLieu = {
+      id_user: id_user,
+      id_chi_nhanh: id_chi_nhanh,
+      loai_don_hang: loai_don_hang,
+      dia_chi: dia_chi,
+      ngay_dat: vietNamdate,
+      san_pham: san_pham,
+      ghi_chu: ghi_chu,
+      so_diem_tich_luy: Math.floor(thanh_tien / 2500),
+      giam_gia: giam_gia,
+      phi_van_chuyen: phi_van_chuyen,
+      ma_trang_thai: 1,
+      ten_trang_thai: "Đang xử lý",
+      ngay_cap_nhat_1: vietNamdate,
+      tong_san_pham: tong_san_pham,
+      thanh_tien: thanh_tien,
+      email: "",
+      ten_user: "",
+      so_sao: null,
+      danh_gia: "",
+      thanh_toan: thanh_toan,
 
+    };
+    const donHang = await modelDonHang.create(duLieu);
+    return donHang;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
-
 const layDonHang = async (id_don_hang) => {
-    try {
-        const donHang = await modelDonHang.findById(id_don_hang);
-        if (!donHang) {
-            return [];
-        }
-        return donHang;
-    } catch (error) {
-        throw new Error(error);
+  try {
+    const donHang = await modelDonHang.findById(id_don_hang);
+    if (!donHang) {
+      return [];
     }
+    return donHang;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 //lay don hang theo id_user
 const layDonHangTheoIdUser = async (id_user) => {
-    try {
-        const donHang = await modelDonHang.find({ id_user: id_user });
-        if (!donHang) {
-            return [];
-        }
-        return donHang;
-    } catch (error) {
-        throw new Error(error);
+  try {
+    const donHang = await modelDonHang.find({ id_user: id_user });
+    if (!donHang) {
+      return [];
     }
+    return donHang;
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
 //cap nhat trang thai
 const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
-    try {
-        const donHang = await modelDonHang.findById(id_don_hang).populate('san_pham');
-        if (!donHang) {
-            return false;
-        }
-        const user = await modelUser.findById(donHang.id_user);
-        
-        if (!user) {
-            return false;
-        }
-
-        if (ma_trang_thai === 3) {
-            let ma_trang_thai_3 =  new Date();
-            ma_trang_thai_3.setHours(vietNamdate.getHours() + 7);
-            donHang.ma_trang_thai = ma_trang_thai;
-            donHang.ten_trang_thai = "Đang giao";
-            donHang.ngay_cap_nhat_3 = ma_trang_thai_3;
-
-            // const productUpdates = donHang.san_pham.map(async (sanPham) => {
-            //     const updatedProduct = await modelSanPham.findByIdAndUpdate(
-            //         sanPham.id_san_pham,
-            //         { $inc: { so_luong_da_mua: sanPham.so_luong } },
-            //         { new: true }
-            //     );
-            //     // handle updatedProduct if needed
-            //     console.log("day la update"+ updatedProduct);
-            //     return updatedProduct;
-            // });
-
-            // await Promise.all(productUpdates);   
-            await donHang.save();
-            return donHang;
-        } else if (ma_trang_thai === 4) {
-            const productUpdates = donHang.san_pham.map(async (sanPham) => {
-                const updatedProduct = await modelSanPham.findByIdAndUpdate(
-                    sanPham.id_san_pham,
-                    { $inc: { so_luong_da_ban: sanPham.so_luong } },
-                    { new: true }
-                );
-                // handle updatedProduct if needed
-                return updatedProduct;
-            });
-
-            await Promise.all(productUpdates);
-            let ma_trang_thai_4 =  new Date();
-            ma_trang_thai_4.setHours(vietNamdate.getHours() + 7);
-            if (donHang.ma_trang_thai !== ma_trang_thai) {
-                donHang.ma_trang_thai = ma_trang_thai;
-                donHang.ten_trang_thai = "Đã giao";
-                donHang.ngay_cap_nhat_4 = ma_trang_thai_4;
-
-                const doi_diem = {
-                    ten_doi_diem: "Cộng điểm đơn hàng",
-                    ngay_doi: vietNamdate,
-                    so_diem: donHang.so_diem_tich_luy
-                };
-
-                user.tich_diem += donHang.so_diem_tich_luy;
-                user.doi_diem = doi_diem;
-                user.diem_tich_luy += donHang.so_diem_tich_luy;
-                user.diem_thanh_vien += donHang.so_diem_tich_luy;
-
-                // Your switch case logic for user.hang_thanh_vien here
-                if(user.diem_thanh_vien >= 0 && user.diem_thanh_vien < 200){
-                    user.hang_thanh_vien = "Khách hàng mới";
-                }else if(user.diem_thanh_vien >= 200 && user.diem_thanh_vien < 500){
-                    user.hang_thanh_vien = "Hạng đồng";
-                }else if(user.diem_thanh_vien >= 500 && user.diem_thanh_vien < 1000){
-                    user.hang_thanh_vien = "Hạng bạc";
-                }else if(user.diem_thanh_vien >= 1000 && user.diem_thanh_vien < 2000){
-                    user.hang_thanh_vien = "Hạng vàng";
-                }else if(user.diem_thanh_vien >= 2000 && user.diem_thanh_vien < 5000){
-                    user.hang_thanh_vien = "Hạng kim cương";
-                }else if(user.diem_thanh_vien >= 5000){
-                    user.hang_thanh_vien = "Khách hàng VIP";
-                }
-                await user.save();
-                await donHang.save();
-            }
-
-            return donHang;
-        } else if (ma_trang_thai === 2) {
-            let ma_trang_thai_2 =  new Date();
-            ma_trang_thai_2.setHours(vietNamdate.getHours() + 7);
-            donHang.ma_trang_thai = ma_trang_thai;
-            donHang.ten_trang_thai = "Đã hủy";
-            donHang.ngay_cap_nhat_2 = ma_trang_thai_2;
-            await donHang.save();
-            return donHang;
-        }else if (ma_trang_thai === 0) {
-            let ma_trang_thai_0 =  new Date();
-            ma_trang_thai_0.setHours(vietNamdate.getHours() + 7);
-            donHang.ma_trang_thai = ma_trang_thai;
-            donHang.ten_trang_thai = "Đã hủy";
-            donHang.ngay_cap_nhat_0 = ma_trang_thai_0;
-            await donHang.save();
-            return donHang;
-        }else {
-            return false;
-        }
-    } catch (error) {
-        throw new Error(error);
+  try {
+    const donHang = await modelDonHang.findById(id_don_hang).populate('san_pham');
+    if (!donHang) {
+      return false;
     }
-};
+    const user = await modelUser.findById(donHang.id_user);
 
+    if (!user) {
+      return false;
+    }
+
+    if (ma_trang_thai === 3) {
+      let ma_trang_thai_3 = new Date();
+      ma_trang_thai_3.setHours(vietNamdate.getHours() + 7);
+      donHang.ma_trang_thai = ma_trang_thai;
+      donHang.ten_trang_thai = "Đang giao";
+      donHang.ngay_cap_nhat_3 = ma_trang_thai_3;
+
+      // const productUpdates = donHang.san_pham.map(async (sanPham) => {
+      //     const updatedProduct = await modelSanPham.findByIdAndUpdate(
+      //         sanPham.id_san_pham,
+      //         { $inc: { so_luong_da_mua: sanPham.so_luong } },
+      //         { new: true }
+      //     );
+      //     // handle updatedProduct if needed
+      //     console.log("day la update"+ updatedProduct);
+      //     return updatedProduct;
+      // });
+
+      // await Promise.all(productUpdates);   
+      await donHang.save();
+      return donHang;
+    } else if (ma_trang_thai === 4) {
+      const productUpdates = donHang.san_pham.map(async (sanPham) => {
+        const updatedProduct = await modelSanPham.findByIdAndUpdate(
+          sanPham.id_san_pham,
+          { $inc: { so_luong_da_ban: sanPham.so_luong } },
+          { new: true }
+        );
+        // handle updatedProduct if needed
+        return updatedProduct;
+      });
+
+      await Promise.all(productUpdates);
+      let ma_trang_thai_4 = new Date();
+      ma_trang_thai_4.setHours(vietNamdate.getHours() + 7);
+      if (donHang.ma_trang_thai !== ma_trang_thai) {
+        donHang.ma_trang_thai = ma_trang_thai;
+        donHang.ten_trang_thai = "Đã giao";
+        donHang.ngay_cap_nhat_4 = ma_trang_thai_4;
+
+        const doi_diem = {
+          ten_doi_diem: "Cộng điểm đơn hàng",
+          ngay_doi: vietNamdate,
+          so_diem: donHang.so_diem_tich_luy
+        };
+
+        user.tich_diem += donHang.so_diem_tich_luy;
+        user.doi_diem = doi_diem;
+        user.diem_tich_luy += donHang.so_diem_tich_luy;
+        user.diem_thanh_vien += donHang.so_diem_tich_luy;
+
+        // Your switch case logic for user.hang_thanh_vien here
+        if (user.diem_thanh_vien >= 0 && user.diem_thanh_vien < 200) {
+          user.hang_thanh_vien = "Khách hàng mới";
+        } else if (user.diem_thanh_vien >= 200 && user.diem_thanh_vien < 500) {
+          user.hang_thanh_vien = "Hạng đồng";
+        } else if (user.diem_thanh_vien >= 500 && user.diem_thanh_vien < 1000) {
+          user.hang_thanh_vien = "Hạng bạc";
+        } else if (user.diem_thanh_vien >= 1000 && user.diem_thanh_vien < 2000) {
+          user.hang_thanh_vien = "Hạng vàng";
+        } else if (user.diem_thanh_vien >= 2000 && user.diem_thanh_vien < 5000) {
+          user.hang_thanh_vien = "Hạng kim cương";
+        } else if (user.diem_thanh_vien >= 5000) {
+          user.hang_thanh_vien = "Khách hàng VIP";
+        }
+        await user.save();
+        await donHang.save();
+      }
+
+      return donHang;
+    } else if (ma_trang_thai === 2) {
+      let ma_trang_thai_2 = new Date();
+      ma_trang_thai_2.setHours(vietNamdate.getHours() + 7);
+      donHang.ma_trang_thai = ma_trang_thai;
+      donHang.ten_trang_thai = "Đã hủy";
+      donHang.ngay_cap_nhat_2 = ma_trang_thai_2;
+      await donHang.save();
+      return donHang;
+    } else if (ma_trang_thai === 0) {
+      let ma_trang_thai_0 = new Date();
+      ma_trang_thai_0.setHours(vietNamdate.getHours() + 7);
+      donHang.ma_trang_thai = ma_trang_thai;
+      donHang.ten_trang_thai = "Đã hủy";
+      donHang.ngay_cap_nhat_0 = ma_trang_thai_0;
+      await donHang.save();
+      return donHang;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 //danh gia
 const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user, hinh_anh_user) => {
-    try {
-        const donHang = await modelDonHang.findById(id_don_hang);
-        if (!donHang) {
-            return 100;
-        }
-        if (donHang.danh_gia) {
-            return 10;
-        }
-        if (donHang.ma_trang_thai === 4) {
-            donHang.so_sao = so_sao;
-            donHang.danh_gia = danh_gia;
-            donHang.hinh_anh_danh_gia = hinh_anh_danh_gia;
-            donHang.email = email;
-            donHang.ten_user = ten_user;
-            donHang.hinh_anh_user = hinh_anh_user;
-            donHang.ngay_danh_gia = vietNamdate;
-            donHang.ma_trang_thai = 5,
-            donHang.ten_trang_thai= "Đã đánh giá",
-            donHang.ngay_cap_nhat_5= vietNamdate,
-            await donHang.save();
-            for (let i = 0; i < donHang.san_pham.length; i++) {
-                const sanPham = await modelSanPham.findById(donHang.san_pham[i].id_san_pham);
-                sanPham.danh_gia.push({ 
-                    so_sao: so_sao, 
-                    danh_gia: danh_gia, 
-                    hinh_anh_danh_gia: hinh_anh_danh_gia, 
-                    email: email, 
-                    hinh_anh_user: hinh_anh_user,
-                    ten_user: ten_user, 
-                    ngay_danh_gia: vietNamdate 
-                });
-                sanPham.so_luong_danh_gia = sanPham.danh_gia.length;
-                let tong_sao = 0; // Khai báo biến tong_sao ở đây và gán giá trị 0
-                for (let j = 0; j < sanPham.danh_gia.length; j++) {
-                    tong_sao = tong_sao + sanPham.danh_gia[j].so_sao;
-                }
-                sanPham.tong_sao = tong_sao / sanPham.danh_gia.length;
-                await sanPham.save();
-            }
-            return donHang;
-        } else {
-            return 1000;
-        }
-
-    } catch (error) {
-        throw new Error(error);
+  try {
+    const donHang = await modelDonHang.findById(id_don_hang);
+    if (!donHang) {
+      return 100;
     }
+    if (donHang.danh_gia) {
+      return 10;
+    }
+    if (donHang.ma_trang_thai === 4) {
+      donHang.so_sao = so_sao;
+      donHang.danh_gia = danh_gia;
+      donHang.hinh_anh_danh_gia = hinh_anh_danh_gia;
+      donHang.email = email;
+      donHang.ten_user = ten_user;
+      donHang.hinh_anh_user = hinh_anh_user;
+      donHang.ngay_danh_gia = vietNamdate;
+      donHang.ma_trang_thai = 5,
+        donHang.ten_trang_thai = "Đã đánh giá",
+        donHang.ngay_cap_nhat_5 = vietNamdate,
+        await donHang.save();
+      for (let i = 0; i < donHang.san_pham.length; i++) {
+        const sanPham = await modelSanPham.findById(donHang.san_pham[i].id_san_pham);
+        sanPham.danh_gia.push({
+          so_sao: so_sao,
+          danh_gia: danh_gia,
+          hinh_anh_danh_gia: hinh_anh_danh_gia,
+          email: email,
+          hinh_anh_user: hinh_anh_user,
+          ten_user: ten_user,
+          ngay_danh_gia: vietNamdate
+        });
+        sanPham.so_luong_danh_gia = sanPham.danh_gia.length;
+        let tong_sao = 0; // Khai báo biến tong_sao ở đây và gán giá trị 0
+        for (let j = 0; j < sanPham.danh_gia.length; j++) {
+          tong_sao = tong_sao + sanPham.danh_gia[j].so_sao;
+        }
+        sanPham.tong_sao = tong_sao / sanPham.danh_gia.length;
+        await sanPham.save();
+      }
+      return donHang;
+    } else {
+      return 1000;
+    }
+
+  } catch (error) {
+    throw new Error(error);
+  }
 };
 
-
-
 module.exports = {
-    themDonHang, layDonHang, layDonHangTheoIdUser, capNhatTrangThai, danhGia, layDanhSachSanPhamChuaDanhGia,
-    suaDonHang
-}
+  themDonHang,
+  layDonHang,
+  layDonHangTheoIdUser,
+  capNhatTrangThai,
+  danhGia,
+  layDanhSachSanPhamChuaDanhGia,
+  suaDonHang,
+};
