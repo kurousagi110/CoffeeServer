@@ -213,7 +213,7 @@ router.post(
         // gửi thông báo đơn trạng thái đơn hàng cho thiết bị cụ thể (đang vận chuyển)
         //==========================
         if (ma_trang_thai === 3) {
-          sendNotificationOrderStatusDelivering({ id_don_hang });
+          sendNotificationOrderStatusDelivering({don_hang: result});
         }
         res.status(200).json({
           status: true,
@@ -269,12 +269,7 @@ router.post('/danh-gia', AuthenToken, async function (req, res, next) {
                 message: 'Đánh giá thất bại!'
             });
         }
-    } catch (error) {
-        res.status(400).json({
-            status: false,
-            message: error.message
-        });
-    }
+
   } catch (error) {
     res.status(400).json({
       status: false,

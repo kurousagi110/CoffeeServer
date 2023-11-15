@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var uploadAnh = require('../../components/MiddleWare/uploadFile');
 const sanPhamController = require('../../components/SanPham/ControllerSanPham');
 
 //lấy danh sách sản phẩm mới

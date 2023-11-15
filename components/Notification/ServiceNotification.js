@@ -57,20 +57,19 @@ const sendNotificationNewProduct = async (san_pham) => {
 };
 
 // gửi thông báo trạng thái đơn hàng cho thiết bị cụ thể (đang vận chuyển)
-const sendNotificationOrderStatusDelivering = async ({ id_don_hang }) => {
-  console.log("ID DON HANG: ", id_don_hang);
+const sendNotificationOrderStatusDelivering = async ({don_hang}) => {
+  console.log("ID DON HANG: ", don_hang);
 
-  const donHang = await modelDonHang.findById(id_don_hang).populate("san_pham");
-  console.log("DON HANG: ", donHang);
-
-  const user = await modelUser.findById(donHang.id_user);
+  const user = await modelUser.findById(don_hang.id_user);
   console.log("USER: ", user.device_token);
 
   try {
     // một chút nhớ đổi sản phẩm thành đơn hàng
-    let imageUrl = "";
-    if (donHang.san_pham.length > 0) {
-      imageUrl = donHang.san_pham[0].hinh_anh_sp;
+    // let imageUrl = "https://dogifood.vn/Images/product/2201050907-ca-phe-den-da.webp";
+    //=====================
+    if (don_hang.san_pham.length > 0) {
+      imageUrl = don_hang.san_pham[0].hinh_anh_sp;
+      console.log("URL IMAGE: ", imageUrl);
     }
 
     const message = {
