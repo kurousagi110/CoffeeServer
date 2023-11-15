@@ -226,8 +226,14 @@ const getAllSanPham = async () => {
 };
 
 //lấy sản phẩm ngãu nhiên theo ngày
-const getSanPhamNgauNhienTheoNgay = async () => {
-
+const getSanPhamMoi = async () => {
+    try {
+        const sanPham = await sanPhamModel.find({ is_san_pham_moi: true });
+        return sanPham;
+    } catch (error) {
+        console.log('Lỗi tại getSanPhamMoi service: ', error)
+    }
+    return false;
 };
 
 //thêm loại sản phẩm
@@ -444,6 +450,8 @@ const themSanPhamAll = async (san_pham) => {
             so_luong_danh_gia: 0,
             check_gia_giam: false,
             ngay_giam: null,
+            is_san_pham_moi: true,
+            ngay_san_pham_moi: new Date(vietNamdate.getTime() + (30 * 24 * 60 * 60 * 1000)),
         });
         await result.save();
         return result;
@@ -459,5 +467,5 @@ module.exports = {
     locSanPhamTheoGiaTuThapDenCao, getSanPhamById, getAllSanPham, themSanPhamAll,
     timKiemSanPhamTheoCategory, timKiemSanPhamTheoListCategory,
     danhSachSanPhamDanhGiaTotNhat, danhSachDanhGiaTheoSanPham, suaDuLieu, suaLoaiSanPham,
-    getSanPhamGiamGia
+    getSanPhamGiamGia , getSanPhamMoi
 };

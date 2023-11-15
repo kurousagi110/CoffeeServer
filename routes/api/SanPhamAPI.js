@@ -4,7 +4,31 @@ var uploadAnh = require('../../components/MiddleWare/uploadFile');
 const sanPhamController = require('../../components/SanPham/ControllerSanPham');
 const AuthenToken = require('../../components/MiddleWare/AuthenToken');
 
-
+//lấy danh sách sản phẩm mới
+//http://localhost:3000/api/san-pham/danh-sach-san-pham-moi
+router.get('/danh-sach-san-pham-moi', async (req, res) => {
+    try {
+        const san_pham = await sanPhamController.getSanPhamMoi();
+        if (san_pham) {
+            res.status(200).json({
+                success: true,
+                message: 'Lấy danh sách sản phẩm thành công',
+                data: san_pham
+            });
+        } else {
+            res.status(200).json({
+                success: false,
+                message: 'Lấy danh sách sản phẩm thất bại',
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: 'Lấy danh sách sản phẩm thất bại',
+            error: error.message
+        });
+    }
+});
 
 //lấy danh sách sản phẩm giảm giá
 //http://localhost:3000/api/san-pham/danh-sach-san-pham-giam-gia

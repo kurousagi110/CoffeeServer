@@ -1,6 +1,17 @@
 const sanPhamServices = require('./ServiceSanPham');
 
-
+//get sản phẩm mới
+const getSanPhamMoi = async () => {
+    try {
+        const san_pham = await sanPhamServices.getSanPhamMoi();
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
 
 //lấy danh sách sản phẩm giảm giá
 const layDanhSachSanPhamGiamGia = async () => {
@@ -275,4 +286,4 @@ module.exports = { themSize, themSanPham, themLoaiSanPham,
     getAllSanPham, getSanPhamById, locSanPhamTheoGiaTuThapDenCao, timKiemSanPham, themSanPhamAll,
     timKiemSanPhamTheoCategory, timKiemSanPhamTheoListCategory,
     danhSachDanhGiaTheoSanPham, danhSachSanPhamDanhGiaTotNhat, suaDuLieu, suaLoaiSanPham,
-    layDanhSachSanPhamGiamGia };
+    layDanhSachSanPhamGiamGia, getSanPhamMoi };
