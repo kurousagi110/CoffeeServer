@@ -1,14 +1,7 @@
 const sanPhamModel = require("./ModelSanPham");
 
 //them du lieu
-const suaDuLieu = async (
-  id_san_pham,
-  ten_san_pham,
-  mo_ta,
-  tong_sao,
-  so_luong_danh_gia,
-  so_luong_da_ban
-) => {
+const suaDuLieu = async (id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban) => {
   try {
     const san_pham = await sanPhamModel.findOne({ _id: id_san_pham });
     if (san_pham) {
@@ -164,11 +157,7 @@ const getAllSanPham = async () => {
 };
 
 //thêm loại sản phẩm
-const themLoaiSanPham = async (
-  id_san_pham,
-  ten_loai_san_pham,
-  ma_loai_san_pham
-) => {
+const themLoaiSanPham = async (id_san_pham, ten_loai_san_pham, ma_loai_san_pham) => {
   try {
     const san_pham = await sanPhamModel.findOne({ _id: id_san_pham });
     if (san_pham) {
@@ -187,12 +176,7 @@ const themLoaiSanPham = async (
 };
 
 //sửa loại sản phẩm
-const suaLoaiSanPham = async (
-  id_san_pham,
-  id_loai_san_pham,
-  ten_loai_san_pham,
-  ma_loai_san_pham
-) => {
+const suaLoaiSanPham = async (id_san_pham, id_loai_san_pham, ten_loai_san_pham, ma_loai_san_pham) => {
   try {
     const san_pham = await sanPhamModel.findOne({ _id: id_san_pham });
     if (san_pham) {

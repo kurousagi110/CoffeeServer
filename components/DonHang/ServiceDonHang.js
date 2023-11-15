@@ -4,19 +4,7 @@ const modelUser = require("../User/ModelUser");
 const moment = require("moment");
 
 //sửa đơn hàng
-const suaDonHang = async (
-  id_don_hang,
-  id_user,
-  id_chi_nhanh,
-  loai_don_hang,
-  dia_chi,
-  san_pham,
-  ghi_chu,
-  giam_gia,
-  phi_van_chuyen,
-  thanh_tien,
-  thanh_toan
-) => {
+const suaDonHang = async (id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
   try {
     const donHang = await modelDonHang.findById(id_don_hang);
     if (!donHang) {
@@ -75,18 +63,7 @@ const layDanhSachSanPhamChuaDanhGia = async (id_user) => {
   }
 };
 
-const themDonHang = async (
-  id_user,
-  id_chi_nhanh,
-  loai_don_hang,
-  dia_chi,
-  san_pham,
-  ghi_chu,
-  giam_gia,
-  phi_van_chuyen,
-  thanh_tien,
-  thanh_toan
-) => {
+const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
   try {
     let tong_san_pham = 0;
     for (let i = 0; i < san_pham.length; i++) {

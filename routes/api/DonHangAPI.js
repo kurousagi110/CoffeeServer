@@ -3,40 +3,14 @@ var router = express.Router();
 const DonHangController = require("../../components/DonHang/ControllerDonHang");
 const AuthenToken = require("../../components/MiddleWare/AuthenToken");
 const { route } = require("./FavoriteAPI");
-const {
-  sendNotificationOrderStatusDelivering,
-} = require("../../components/Notification/ServiceNotification");
+const {sendNotificationOrderStatusDelivering} = require("../../components/Notification/ServiceNotification");
 
 //sửa đơn hàng
 //http://localhost:3000/api/don-hang/sua-don-hang
 router.post("/sua-don-hang", AuthenToken, async function (req, res, next) {
   try {
-    const {
-      id_don_hang,
-      id_user,
-      id_chi_nhanh,
-      loai_don_hang,
-      dia_chi,
-      san_pham,
-      ghi_chu,
-      giam_gia,
-      phi_van_chuyen,
-      thanh_tien,
-      thanh_toan,
-    } = req.body;
-    const result = await DonHangController.suaDonHang(
-      id_don_hang,
-      id_user,
-      id_chi_nhanh,
-      loai_don_hang,
-      dia_chi,
-      san_pham,
-      ghi_chu,
-      giam_gia,
-      phi_van_chuyen,
-      thanh_tien,
-      thanh_toan
-    );
+    const {id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan, } = req.body;
+    const result = await DonHangController.suaDonHang( id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan,);
     if (result) {
       res.status(200).json({
         status: true,
@@ -59,15 +33,10 @@ router.post("/sua-don-hang", AuthenToken, async function (req, res, next) {
 
 //lấy danh sách sản phẩm chưa đánh giá
 //http://localhost:3000/api/don-hang/lay-danh-sach-san-pham-chua-danh-gia
-router.get(
-  "/lay-danh-sach-san-pham-chua-danh-gia/:id_user",
-  AuthenToken,
-  async function (req, res, next) {
+router.get("/lay-danh-sach-san-pham-chua-danh-gia/:id_user",AuthenToken, async function (req, res, next) {
     try {
       const { id_user } = req.params;
-      const result = await DonHangController.layDanhSachSanPhamChuaDanhGia(
-        id_user
-      );
+      const result = await DonHangController.layDanhSachSanPhamChuaDanhGia(id_user);
       if (result) {
         res.status(200).json({
           status: true,
@@ -93,30 +62,8 @@ router.get(
 //http://localhost:3000/api/don-hang/them-don-hang
 router.post("/them-don-hang", AuthenToken, async function (req, res, next) {
   try {
-    const {
-      id_user,
-      id_chi_nhanh,
-      loai_don_hang,
-      dia_chi,
-      san_pham,
-      ghi_chu,
-      giam_gia,
-      phi_van_chuyen,
-      thanh_tien,
-      thanh_toan,
-    } = req.body;
-    const result = await DonHangController.themDonHang(
-      id_user,
-      id_chi_nhanh,
-      loai_don_hang,
-      dia_chi,
-      san_pham,
-      ghi_chu,
-      giam_gia,
-      phi_van_chuyen,
-      thanh_tien,
-      thanh_toan
-    );
+    const {id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan} = req.body;
+    const result = await DonHangController.themDonHang(id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan);
     if (result) {
       res.status(200).json({
         status: true,
@@ -138,10 +85,7 @@ router.post("/them-don-hang", AuthenToken, async function (req, res, next) {
 });
 //lấy đơn hàng
 //http://localhost:3000/api/don-hang/lay-don-hang
-router.get(
-  "/lay-don-hang/:id_don_hang",
-  AuthenToken,
-  async function (req, res, next) {
+router.get("/lay-don-hang/:id_don_hang",AuthenToken,async function (req, res, next) {
     try {
       const { id_don_hang } = req.params;
       const result = await DonHangController.layDonHang(id_don_hang);
@@ -168,10 +112,7 @@ router.get(
 
 //lấy đơn hàng theo id_user
 //http://localhost:3000/api/don-hang/lay-don-hang-theo-id-user
-router.get(
-  "/lay-don-hang-theo-id-user/:id_user",
-  AuthenToken,
-  async function (req, res, next) {
+router.get("/lay-don-hang-theo-id-user/:id_user",AuthenToken, async function (req, res, next) {
     try {
       const { id_user } = req.params;
       const result = await DonHangController.layDonHangTheoIdUser(id_user);
@@ -198,16 +139,10 @@ router.get(
 
 //cập nhật trạng thái
 //http://localhost:3000/api/don-hang/cap-nhat-trang-thai
-router.post(
-  "/cap-nhat-trang-thai",
-  AuthenToken,
-  async function (req, res, next) {
+router.post("/cap-nhat-trang-thai",AuthenToken, async function (req, res, next) {
     try {
       const { id_don_hang, ma_trang_thai } = req.body;
-      const result = await DonHangController.capNhatTrangThai(
-        id_don_hang,
-        ma_trang_thai
-      );
+      const result = await DonHangController.capNhatTrangThai(id_don_hang, ma_trang_thai );
 
       if (result) {
         // gửi thông báo đơn trạng thái đơn hàng cho thiết bị cụ thể (đang vận chuyển)
@@ -239,22 +174,8 @@ router.post(
 //http://localhost:3000/api/don-hang/danh-gia
 router.post("/danh-gia", AuthenToken, async function (req, res, next) {
   try {
-    const {
-      id_don_hang,
-      so_sao,
-      danh_gia,
-      hinh_anh_danh_gia,
-      email,
-      ten_user,
-    } = req.body;
-    const result = await DonHangController.danhGia(
-      id_don_hang,
-      so_sao,
-      danh_gia,
-      hinh_anh_danh_gia,
-      email,
-      ten_user
-    );
+    const {id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user} = req.body;
+    const result = await DonHangController.danhGia(id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, ten_user);
     if (isNaN(result)) {
       res.status(200).json({
         status: true,
