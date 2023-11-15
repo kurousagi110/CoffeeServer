@@ -3,30 +3,14 @@ var router = express.Router();
 var uploadAnh = require("../../components/MiddleWare/uploadFile");
 const sanPhamController = require("../../components/SanPham/ControllerSanPham");
 const AuthenToken = require("../../components/MiddleWare/AuthenToken");
-const {
-  sendNotificationNewProduct,
-} = require("../../components/Notification/ServiceNotification");
+const {sendNotificationNewProduct} = require("../../components/Notification/ServiceNotification");
 
 //sửa sản phẩm
 //http://localhost:3000/api/san-pham/sua-san-pham
 router.post("/sua-san-pham", async (req, res) => {
   try {
-    const {
-      id_san_pham,
-      ten_san_pham,
-      mo_ta,
-      tong_sao,
-      so_luong_danh_gia,
-      so_luong_da_ban,
-    } = req.body;
-    const result = await sanPhamController.suaDuLieu(
-      id_san_pham,
-      ten_san_pham,
-      mo_ta,
-      tong_sao,
-      so_luong_danh_gia,
-      so_luong_da_ban
-    );
+    const {id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban,} = req.body;
+    const result = await sanPhamController.suaDuLieu(id_san_pham, ten_san_pham, mo_ta, tong_sao, so_luong_danh_gia, so_luong_da_ban );
     if (result) {
       res.status(200).json({
         success: true,
@@ -49,9 +33,7 @@ router.post("/sua-san-pham", async (req, res) => {
 
 //danh sách đánh giá theo sản phẩm
 //http://localhost:3000/api/san-pham/danh-sach-danh-gia-theo-san-pham
-router.get(
-  "/danh-sach-danh-gia-theo-san-pham/:id_san_pham",
-  async (req, res) => {
+router.get("/danh-sach-danh-gia-theo-san-pham/:id_san_pham",async (req, res) => {
     try {
       const { id_san_pham } = req.params;
       const danh_gia = await sanPhamController.danhSachDanhGiaTheoSanPham(
