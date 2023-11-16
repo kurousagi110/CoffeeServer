@@ -1,8 +1,6 @@
 const modelVongQuay = require('./ModelVongQuay');
 const modelUser = require('../User/ModelUser');
 
-let vietNamdate = new Date();
-vietNamdate.setHours(vietNamdate.getHours() + 7);
 
 //sử dụng vòng quay
 const suDungVongQuay = async (id_user) => {
@@ -15,10 +13,10 @@ const suDungVongQuay = async (id_user) => {
             return false;
         }
         user.tich_diem = user.tich_diem - 100;
-        console.log(user.tich_diem);
-        console.log (vietNamdate);
+        let suDungDate = new Date();
+        suDungDate.setHours(suDungDate.getHours() + 7);
         user.doi_diem.push({
-            ngay_doi: vietNamdate,
+            ngay_doi: suDungDate,
             ten_doi_diem: "Sử dụng vòng quay",
             so_diem: -100,
         });
@@ -41,9 +39,11 @@ const themVoucherUser = async (id_user, id_vong_quay) => {
             return false;
         }
         if (vongquay.diem > 0) {
+            let themVoucherDate = new Date();
+            themVoucherDate.setHours(themVoucherDate.getHours() + 7);
             user.diem = user.diem + vongquay.diem;
             user.doi_diem.push({
-                ngay_doi: vietNamdate,
+                ngay_doi: themVoucherDate,
                 ten_doi_diem: "Nhận điểm từ vòng quay",
                 so_diem: vongquay.diem,
             });
@@ -93,6 +93,8 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
         if (check) {
             return false;
         }
+        let themVongQuayDate = new Date();
+        themVongQuayDate.setHours(themVongQuayDate.getHours() + 7);
         const vongquay = new modelVongQuay({
             ten_vong_quay: ten_vong_quay,
             mo_ta: mo_ta,
@@ -101,8 +103,8 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
             diem: diem,
             giam_gia: giam_gia,
             gia_tri: gia_tri,
-            ngay_bat_dau: vietNamdate,
-            ngay_ket_thuc: new Date(vietNamdate.getTime() + (30 * 24 * 60 * 60 * 1000)),
+            ngay_bat_dau: themVongQuayDate,
+            ngay_ket_thuc: new Date(themVongQuayDate.getTime() + (30 * 24 * 60 * 60 * 1000)),
             trang_thai: "Còn hiệu lực",
             hinh_anh: hinh_anh,
             status: 1,
@@ -122,6 +124,8 @@ const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_v
         if (!vongquay) {
             return false;
         }
+        let suaVongQuayDate = new Date();
+        suaVongQuayDate.setHours(suaVongQuayDate.getHours() + 7);
         vongquay.ten_vong_quay = ten_vong_quay || vongquay.ten_vong_quay;
         vongquay.mo_ta = mo_ta || vongquay.mo_ta;
         vongquay.ten_voucher = ten_voucher || vongquay.ten_voucher;
@@ -129,8 +133,8 @@ const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_v
         vongquay.diem = diem || vongquay.diem;
         vongquay.giam_gia = giam_gia || vongquay.giam_gia;
         vongquay.gia_tri = gia_tri || vongquay.gia_tri;
-        vongquay.ngay_bat_dau = vietNamdate;
-        vongquay.ngay_ket_thuc = new Date(vietNamdate.getTime() + (30 * 24 * 60 * 60 * 1000));
+        vongquay.ngay_bat_dau = suaVongQuayDate;
+        vongquay.ngay_ket_thuc = new Date(suaVongQuayDate.getTime() + (30 * 24 * 60 * 60 * 1000));
         vongquay.hinh_anh = hinh_anh || vongquay.hinh_anh;
         await vongquay.save();
         console.log(vongquay);

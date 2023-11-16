@@ -1,13 +1,15 @@
 const modelVoucher = require('./ModelVoucher');
 const modelUser = require('../User/ModelUser');
-let vietNamdate = new Date();
-vietNamdate.setHours(vietNamdate.getHours() + 7);
+
 
 //lấy danh sách voucher của user
 const layDanhSachVoucherUser = async (id_user) => {
     try {
         const user = await modelUser.findById(id_user);
-        const currentDate = vietNamdate;
+        let layDanhSachDate = new Date();
+        layDanhSachDate.setHours(layDanhSachDate.getHours() + 7);
+
+        const currentDate = layDanhSachDate;
         const voucher = await modelVoucher.find();
 
         let VoucherHieuLuc = [];
@@ -70,7 +72,9 @@ const layDanhSachVoucherUser = async (id_user) => {
 const layDanhSachVoucher = async () => {
     try {
         const list = await modelVoucher.find();
-        const currentDate = vietNamdate;
+        let layVoucherDate = new Date();
+        layVoucherDate.setHours(layVoucherDate.getHours() + 7);
+        const currentDate = layVoucherDate;
 
         for (const voucher of list) {
             if (voucher.ngay_ket_thuc < currentDate && voucher.trang_thai !== "Hết hiệu lực") {
@@ -91,7 +95,9 @@ const layDanhSachVoucher = async () => {
 const layDanhSachVoucherDoiDiem = async () => {
     try {
         const list = await modelVoucher.find();
-        const currentDate = vietNamdate;
+        let layDoiDiemDate = new Date();
+        layDoiDiemDate.setHours(layDoiDiemDate.getHours() + 7);
+        const currentDate = layDoiDiemDate;
 
         for (const voucher of list) {
             if (voucher.ngay_ket_thuc < currentDate && voucher.trang_thai !== "Hết hiệu lực") {
@@ -128,6 +134,8 @@ const doiDiemThanhVoucher = async (id_user, id_voucher) => {
     try {
         const user = await modelUser.findById(id_user);
         const checkVoucher = await modelVoucher.findById(id_voucher);
+        let doiDiemDate = new Date();
+        doiDiemDate.setHours(doiDiemDate.getHours() + 7);
         console.log(checkVoucher);
         if (!checkVoucher || !checkVoucher) {
             return false;
@@ -137,7 +145,7 @@ const doiDiemThanhVoucher = async (id_user, id_voucher) => {
         }
         user.tich_diem = user.tich_diem - checkVoucher.diem;
         user.doi_diem.push({
-            ngay_doi: vietNamdate,
+            ngay_doi: doiDiemDate,
             ten_doi_diem: "Đổi điểm thành voucher",
             so_diem: -checkVoucher.diem,
         });
@@ -158,7 +166,7 @@ const doiDiemThanhVoucher = async (id_user, id_voucher) => {
             giam_gia: checkVoucher.giam_gia,
             gia_tri: checkVoucher.gia_tri,
             mo_ta: checkVoucher.mo_ta,
-            ngay_bat_dau: vietNamdate,
+            ngay_bat_dau: doiDiemDate,
             ngay_ket_thuc: checkVoucher.ngay_ket_thuc,
             hinh_anh: checkVoucher.hinh_anh,
             status: checkVoucher.status,
@@ -230,6 +238,8 @@ const  themVoucher = async (ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_th
         }else{
             status = 3
         }
+        let themVoucherDate = new Date();
+        themVoucherDate.setHours(themVoucherDate.getHours() + 7);
         const voucher = new modelVoucher({
             ten_voucher: ten_voucher,
             ma_voucher: ma_voucher,
@@ -237,8 +247,8 @@ const  themVoucher = async (ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_th
             diem: diem,
             giam_gia: giam_gia,
             mo_ta: mo_ta,
-            ngay_bat_dau: vietNamdate,
-            ngay_ket_thuc: new Date(vietNamdate.getTime() + (ngay_ket_thuc * 24 * 60 * 60 * 1000)), // Thay vì new Date.now() + ngay_ket_thuc
+            ngay_bat_dau: themVoucherDate,
+            ngay_ket_thuc: new Date(themVoucherDate.getTime() + (ngay_ket_thuc * 24 * 60 * 60 * 1000)), // Thay vì new Date.now() + ngay_ket_thuc
             trang_thai: "Còn hiệu lực",
             hinh_anh:  hinh_anh,
             status: status,

@@ -2,8 +2,7 @@ const modelDonHang = require('./ModelDonHang');
 const modelSanPham = require('../SanPham/ModelSanPham');
 const modelUser = require('../User/ModelUser');
 const moment = require('moment');
-let vietNamdate = new Date();
-vietNamdate.setHours(vietNamdate.getHours() + 7);
+
 
 //sửa đơn hàng
 const suaDonHang = async (id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
@@ -70,12 +69,14 @@ const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_ph
         for (let i = 0; i < san_pham.length; i++) {
             tong_san_pham += san_pham[i].so_luong;
         }
+        let themDonHangDate = new Date();
+        themDonHangDate.setHours(themDonHangDate.getHours() + 7);
         const duLieu = {
             id_user: id_user,
             id_chi_nhanh: id_chi_nhanh,
             loai_don_hang: loai_don_hang,
             dia_chi: dia_chi,
-            ngay_dat: vietNamdate,
+            ngay_dat: themDonHangDate,
             san_pham: san_pham,
             ghi_chu: ghi_chu,
             so_diem_tich_luy: Math.floor(thanh_tien / 2500),
@@ -83,7 +84,7 @@ const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_ph
             phi_van_chuyen: phi_van_chuyen,
             ma_trang_thai: 1,
             ten_trang_thai: "Đang xử lý",
-            ngay_cap_nhat_1: vietNamdate,
+            ngay_cap_nhat_1: themDonHangDate,
             tong_san_pham: tong_san_pham,
             thanh_tien: thanh_tien,
             email: "",
@@ -141,7 +142,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
 
         if (ma_trang_thai === 3) {
             let ma_trang_thai_3 =  new Date();
-            ma_trang_thai_3.setHours(vietNamdate.getHours() + 7);
+            ma_trang_thai_3.setHours(ma_trang_thai_3.getHours() + 7);
             donHang.ma_trang_thai = ma_trang_thai;
             donHang.ten_trang_thai = "Đang giao";
             donHang.ngay_cap_nhat_3 = ma_trang_thai_3;
@@ -173,7 +174,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
 
             await Promise.all(productUpdates);
             let ma_trang_thai_4 =  new Date();
-            ma_trang_thai_4.setHours(vietNamdate.getHours() + 7);
+            ma_trang_thai_4.setHours(ma_trang_thai_4.getHours() + 7);
             if (donHang.ma_trang_thai !== ma_trang_thai) {
                 donHang.ma_trang_thai = ma_trang_thai;
                 donHang.ten_trang_thai = "Đã giao";
@@ -181,7 +182,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
 
                 const doi_diem = {
                     ten_doi_diem: "Cộng điểm đơn hàng",
-                    ngay_doi: vietNamdate,
+                    ngay_doi: ma_trang_thai_4,
                     so_diem: donHang.so_diem_tich_luy
                 };
 
@@ -211,7 +212,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             return donHang;
         } else if (ma_trang_thai === 2) {
             let ma_trang_thai_2 =  new Date();
-            ma_trang_thai_2.setHours(vietNamdate.getHours() + 7);
+            ma_trang_thai_2.setHours(ma_trang_thai_2.getHours() + 7);
             donHang.ma_trang_thai = ma_trang_thai;
             donHang.ten_trang_thai = "Đã hủy";
             donHang.ngay_cap_nhat_2 = ma_trang_thai_2;
@@ -219,7 +220,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             return donHang;
         }else if (ma_trang_thai === 0) {
             let ma_trang_thai_0 =  new Date();
-            ma_trang_thai_0.setHours(vietNamdate.getHours() + 7);
+            ma_trang_thai_0.setHours(ma_trang_thai_2.getHours() + 7);
             donHang.ma_trang_thai = ma_trang_thai;
             donHang.ten_trang_thai = "Đã hủy";
             donHang.ngay_cap_nhat_0 = ma_trang_thai_0;
@@ -245,16 +246,18 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
             return 10;
         }
         if (donHang.ma_trang_thai === 4) {
+            let ma_trang_thai_4 = new Date();
+            ma_trang_thai_4.setHours(ma_trang_thai_4.getHours() + 7);
             donHang.so_sao = so_sao;
             donHang.danh_gia = danh_gia;
             donHang.hinh_anh_danh_gia = hinh_anh_danh_gia;
             donHang.email = email;
             donHang.ten_user = ten_user;
             donHang.hinh_anh_user = hinh_anh_user;
-            donHang.ngay_danh_gia = vietNamdate;
+            donHang.ngay_danh_gia = ma_trang_thai_4;
             donHang.ma_trang_thai = 5,
             donHang.ten_trang_thai= "Đã đánh giá",
-            donHang.ngay_cap_nhat_5= vietNamdate,
+            donHang.ngay_cap_nhat_5= ma_trang_thai_4,
             await donHang.save();
             for (let i = 0; i < donHang.san_pham.length; i++) {
                 const sanPham = await modelSanPham.findById(donHang.san_pham[i].id_san_pham);
@@ -265,7 +268,7 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
                     email: email, 
                     hinh_anh_user: hinh_anh_user,
                     ten_user: ten_user, 
-                    ngay_danh_gia: vietNamdate 
+                    ngay_danh_gia: ma_trang_thai_4 
                 });
                 sanPham.so_luong_danh_gia = sanPham.danh_gia.length;
                 let tong_sao = 0; // Khai báo biến tong_sao ở đây và gán giá trị 0

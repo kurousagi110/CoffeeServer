@@ -1,6 +1,5 @@
 const sanPhamModel = require('./ModelSanPham');
-let vietNamdate = new Date();
-vietNamdate.setHours(vietNamdate.getHours() + 7);
+
 
 
 
@@ -156,9 +155,11 @@ const getSanPhamGiamGia = async () => {
 //get all product
 const getAllSanPham = async () => {
     try {
+        let getAllDate = new Date();
+        getAllDate.setHours(getAllDate.getHours() + 7);
         const sanPham = await sanPhamModel.find();
         let check = false;
-        if(sanPham.ngay_san_pham_moi < vietNamdate){
+        if(sanPham.ngay_san_pham_moi < getAllDate){
             sanPham.is_san_pham_moi = false;
         }
         for (let i = 0; i < sanPham.length; i++) {
@@ -170,7 +171,7 @@ const getAllSanPham = async () => {
             }
 
             // Check if the discount expiration date has passed
-            if (sanPhamItem.ngay_giam < vietNamdate) {
+            if (sanPhamItem.ngay_giam < getAllDate) {
                 // Set the product's discount status to inactive
                 sanPhamItem.check_gia_giam = false;
                 sanPhamItem.ngay_giam = null;
@@ -191,9 +192,9 @@ const getAllSanPham = async () => {
                 { $match: { is_san_pham_moi: false } },
                 { $sample: { size: 5 } }
             ]);
-
+            const date = new Date();
             // Set the discount expiration date for the new discounted products
-            const ngay_mai = new Date(vietNamdate.getTime() + (24 * 60 * 60 * 1000));
+            const ngay_mai = new Date(date.getTime() + (24 * 60 * 60 * 1000));
             ngay_mai.setHours(0,0,0,0);
 
             for (let i = 0; i < sanPhamNgauNhien.length; i++) {
@@ -437,6 +438,8 @@ const themSanPhamAll = async (san_pham) => {
                 isSelected: select,
             })
         }
+        let them_all_date = new Date();
+        them_all_date.setHours(them_all_date.getHours() + 7);
         const result = new sanPhamModel({
             ten_san_pham: san_pham.ten_san_pham,
             mo_ta: san_pham.mo_ta,
@@ -451,7 +454,7 @@ const themSanPhamAll = async (san_pham) => {
             check_gia_giam: false,
             ngay_giam: null,
             is_san_pham_moi: true,
-            ngay_san_pham_moi: new Date(vietNamdate.getTime() + (30 * 24 * 60 * 60 * 1000)),
+            ngay_san_pham_moi: new Date(them_all_date.getTime() + (30 * 24 * 60 * 60 * 1000)),
         });
         await result.save();
         return result;
