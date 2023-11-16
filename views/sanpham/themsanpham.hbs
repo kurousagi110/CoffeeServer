@@ -218,53 +218,51 @@
         <div class="col-12">
           <div class="card card-body">
             <h4 class="card-title">Thêm User</h4>
-            <form class="form-horizontal mt-4">
+            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
+              method="post">
               <div class="form-group">
-                <label>Tài khoản
-                </label>
-                <input type="text" class="form-control" value="" />
+                <label for="ten_san_pham">Tên sản phẩm</label>
+                <input type="text" id="ten_san_pham" name="ten_san_pham" class="form-control" placeholder="" />
               </div>
+
               <div class="form-group">
-                <label for="example-email">Email
-                </label>
-                <input type="email" id="example-email" name="example-email" class="form-control" placeholder="Email" />
+                <label for="loai_san_pham">Loại sản phẩm</label>
+                <select class="form-control" id="loai_san_pham" name="loai_san_pham">
+                  {{#each loai_san_pham}}
+                  <option value="{{this._id}}">{{this.ten_loai_san_pham}}</option>
+                  {{/each}}
+                </select>
               </div>
-              <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" value="" />
-              </div>
-              <div class="form-group">
-                <label>Số Điện Thoại</label>
-                <input type="text" class="form-control" placeholder="" />
-              </div>
+
               <div class="form-group" id="ThemMang" class="d-flex align-items-center">
                 <div class="form-group">
                   <div class="btn btn-primary" onclick="themTruongInput()"><i class="mdi mdi-plus-box me-2"></i> Thêm
                     size</div>
                 </div>
               </div>
+
+              <div class="form-group size-container" id="size-container">
+              </div>
+
               <div class="form-group">
-                <label>Giới Tính</label>
-                <select class="form-select shadow-none col-12" id="inlineFormCustomSelect">
-                  <option selected>Chọn...</option>
-                  <option value="1">nam</option>
-                  <option value="2">nữ</option>
-                  <option value="0">không xác định</option>
-                </select>
+                <label for="mo_ta">Mô tả</label>
+                <input type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
               </div>
+
               <div class="custom-file">
-                <input type="file" multiple class="custom-file-input" id="inputGroupFile01" />
+                <input type="file" name="files" multiple class="custom-file-input" id="inputGroupFile01" />
+                <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
               </div>
+
+              <input type="hidden" id="sizesInput" name="sizes" value="">
+
               <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
                 <button type="submit" class="btn btn-primary" style="width: 95%">Lưu</button>
               </div>
+            </form>
+
           </div>
-
         </div>
-
-        </form>
       </div>
-    </div>
-  </div>
 
-</div>
+    </div>
