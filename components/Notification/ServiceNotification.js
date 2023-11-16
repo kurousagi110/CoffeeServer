@@ -57,7 +57,7 @@ const sendNotificationNewProduct = async (san_pham) => {
 };
 
 // gửi thông báo trạng thái đơn hàng cho thiết bị cụ thể (đang vận chuyển)
-const sendNotificationOrderStatusDelivering = async ({don_hang}) => {
+const sendNotificationOrderStatusDelivering = async ({ don_hang }) => {
   console.log("ID DON HANG: ", don_hang);
 
   const user = await modelUser.findById(don_hang.id_user);
@@ -107,11 +107,18 @@ const sendNotificationOrderStatusDelivering = async ({don_hang}) => {
 };
 
 // gửi thông báo trạng thái đơn hàng cho thiết bị cụ thể (đã giao hàng)
-const sendNotificationOrderStatusArrived = async ({don_hang}) => {
+const sendNotificationOrderStatusArrived = async ({ don_hang }) => {
   console.log("ID DON HANG: ", don_hang);
 
   const user = await modelUser.findById(don_hang.id_user);
-  console.log("USER: ", user.device_token);
+  console.log(
+    "USER: ",
+    user.ho_ten,
+    " ===== ",
+    user.email,
+    " ===== ",
+    user.avatar
+  );
 
   try {
     // một chút nhớ đổi sản phẩm thành đơn hàng
@@ -121,8 +128,8 @@ const sendNotificationOrderStatusArrived = async ({don_hang}) => {
       imageUrl = don_hang.san_pham[0].hinh_anh_sp;
       console.log("URL IMAGE: ", imageUrl);
     }
-    console.log("DON HANG: ", don_hang._id.toString())
-    console.log("USER: ", don_hang.id_user)
+    console.log("DON HANG: ", don_hang._id.toString());
+    console.log("USER: ", don_hang.id_user);
 
     const message = {
       notification: {
@@ -136,7 +143,11 @@ const sendNotificationOrderStatusArrived = async ({don_hang}) => {
         message: "Đơn hàng của bạn đã giao thành công",
         bigText: `Cảm ơn bạn đã tin tưởng vào Coffee.Love`,
         idDonHang: don_hang._id.toString(),
-        idUser: don_hang.id_user,
+
+        email: user.email,
+        tenUser: user.ho_ten,
+        avatar: user.avatar,
+
         image: imageUrl,
       },
       token: user.device_token,
@@ -163,5 +174,5 @@ const sendNotificationOrderStatusArrived = async ({don_hang}) => {
 module.exports = {
   sendNotificationNewProduct,
   sendNotificationOrderStatusDelivering,
-  sendNotificationOrderStatusArrived
+  sendNotificationOrderStatusArrived,
 };
