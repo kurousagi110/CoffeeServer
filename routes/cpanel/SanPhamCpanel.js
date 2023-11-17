@@ -5,6 +5,8 @@ const sanphamController = require('../../components/SanPham/ControllerSanPham');
 const jwt = require('jsonwebtoken');
 const upload = require('../../components/MiddleWare/uploadMultiFile');
 const loaiSanPhamController = require('../../components/LoaiSanPham/ControllerLoaiSanPham');
+const Swal = require('sweetalert2')
+
 
 //http://localhost:3000/cpanel/san-pham
 router.get('/', [AuthenWeb], async function (req, res, next) {
@@ -34,50 +36,52 @@ router.post('/them-san-pham', [AuthenWeb, upload], async function (req, res, nex
     try {
         let { ten_san_pham, loai_san_pham, mo_ta } = req.body;
         let files = req.files; // 'files' since you used upload.array
-        let sizes = JSON.parse(req.body.sizes);
+
         console.log("files", files);
-        console.log("size", req.body.sizes);
-        console.log("ten_san_pham", sizes);
+        console.log("ten_san_pham", ten_san_pham);
+        console.log("loai_san_pham", loai_san_pham);
+        console.log("mo_ta", mo_ta);
+        console.log ("req.body", req.body.sizes);
+        console.log ("req.body", req.body);
+        let sizes = JSON.parse(req.body.sizes);
 
+
+        let hinh_anh_sp = [];
         if (files && files.length > 0) {
-            let hinh_anh_sp = files.map(file => `http://localhost:3000/images/${file.filename}`);
+            hinh_anh_sp = files.map(file => ({
+                hinh_anh_sp: `http://localhost:3000/images/${encodeURIComponent(file.filename)}`
+            }));
+        }
 
-            for (let i = 0; i < req.body.sizes.length; i++) {
-                let sizeObject = JSON.parse(req.body.sizes[i]);
-                sizes.push(sizeObject);
-            }
+        const result_loai_san_pham = await loaiSanPhamController.layLoaiSanPhamTheoId(loai_san_pham);
 
-            console.log("sizes", sizes);
-            console.log("hinh_anh_sp", hinh_anh_sp);
-            console.log("ten_san_pham", ten_san_pham);
-            console.log("loai_san_pham", loai_san_pham);
-            console.log("mo_ta", mo_ta);
-            const san_pham = {
-                ten_san_pham,
-                loai_san_pham,
-                size: sizes,
-                mo_ta,
-                hinh_anh_sp,
-            };
+        console.log("sizes", sizes);
+        console.log("hinh_anh_sp", hinh_anh_sp);
 
-            console.log(san_pham);
+        const san_pham = {
+            ten_san_pham,
+            result_loai_san_pham,
+            size: sizes,
+            mo_ta,
+            hinh_anh_sp,
+        };
 
-            const sanpham = await themSanPhamAll.createSanPham(san_pham);
+        console.log(san_pham);
 
-            if (sanpham) {
-                // Reset mảng sizes sau khi đã sử dụng
-                sizes = [];
-                res.redirect('/cpanel/san-pham');
-            } else {
-                res.render('sanpham/themsanpham');
-            }
+        const sanpham = await sanphamController.themSanPhamAll(san_pham);
+
+        if (sanpham) {
+            // Remove the line below
+            // sizes = [];
+            res.status(200).redirect('/cpanel/san-pham');
         } else {
-            // Handle the case where no files or sizes were provided
-            res.render('sanpham/themsanpham');
+            const loai_san_pham = await loaiSanPhamController.layTatCaLoaiSanPham();
+            res.status(300).render('sanpham/themsanpham' , { loai_san_pham });
         }
     } catch (err) {
         console.log(err);
-        res.render('sanpham/themsanpham');
+        const loai_san_pham = await loaiSanPhamController.layTatCaLoaiSanPham();
+        res.status(400).render('sanpham/themsanpham' , { loai_san_pham });
     }
 });
 

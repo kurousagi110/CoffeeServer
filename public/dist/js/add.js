@@ -50,4 +50,6 @@ function luuThongTin(dem, label, value) {
 
   // Update the hidden input field with the JSON-encoded sizes array
   document.getElementById('sizesInput').value = sizesJson;
+
+  // Add the current size to the Size array
 }

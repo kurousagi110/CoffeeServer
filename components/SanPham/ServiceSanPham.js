@@ -461,7 +461,6 @@ const themSanPhamAll = async (san_pham) => {
     } catch (error) {
         console.log('Lỗi tại themSanPhamAll service: ', error)
     }
-    return false;
 };
 
 module.exports = {

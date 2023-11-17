@@ -257,7 +257,8 @@
               <input type="hidden" id="sizesInput" name="sizes" value="">
 
               <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
-                <button type="submit" class="btn btn-primary" style="width: 95%">Lưu</button>
+                <button type="button" onclick="validateAndSubmit()" class="btn btn-primary"
+                  style="width: 95%">Lưu</button>
               </div>
             </form>
 
@@ -266,3 +267,81 @@
       </div>
 
     </div>
+    <script>
+      async function validateAndSubmit() {
+        // Validate the form data here
+        const ten_san_pham = document.getElementById('ten_san_pham').value;
+        const loai_san_pham = document.getElementById('loai_san_pham').value;
+        const mo_ta = document.getElementById('mo_ta').value;
+        const filesInput = document.getElementById('inputGroupFile01');
+
+        if (!ten_san_pham || !loai_san_pham || !mo_ta || !filesInput.files.length) {
+          const result = await Swal.fire({
+            icon: 'Lỗi',
+            title: 'Oops...',
+            text: 'Bạn hãy nhập đầy đủ không được để trống.',
+            showCancelButton: true,
+            cancelButtonText: 'OK',
+            allowOutsideClick: false // Prevent clicking outside the modal to close it
+          });
+
+          if (result.isConfirmed) {
+            return;
+          }
+        }
+
+        // Show confirmation dialog
+        const confirmationResult = await Swal.fire({
+          title: 'Bạn có chắc chắn muốn thêm sản phẩm này?',
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Lưu',
+          denyButtonText: "Chỉnh sửa."
+        });
+
+        if (confirmationResult.isConfirmed) {
+          // Submit the form
+          const formData = new FormData();
+          formData.append('ten_san_pham', ten_san_pham);
+          formData.append('loai_san_pham', loai_san_pham);
+          formData.append('mo_ta', mo_ta);
+
+          // Get the value from the hidden input field
+          const sizesInput = document.getElementById('sizesInput').value;
+
+          // Append the 'sizes' data to the form data
+          formData.append('sizes', sizesInput);
+
+          const filesInput = document.getElementById('inputGroupFile01');
+          for (let i = 0; i < filesInput.files.length; i++) {
+            formData.append('files', filesInput.files[i]);
+          }
+          try {
+            const response = await fetch('/cpanel/san-pham/them-san-pham', {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (response.ok) {
+              Swal.fire({
+                icon: 'Thêm sản phẩm thành công',
+                title: 'Saved!',
+                showConfirmButton: false,
+                timer: 1000,
+              });
+              setTimeout(() => {
+                window.location.href = '/cpanel/san-pham';
+              }, 1000);
+            } else {
+              Swal.fire('Lỗi', 'Tên sản phẩm bị trùng', 'error');
+            }
+          } catch (error) {
+            console.error(error);
+            Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
+          }
+        } else if (confirmationResult.isDenied) {
+          Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
+        }
+      }
+
+    </script>

@@ -268,7 +268,7 @@ const themSanPham = async (ten_san_pham, mo_ta) => {
     }
     return false;
 };
-//thêm san3 phẩm
+//thêm san3 phẩmthemSanPhamAll
 const themSanPhamAll = async (san_pham) => {
     try {
         const result = await sanPhamServices.themSanPhamAll(san_pham);
