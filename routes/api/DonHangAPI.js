@@ -8,6 +8,64 @@ const {
   sendNotificationOrderStatusArrived,
 } = require("../../components/Notification/ServiceNotification");
 
+
+//lấy đơn hàng theo chi nhánh
+//http://localhost:3000/api/don-hang/lay-don-hang-theo-chi-nhanh/:id_chi_nhanh
+router.get("/lay-don-hang-theo-chi-nhanh/:id_chi_nhanh", AuthenToken, async function (req, res, next) {
+  try {
+    const { id_chi_nhanh } = req.params;
+    const result = await DonHangController.layDonHangTheoChiNhanh(
+      id_chi_nhanh
+    );
+    if (result) {
+      res.status(200).json({
+        status: true,
+        message: "Lấy đơn hàng theo chi nhánh thành công!",
+        result: result,
+      });
+    } else {
+      res.status(200).json({
+        status: false,
+        message: "Lấy đơn hàng theo chi nhánh thất bại!",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+
+//thống kê đơn hàng theo chi nhánh
+//http://localhost:3000/api/don-hang/thong-ke-don-hang-theo-chi-nhanh/:id_chi_nhanh
+router.get("/thong-ke-don-hang-theo-chi-nhanh/:id_chi_nhanh", AuthenToken, async function (req, res, next) {
+  try {
+    const { id_chi_nhanh } = req.params;
+    const result = await DonHangController.thongKeDonHangTheoChiNhanh(
+      id_chi_nhanh
+    );
+    if (result) {
+      res.status(200).json({
+        status: true,
+        message: "Thống kê đơn hàng theo chi nhánh thành công!",
+        result: result,
+      });
+    } else {
+      res.status(200).json({
+        status: false,
+        message: "Thống kê đơn hàng theo chi nhánh thất bại!",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+
+
 //sửa đơn hàng
 //http://localhost:3000/api/don-hang/sua-don-hang
 router.post("/sua-don-hang", AuthenToken, async function (req, res, next) {

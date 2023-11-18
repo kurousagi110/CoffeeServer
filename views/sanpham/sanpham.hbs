@@ -1,5 +1,5 @@
 <header>
-    <link rel="stylesheet" href="/dist/css/dialog.css" />
+  <link rel="stylesheet" href="/dist/css/dialog.css" />
 </header>
 <div class="preloader">
   <div class="lds-ripple">
@@ -219,23 +219,34 @@
                       <th scope="col">Số lượng bán</th>
                       <th scope="col">Số lượng đánh giá</th>
                       <th scope="col">Tổng sao</th>
+                      <th scope="col">Sửa</th>
                       <th scope="col">Xóa</th>
                     </tr>
                   </thead>
                   <tbody>
                     {{#each sanpham}}
                     <tr>
-                      <th scope="row" onclick="openDialog()"><span class="stt"></span></th>
-                      <td onclick="openDialog()">{{this.ten_san_pham}}</td>
-                      <td onclick="openDialog()">{{this.mo_ta}}</td>
-                      <td onclick="openDialog()">{{this.so_luong_da_ban}}</td>
-                      <td onclick="openDialog()">{{this.so_luong_danh_gia}}</td>
-                      <td onclick="openDialog()">{{this.tong_sao}}</td>
-                      <td>
-                        <i class="me-1 font-18 mdi mdi-account-multiple-minus">
-                          <a href="http://localhost:3000/cpanel/san-pham/xoa-san-pham/{{this.id}}"><span
-                              ></span></a>
-                        </i>
+                      <th scope="row"><span class="stt">
+                          {{this.stt}}
+                        </span></th>
+                      <td>{{this.ten_san_pham}}</td>
+                      <td>{{this.mo_ta}}</td>
+                      <td>{{this.so_luong_da_ban}}</td>
+                      <td>{{this.so_luong_danh_gia}}</td>
+                      <td>{{this.tong_sao}}</td>
+                      <td class="td-button">
+                        <button type="button" class="btn btn-primary btn-edit" style="margin-top: 0px;">
+                          <a href="/cpanel/san-pham/sua-san-pham/{{this.id}}">
+                            <span style="color: white;">Sửa</span>
+                          </a>
+                        </button> 
+                      </td>
+                      <td class="td-button">
+                        <button type="button" class="btn btn-danger btn-delete" style="margin-top: 0px;">
+                          <a href="/cpanel/san-pham/xoa-san-pham/{{this.id}}">
+                            <span style="color: white;">Xóa</span>
+                          </a>
+                        </button>
                       </td>
                     </tr>
                     {{/each}}
@@ -255,153 +266,5 @@
     <i class="me-1 font-18 mdi mdi-close"></i>
   </span>
 
-  <h2>Thông tin chi tiết</h2>
-  <div class="content">
-    <div class="column">
-      <div class="form-group">
-        <label for="idInput"><strong>ID:</strong></label>
-        <input type="text" id="idInput" value="1234abcd">
-      </div>
-      <div class="form-group">
-        <label for="maKhachHangInput"><strong>Mã khách hàng:</strong></label>
-        <input type="text" id="maKhachHangInput" value="MK001">
-      </div>
-      <div class="form-group">
-        <label for="taiKhoanInput"><strong>Tài khoản:</strong></label>
-        <input type="text" id="taiKhoanInput" value="taikhoan123">
-      </div>
-      <div class="form-group">
-        <label for="emailInput"><strong>Email:</strong></label>
-        <input type="text" id="emailInput" value="email@example.com">
-      </div>
-      <div class="form-group">
-        <label for="soDienThoaiInput"><strong>Số điện thoai:</strong></label>
-        <input type="text" id="soDienThoaiInput" value="0123456789">
-      </div>
-      <div class="form-group">
-        <label for="matKhauInput"><strong>Mật khẩu:</strong></label>
-        <input type="text" id="matKhauInput" value="**********">
-      </div>
-      <div class="form-group">
-        <label for="hoTenInput"><strong>Họ tên:</strong></label>
-        <input type="text" id="hoTenInput" value="John Doe">
-      </div>
-      <div class="form-group">
-        <label for="avatarInput"><strong>Avatar:</strong></label>
-        <input type="text" id="avatarInput" value="avatar.png">
-      </div>
-    </div>
-    <div class="column">
-      <div class="form-group">
-        <label for="idInput"><strong>ID:</strong></label>
-        <input type="text" id="idInput" value="1234abcd">
-      </div>
-      <div class="form-group">
-        <label for="maKhachHangInput"><strong>Mã khách hàng:</strong></label>
-        <input type="text" id="maKhachHangInput" value="MK001">
-      </div>
-      <div class="form-group">
-        <label for="taiKhoanInput"><strong>Tài khoản:</strong></label>
-        <input type="text" id="taiKhoanInput" value="taikhoan123">
-      </div>
-      <div class="form-group">
-        <label for="emailInput"><strong>Email:</strong></label>
-        <input type="text" id="emailInput" value="email@example.com">
-      </div>
-      <div class="form-group">
-        <label for="soDienThoaiInput"><strong>Số điện thoai:</strong></label>
-        <input type="text" id="soDienThoaiInput" value="0123456789">
-      </div>
-      <div class="form-group">
-        <label for="matKhauInput"><strong>Mật khẩu:</strong></label>
-        <input type="text" id="matKhauInput" value="**********">
-      </div>
-      <div class="form-group">
-        <label for="hoTenInput"><strong>Họ tên:</strong></label>
-        <input type="text" id="hoTenInput" value="John Doe">
-      </div>
-      <div class="form-group">
-        <label for="avatarInput"><strong>Avatar:</strong></label>
-        <input type="text" id="avatarInput" value="avatar.png">
-      </div>
-    </div>
-    <div class="column">
-      <div class="form-group">
-        <label for="idInput"><strong>ID:</strong></label>
-        <input type="text" id="idInput" value="1234abcd">
-      </div>
-      <div class="form-group">
-        <label for="maKhachHangInput"><strong>Mã khách hàng:</strong></label>
-        <input type="text" id="maKhachHangInput" value="MK001">
-      </div>
-      <div class="form-group">
-        <label for="taiKhoanInput"><strong>Tài khoản:</strong></label>
-        <input type="text" id="taiKhoanInput" value="taikhoan123">
-      </div>
-      <div class="form-group">
-        <label for="emailInput"><strong>Email:</strong></label>
-        <input type="text" id="emailInput" value="email@example.com">
-      </div>
-      <div class="form-group">
-        <label for="soDienThoaiInput"><strong>Số điện thoai:</strong></label>
-        <input type="text" id="soDienThoaiInput" value="0123456789">
-      </div>
-      <div class="form-group">
-        <label for="matKhauInput"><strong>Mật khẩu:</strong></label>
-        <input type="text" id="matKhauInput" value="**********">
-      </div>
-      <div class="form-group">
-        <label for="hoTenInput"><strong>Họ tên:</strong></label>
-        <input type="text" id="hoTenInput" value="John Doe">
-      </div>
-      <div class="form-group">
-        <label for="avatarInput"><strong>Avatar:</strong></label>
-        <input type="text" id="avatarInput" value="avatar.png">
-      </div>
-    </div>
-    <div class="column">
-      <div class="form-group">
-        <label for="idInput"><strong>ID:</strong></label>
-        <input type="text" id="idInput" value="1234abcd">
-      </div>
-      <div class="form-group">
-        <label for="maKhachHangInput"><strong>Mã khách hàng:</strong></label>
-        <input type="text" id="maKhachHangInput" value="MK001">
-      </div>
-      <div class="form-group">
-        <label for="taiKhoanInput"><strong>Tài khoản:</strong></label>
-        <input type="text" id="taiKhoanInput" value="taikhoan123">
-      </div>
-      <div class="form-group">
-        <label for="emailInput"><strong>Email:</strong></label>
-        <input type="text" id="emailInput" value="email@example.com">
-      </div>
-      <div class="form-group">
-        <label for="soDienThoaiInput"><strong>Số điện thoai:</strong></label>
-        <input type="text" id="soDienThoaiInput" value="0123456789">
-      </div>
-      <div class="form-group">
-        <label for="matKhauInput"><strong>Mật khẩu:</strong></label>
-        <input type="text" id="matKhauInput" value="**********">
-      </div>
-      <div class="form-group">
-        <label for="hoTenInput"><strong>Họ tên:</strong></label>
-        <input type="text" id="hoTenInput" value="John Doe">
-      </div>
-      <div class="form-group">
-        <label for="avatarInput"><strong>Avatar:</strong></label>
-        <input type="text" id="avatarInput" value="avatar.png">
-      </div>
-    </div>
 
-    <button type="button" onclick="suaThongTin()">Sửa</button>
-  </div>
 </div>
-
-<script>
-  // JavaScript để tính toán và hiển thị giá trị STT
-  const sttElements = document.querySelectorAll('.stt');
-  sttElements.forEach((sttElement, index) => {
-    sttElement.textContent = index + 1;
-  });
-</script>

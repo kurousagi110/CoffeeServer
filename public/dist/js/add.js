@@ -12,7 +12,7 @@ function themTruongInput() {
   container.appendChild(newtitle);
 
   // Create a new size object
-  const newSize = { size: "", gia: "", giam_gia: "" };
+  const newSize = { ten_size: "", gia: "", giam_gia: "" };
 
   for (let i = 0; i < labels.length; i++) {
     const label = labels[i];
@@ -29,9 +29,9 @@ function themTruongInput() {
 }
 
 function luuThongTin(dem, label, value) {
-  let newSize = sizes[dem - 1] || { size: "", gia: "", giam_gia: "" };
+  let newSize = sizes[dem - 1] || { ten_size: "", gia: "", giam_gia: "" };
   if (label === "Size") {
-    newSize.size = value;
+    newSize.ten_size = value;
   } else if (label === "Giá") {
     newSize.gia = value;
   } else if (label === "Giảm giá") {

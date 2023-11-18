@@ -17599,4 +17599,53 @@ table td {
   font-weight: bold;
   border-right: 1px solid #fff;
   }
+
+  .btn-edit:hover,
+  .btn-delete:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+  .btn-edit a {
+    background-image: url(edit-icon.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
   
+  .btn-delete a {
+    background-image: url(delete-icon.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+  .btn-edit {
+    color: white;
+    background-color: var(--bs-blue);
+  }
+  
+  .btn-delete {
+    color: white;
+    background-color: var(--bs-red);
+  }
+  .btn-edit a,
+.btn-delete a {
+  font-family: sans-serif;
+  font-weight: 600;
+}
+.btn-edit,
+.btn-delete {
+  width: 100px;
+  height: 40px;
+  padding: auto;
+}
+td-button{
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.table th,
+.table td {
+  padding-top: 20px ;
+  text-align: left;
+}
+
+.table th:nth-child(2) {
+  text-align: center;
+}

@@ -3,6 +3,71 @@ const modelSanPham = require('../SanPham/ModelSanPham');
 const modelUser = require('../User/ModelUser');
 const moment = require('moment');
 
+//lấy đơn hàng theo chi nhánh
+const layDonHangTheoChiNhanh = async (id_chi_nhanh) => {
+    try {
+        const donHang = await modelDonHang.find({ id_chi_nhanh: id_chi_nhanh });
+        if (!donHang || donHang.length === 0) {
+            return []
+        }
+        return donHang;
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+
+}
+
+//thống kê đơn hàng theo chi nhánh
+const thongKeDonHangTheoChiNhanh = async (id_chi_nhanh) => {
+    try {
+        const donHang = await modelDonHang.find({ id_chi_nhanh: id_chi_nhanh });
+        if (!donHang || donHang.length === 0) {
+            return []
+        }
+        let tong_don_hang = 0;
+        let don_hang_chua_xac_nhan = [];
+        let don_hang_da_xac_nhan = [];
+        let don_hang_dang_giao = [];
+        let don_hang_da_giao = [];  
+        let don_hang_da_huy = [];
+        let don_hang_da_danh_gia = [];
+        let tong_doanh_thu = 0;
+
+
+        for(let i =0; i < donHang.length; i++){
+            tong_don_hang += 1;
+            if(donHang[i].ma_trang_thai === 0){
+                don_hang_da_huy.push(donHang[i]);
+            }else if(donHang[i].ma_trang_thai === 1){
+                don_hang_chua_xac_nhan.push(donHang[i]);
+            }else if(donHang[i].ma_trang_thai === 2){
+                don_hang_da_xac_nhan.push(donHang[i]);
+            }else if(donHang[i].ma_trang_thai === 3){
+                don_hang_dang_giao.push(donHang[i]);
+            }else if(donHang[i].ma_trang_thai === 4){
+                don_hang_da_giao.push(donHang[i]);
+            }else if(donHang[i].ma_trang_thai === 5){
+                don_hang_da_danh_gia.push(donHang[i]);
+            }
+            tong_doanh_thu += donHang[i].thanh_tien;
+        }    
+        return {
+            tong_don_hang: tong_don_hang,
+            don_hang_chua_xac_nhan: don_hang_chua_xac_nhan,
+            don_hang_da_xac_nhan: don_hang_da_xac_nhan,
+            don_hang_dang_giao: don_hang_dang_giao,
+            don_hang_da_giao: don_hang_da_giao,
+            don_hang_da_huy: don_hang_da_huy,
+            don_hang_da_danh_gia: don_hang_da_danh_gia,
+            tong_doanh_thu: tong_doanh_thu,
+        }
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);  
+    }
+};
+
 
 //sửa đơn hàng
 const suaDonHang = async (id_don_hang, id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu, giam_gia, phi_van_chuyen, thanh_tien, thanh_toan) => {
@@ -220,7 +285,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             return donHang;
         }else if (ma_trang_thai === 0) {
             let ma_trang_thai_0 =  new Date();
-            ma_trang_thai_0.setHours(ma_trang_thai_2.getHours() + 7);
+            ma_trang_thai_0.setHours(ma_trang_thai_0.getHours() + 7);
             donHang.ma_trang_thai = ma_trang_thai;
             donHang.ten_trang_thai = "Đã hủy";
             donHang.ngay_cap_nhat_0 = ma_trang_thai_0;
@@ -275,7 +340,7 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
                 for (let j = 0; j < sanPham.danh_gia.length; j++) {
                     tong_sao = tong_sao + sanPham.danh_gia[j].so_sao;
                 }
-                sanPham.tong_sao = tong_sao / sanPham.danh_gia.length;
+                sanPham.tong_sao = Math.round(tong_sao / sanPham.danh_gia.length, 2);
                 await sanPham.save();
             }
             return donHang;
@@ -292,5 +357,5 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
 
 module.exports = {
     themDonHang, layDonHang, layDonHangTheoIdUser, capNhatTrangThai, danhGia, layDanhSachSanPhamChuaDanhGia,
-    suaDonHang
+    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh
 }
