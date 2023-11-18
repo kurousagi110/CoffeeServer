@@ -136,4 +136,21 @@ router.post('/sua-san-pham/:id', [AuthenWeb, upload], async function (req, res, 
     }
 });
 
+//xóa sản phẩm
+//http://localhost:3000/cpanel/san-pham/xoa-san-pham/:id
+router.get('/xoa-san-pham/:id', [AuthenWeb], async function (req, res, next) {
+    try {
+      const id = req.params.id;
+      const sanpham = await sanphamController.xoaSanPham(id);
+      if (sanpham) {
+        res.status(200).redirect('/cpanel/san-pham'); // Corrected line
+      } else {
+        res.status(300).redirect('/cpanel/san-pham');
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(400).redirect('/cpanel/san-pham');
+    }
+  });
+
 module.exports = router;

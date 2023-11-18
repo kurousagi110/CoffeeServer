@@ -280,8 +280,6 @@
             icon: 'Lỗi',
             title: 'Oops...',
             text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            showCancelButton: true,
-            cancelButtonText: 'OK',
             allowOutsideClick: false // Prevent clicking outside the modal to close it
           });
 
@@ -324,7 +322,7 @@
 
             if (response.ok) {
               Swal.fire({
-                icon: 'Thêm sản phẩm thành công',
+                icon: 'success',
                 title: 'Saved!',
                 showConfirmButton: false,
                 timer: 1000,

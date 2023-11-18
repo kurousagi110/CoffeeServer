@@ -479,11 +479,24 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
     return false;
 };
 
+//xóa sản phẩm
+const xoaSanPham = async (id_san_pham) => {
+    try {
+        const san_pham = await sanPhamModel.findByIdAndDelete(id_san_pham);
+        if (san_pham) {
+            return true;
+        }
+    } catch (error) {
+        console.log('Lỗi tại xoaSanPham service: ', error)
+    }
+    return false;
+};
+
 module.exports = {
     themLoaiSanPham, xoaLoaiSanPham, themHinhAnh, xoaHinhAnh,
     themSize, suaSize, xoaSize, themSanPham, timKiemSanPham,
     locSanPhamTheoGiaTuThapDenCao, getSanPhamById, getAllSanPham, themSanPhamAll,
     timKiemSanPhamTheoCategory, timKiemSanPhamTheoListCategory,
     danhSachSanPhamDanhGiaTotNhat, danhSachDanhGiaTheoSanPham, suaDuLieu, suaLoaiSanPham,
-    getSanPhamGiamGia , getSanPhamMoi, suaSanPhamAll
+    getSanPhamGiamGia , getSanPhamMoi, suaSanPhamAll, xoaSanPham
 };

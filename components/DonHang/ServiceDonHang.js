@@ -340,8 +340,11 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
                 for (let j = 0; j < sanPham.danh_gia.length; j++) {
                     tong_sao = tong_sao + sanPham.danh_gia[j].so_sao;
                 }
-                sanPham.tong_sao = Math.round(tong_sao / sanPham.danh_gia.length, 2);
+                const sao = tong_sao / sanPham.danh_gia.length;
+                console.log("saooooooo"+ sao);
+                sanPham.tong_sao = sao.toFixed(2);
                 await sanPham.save();
+                console.log(sanPham);
             }
             return donHang;
         } else {
