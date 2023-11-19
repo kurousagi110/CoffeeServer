@@ -1,3 +1,7 @@
+const { Amplify } = require ('aws-amplify');
+const config = require ('./src/amplifyconfiguration.json');
+Amplify.configure(config);
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
