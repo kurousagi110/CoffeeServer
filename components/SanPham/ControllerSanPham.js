@@ -281,9 +281,36 @@ const themSanPhamAll = async (san_pham) => {
     return false;
 };
 
+//sửa sản phẩm all 
+const suaSanPhamAll = async (id_san_pham, san_pham) => {
+    try {
+        const result = await sanPhamServices.suaSanPhamAll(id_san_pham, san_pham);
+        if (result) {
+            return result;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
+//xóa sản phẩm
+
+const xoaSanPham = async (id_san_pham) => {
+    try {
+        const san_pham = await sanPhamServices.xoaSanPham(id_san_pham);
+        if (san_pham) {
+            return san_pham;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
 module.exports = { themSize, themSanPham, themLoaiSanPham, 
     themHinhAnh, xoaHinhAnh, suaSize, xoaSize,  xoaLoaiSanPham,
     getAllSanPham, getSanPhamById, locSanPhamTheoGiaTuThapDenCao, timKiemSanPham, themSanPhamAll,
     timKiemSanPhamTheoCategory, timKiemSanPhamTheoListCategory,
     danhSachDanhGiaTheoSanPham, danhSachSanPhamDanhGiaTotNhat, suaDuLieu, suaLoaiSanPham,
-    layDanhSachSanPhamGiamGia, getSanPhamMoi };
+    layDanhSachSanPhamGiamGia, getSanPhamMoi, suaSanPhamAll, xoaSanPham };

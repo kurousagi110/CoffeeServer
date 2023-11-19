@@ -181,7 +181,6 @@ const getAllSanPham = async () => {
                 }
                 // Save the updated product
                 await sanPhamItem.save();
-                console.log('sanPhamItem: ', sanPhamItem);
                 check = true;
             }
         }
@@ -202,7 +201,6 @@ const getAllSanPham = async () => {
                 sanPhamNgauNhienItem.ngay_giam = ngay_mai;
                 sanPhamNgauNhienItem.check_gia_giam = true;
             }
-            console.log('sanPhamNgauNhien: ', sanPhamNgauNhien);
             // Save the new discounted products
             for (let i = 0; i < sanPhamNgauNhien.length; i++) {
                 for (let j = 0; j < sanPham.length; j++) {
@@ -420,9 +418,8 @@ const themSanPhamAll = async (san_pham) => {
         if (data) {
             return false;
         }
-
-
-        const size = []
+        console.log('san_pham: ', san_pham);
+        let size = []
         for (let i = 0; i < san_pham.size.length; i++) {
             let select = false;
             if (san_pham.size[i].ten_size === 'M') {
@@ -438,12 +435,13 @@ const themSanPhamAll = async (san_pham) => {
                 isSelected: select,
             })
         }
+        console.log('size: ', size);
         let them_all_date = new Date();
         them_all_date.setHours(them_all_date.getHours() + 7);
         const result = new sanPhamModel({
             ten_san_pham: san_pham.ten_san_pham,
             mo_ta: san_pham.mo_ta,
-            size: san_pham.size,
+            size: size,
             loai_san_pham: san_pham.loai_san_pham,
             hinh_anh_sp: san_pham.hinh_anh_sp,
             danh_gia: [],
@@ -462,6 +460,37 @@ const themSanPhamAll = async (san_pham) => {
         console.log('Lỗi tại themSanPhamAll service: ', error)
     }
 };
+//sửa sản phẩm all
+const suaSanPhamAll = async (id_san_pham, san_pham) => {
+    try {
+        const result_san_pham = await sanPhamModel.findOne({ _id: id_san_pham });
+        if(result_san_pham){
+            result_san_pham.ten_san_pham = san_pham.ten_san_pham || result_san_pham.ten_san_pham;
+            result_san_pham.mo_ta = san_pham.mo_ta || result_san_pham.mo_ta;
+            result_san_pham.size = san_pham.size || result_san_pham.size;
+            result_san_pham.loai_san_pham = san_pham.loai_san_pham || result_san_pham.loai_san_pham;
+            result_san_pham.hinh_anh_sp = san_pham.hinh_anh_sp || result_san_pham.hinh_anh_sp;
+            await result_san_pham.save();
+            return result_san_pham;
+        }
+    } catch (error) {
+        console.log('Lỗi tại suaSanPhamAll service: ', error)
+    }
+    return false;
+};
+
+//xóa sản phẩm
+const xoaSanPham = async (id_san_pham) => {
+    try {
+        const san_pham = await sanPhamModel.findByIdAndDelete(id_san_pham);
+        if (san_pham) {
+            return true;
+        }
+    } catch (error) {
+        console.log('Lỗi tại xoaSanPham service: ', error)
+    }
+    return false;
+};
 
 module.exports = {
     themLoaiSanPham, xoaLoaiSanPham, themHinhAnh, xoaHinhAnh,
@@ -469,5 +498,5 @@ module.exports = {
     locSanPhamTheoGiaTuThapDenCao, getSanPhamById, getAllSanPham, themSanPhamAll,
     timKiemSanPhamTheoCategory, timKiemSanPhamTheoListCategory,
     danhSachSanPhamDanhGiaTotNhat, danhSachDanhGiaTheoSanPham, suaDuLieu, suaLoaiSanPham,
-    getSanPhamGiamGia , getSanPhamMoi
+    getSanPhamGiamGia , getSanPhamMoi, suaSanPhamAll, xoaSanPham
 };
