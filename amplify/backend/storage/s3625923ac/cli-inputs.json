@@ -4,7 +4,9 @@
   "bucketName": "coffeebe8c278ce734224e64a187054b5221b559",
   "storageAccess": "authAndGuest",
   "guestAccess": [
-    "READ"
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
   ],
   "authAccess": [
     "CREATE_AND_UPDATE",

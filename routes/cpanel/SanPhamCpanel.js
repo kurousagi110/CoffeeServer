@@ -6,8 +6,7 @@ const jwt = require("jsonwebtoken");
 const upload = require("../../components/MiddleWare/uploadMultiFile");
 const loaiSanPhamController = require("../../components/LoaiSanPham/ControllerLoaiSanPham");
 const Swal = require("sweetalert2");
-const { uploadData } = require("aws-amplify/storage");
-const { v4: uuidv4 } = require("uuid");
+const {uploadImageToS3} = require('../cpanel/uploadImageToS3FromClient');
 
 //http://localhost:3000/cpanel/san-pham
 router.get("/", [AuthenWeb], async function (req, res, next) {
@@ -52,25 +51,18 @@ router.post(
         // }));
 
         try {
-          const uploadPromises = files.map(async (file) => {
-            const result = await uploadData({
-              key: uuidv4(),
-              data: file.path,
-              options: {
-                accessLevel: "public", // Change this according to your requirements
-                bucket: "public-coffeelove", // Change this according to your requirements
-              },
-            });
-            console.log(`Succeeded for :`, result.result);
-            // return { hinh_anh_sp: result.result };
-          });
-
-          // Wait for all uploads to complete
-          const uploadResults = await Promise.all(uploadPromises);
-
-          console.log("All uploads completed:", uploadResults);
-          // return;
-          // hinh_anh_sp = uploadResults;
+          const keys = await Promise.all(files.map(async (file) => {
+            try {
+              const uploadResult = await uploadImageToS3(file.path);
+              return uploadResult;
+            } catch (error) {
+              console.error(`Error uploading file ${file.originalname}:`, error);
+              return null; // or handle the error in a way that suits your application
+            }
+          }));
+  
+          console.log("All uploads completed. Keys:", keys);
+          hinh_anh_sp = keys
         } catch (error) {
           console.log("Error:", error);
         }
