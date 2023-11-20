@@ -44,7 +44,6 @@ const sendNotificationNewProduct = async (san_pham) => {
       .send(message)
       .then((response) => {
         console.log("Successfully sent message:", response);
-        addNotfication();
       })
       .catch((error) => {
         console.log("Error sending message:", error);
@@ -175,9 +174,8 @@ const sendNotificationOrderStatusArrived = async ({ don_hang }) => {
 };
 
 // add nofication base on user
-const addNotfication = async ({ id_user, image, title, message, type }) => {
+const addNotificationToSpecificDevice = async ({ id_user, image, title, message, type }) => {
   // image, title, message, type, id_user
-  console.log("VALUE: ", id_user, image, title, message, type);
   try {
     const result = await modalNotification.findOne({ id_user: id_user });
     if (!result) {
@@ -223,9 +221,49 @@ const addNotfication = async ({ id_user, image, title, message, type }) => {
   }
 };
 
+const addNotificationToAllUser = async ({image, title, message, type}) => {
+  try {
+    const result = await modalNotification.updateMany(
+      {},
+      {
+        $push: {
+          notification: {
+            image: image,
+            title: title,
+            message: message,
+            type: type,
+            isRead: false,
+          },
+        },
+      }
+    );
+    console.log(`Updated  documents`);
+    return true;
+  } catch (error) {
+    console.log("ERROR AT ADD NOTIFICATION TO ALL USER: ", error);
+    return false;
+  }
+};
+
+const getAllNotification = async ({ id_user }) => {
+  try {
+    const result = await modalNotification.findOne({ id_user: id_user });
+    if (!result) {
+      return false;
+    } else {
+      return result.notification;
+    }
+  } catch (error) {
+    console.log("ERROR GET ALL NOTIFICATION: ", error);
+    return false;
+  }
+};
+
 module.exports = {
   sendNotificationNewProduct,
   sendNotificationOrderStatusDelivering,
   sendNotificationOrderStatusArrived,
-  addNotfication,
+  addNotificationToSpecificDevice,
+  getAllNotification,
+  addNotificationToAllUser,
 };

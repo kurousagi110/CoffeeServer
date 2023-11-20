@@ -1,58 +1,62 @@
 var express = require("express");
 var router = express.Router();
-var uploadAnh = require('../../components/MiddleWare/uploadFile');
-const sanPhamController = require('../../components/SanPham/ControllerSanPham');
+var uploadAnh = require("../../components/MiddleWare/uploadFile");
+const sanPhamController = require("../../components/SanPham/ControllerSanPham");
+const {
+  addNotificationToAllUser,
+  sendNotificationNewProduct,
+} = require("../../components/Notification/ServiceNotification");
 
 //lấy danh sách sản phẩm mới
 //http://localhost:3000/api/san-pham/danh-sach-san-pham-moi
-router.get('/danh-sach-san-pham-moi', async (req, res) => {
-    try {
-        const san_pham = await sanPhamController.getSanPhamMoi();
-        if (san_pham) {
-            res.status(200).json({
-                success: true,
-                message: 'Lấy danh sách sản phẩm thành công',
-                data: san_pham
-            });
-        } else {
-            res.status(200).json({
-                success: false,
-                message: 'Lấy danh sách sản phẩm thất bại',
-            });
-        }
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: 'Lấy danh sách sản phẩm thất bại',
-            error: error.message
-        });
+router.get("/danh-sach-san-pham-moi", async (req, res) => {
+  try {
+    const san_pham = await sanPhamController.getSanPhamMoi();
+    if (san_pham) {
+      res.status(200).json({
+        success: true,
+        message: "Lấy danh sách sản phẩm thành công",
+        data: san_pham,
+      });
+    } else {
+      res.status(200).json({
+        success: false,
+        message: "Lấy danh sách sản phẩm thất bại",
+      });
     }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Lấy danh sách sản phẩm thất bại",
+      error: error.message,
+    });
+  }
 });
 
 //lấy danh sách sản phẩm giảm giá
 //http://localhost:3000/api/san-pham/danh-sach-san-pham-giam-gia
-router.get('/danh-sach-san-pham-giam-gia', async (req, res) => {
-    try {
-        const san_pham = await sanPhamController.layDanhSachSanPhamGiamGia();
-        if (san_pham) {
-            res.status(200).json({
-                success: true,
-                message: 'Lấy danh sách sản phẩm thành công',
-                data: san_pham
-            });
-        } else {
-            res.status(200).json({
-                success: false,
-                message: 'Lấy danh sách sản phẩm thất bại',
-            });
-        }
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: 'Lấy danh sách sản phẩm thất bại',
-            error: error.message
-        });
+router.get("/danh-sach-san-pham-giam-gia", async (req, res) => {
+  try {
+    const san_pham = await sanPhamController.layDanhSachSanPhamGiamGia();
+    if (san_pham) {
+      res.status(200).json({
+        success: true,
+        message: "Lấy danh sách sản phẩm thành công",
+        data: san_pham,
+      });
+    } else {
+      res.status(200).json({
+        success: false,
+        message: "Lấy danh sách sản phẩm thất bại",
+      });
     }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Lấy danh sách sản phẩm thất bại",
+      error: error.message,
+    });
+  }
 });
 
 //sửa sản phẩm
@@ -655,7 +659,29 @@ router.post("/them-full-san-pham", async (req, res) => {
     const result = await sanPhamController.themSanPhamAll(san_pham);
     if (result) {
       // gửi thông báo có sản phẩm mới cho tất cả thiết bị
-      sendNotificationNewProduct(san_pham);
+      const resultSendNotification = await sendNotificationNewProduct(san_pham);
+
+      let hinh_anh_sp = null;
+      if (san_pham.hinh_anh_sp.length > 0) {
+        hinh_anh_sp = san_pham.hinh_anh_sp[0].hinh_anh_sp;
+      }
+      const resultAddNotification = await addNotificationToAllUser({
+        image: hinh_anh_sp,
+        title: san_pham.ten_san_pham,
+        message: "Coffee.Love vừa cho ra sản phẩm mới đó",
+        type: "NewProduct",
+      });
+
+      if (!resultSendNotification) {
+        console.log("FAIL TO FIREBASE SEND NEW MESSAGE TO ALL DEVICE");
+      }else{
+        console.log("SUCCESS TO FIREBASE SEND NEW MESSAGE TO ALL DEVICE");
+      }
+      if (!resultAddNotification) {
+        console.log("FAIL TO ADD NOTIFICATION TO ALL USER");
+      }else{
+        console.log("SUCCESS TO ADD NOTIFICATION TO ALL USER");
+      }
 
       res.status(200).json({
         success: true,

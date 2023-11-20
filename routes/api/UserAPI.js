@@ -4,8 +4,8 @@ const userController = require("../../components/User/ControllerUser");
 const AuthenToken = require("../../components/MiddleWare/AuthenToken");
 const serviceUser = require("../../components/User/ServiceUser");
 const {
-  addNotfication,
 } = require("../../components/Notification/ServiceNotification");
+const serviceNotfication = require("../../components/Notification/ServiceNotification");
 
 //login cpanel
 //http://localhost:3000/users/login-cpanel
@@ -506,19 +506,7 @@ router.post("/dang-nhap-username", async (req, res, next) => {
       mat_khau
     );
     if (result) {
-      const notification = await addNotfication({
-        id_user: "651e8c5baa3c5378de775821",
-        image:
-          "https://fastly.picsum.photos/id/700/200/200.jpg?hmac=_WGJyaec5-FtaUPt721cMe1xainltHzU0AEV8LZwecE",
-        title: " New Product",
-        message: "Ngon lam nha",
-        type: "NewProduct",
-      });
-      if (!notification) {
-        return res
-          .status(200)
-          .json({ trang_thai: false, message: "Thêm thông báo thất bại" });
-      }
+      
 
       res.status(200).json({ trang_thai: true, data: result });
     } else {
@@ -592,6 +580,36 @@ router.post("/doi-mat-khau-otp", async (req, res, next) => {
       res
         .status(200)
         .json({ trang_thai: false, message: "Đổi mật khẩu thất bại" });
+    }
+  } catch (error) {
+    res.status(400).json({ trang_thai: false, message: error.message });
+  }
+});
+
+// gấy danh sách thông báo
+//http://localhost:3000/users/lay-thong-bao
+router.post("/lay-thong-bao", AuthenToken, async (req, res, next) => {
+  try {
+    const { id_user } = req.body;
+    const result = await serviceNotfication.getAllNotification({
+      id_user: id_user,
+    });
+    if (result) {
+      res
+        .status(200)
+        .json({
+          trang_thai: true,
+          message: "Lấy thông báo thành công",
+          data: result,
+        });
+    } else {
+      res
+        .status(200)
+        .json({
+          trang_thai: false,
+          message: "Lấy thông báo thất bại",
+          data: [],
+        });
     }
   } catch (error) {
     res.status(400).json({ trang_thai: false, message: error.message });

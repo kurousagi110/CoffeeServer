@@ -6,65 +6,72 @@ const { route } = require("./FavoriteAPI");
 const {
   sendNotificationOrderStatusDelivering,
   sendNotificationOrderStatusArrived,
+  addNotificationToSpecificDevice,
 } = require("../../components/Notification/ServiceNotification");
-
 
 //lấy đơn hàng theo chi nhánh
 //http://localhost:3000/api/don-hang/lay-don-hang-theo-chi-nhanh/:id_chi_nhanh
-router.get("/lay-don-hang-theo-chi-nhanh/:id_chi_nhanh", AuthenToken, async function (req, res, next) {
-  try {
-    const { id_chi_nhanh } = req.params;
-    const result = await DonHangController.layDonHangTheoChiNhanh(
-      id_chi_nhanh
-    );
-    if (result) {
-      res.status(200).json({
-        status: true,
-        message: "Lấy đơn hàng theo chi nhánh thành công!",
-        result: result,
-      });
-    } else {
-      res.status(200).json({
+router.get(
+  "/lay-don-hang-theo-chi-nhanh/:id_chi_nhanh",
+  AuthenToken,
+  async function (req, res, next) {
+    try {
+      const { id_chi_nhanh } = req.params;
+      const result = await DonHangController.layDonHangTheoChiNhanh(
+        id_chi_nhanh
+      );
+      if (result) {
+        res.status(200).json({
+          status: true,
+          message: "Lấy đơn hàng theo chi nhánh thành công!",
+          result: result,
+        });
+      } else {
+        res.status(200).json({
+          status: false,
+          message: "Lấy đơn hàng theo chi nhánh thất bại!",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
         status: false,
-        message: "Lấy đơn hàng theo chi nhánh thất bại!",
+        message: error.message,
       });
     }
-  } catch (error) {
-    res.status(400).json({
-      status: false,
-      message: error.message,
-    });
   }
-});
+);
 
 //thống kê đơn hàng theo chi nhánh
 //http://localhost:3000/api/don-hang/thong-ke-don-hang-theo-chi-nhanh/:id_chi_nhanh
-router.get("/thong-ke-don-hang-theo-chi-nhanh/:id_chi_nhanh", AuthenToken, async function (req, res, next) {
-  try {
-    const { id_chi_nhanh } = req.params;
-    const result = await DonHangController.thongKeDonHangTheoChiNhanh(
-      id_chi_nhanh
-    );
-    if (result) {
-      res.status(200).json({
-        status: true,
-        message: "Thống kê đơn hàng theo chi nhánh thành công!",
-        result: result,
-      });
-    } else {
-      res.status(200).json({
+router.get(
+  "/thong-ke-don-hang-theo-chi-nhanh/:id_chi_nhanh",
+  AuthenToken,
+  async function (req, res, next) {
+    try {
+      const { id_chi_nhanh } = req.params;
+      const result = await DonHangController.thongKeDonHangTheoChiNhanh(
+        id_chi_nhanh
+      );
+      if (result) {
+        res.status(200).json({
+          status: true,
+          message: "Thống kê đơn hàng theo chi nhánh thành công!",
+          result: result,
+        });
+      } else {
+        res.status(200).json({
+          status: false,
+          message: "Thống kê đơn hàng theo chi nhánh thất bại!",
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
         status: false,
-        message: "Thống kê đơn hàng theo chi nhánh thất bại!",
+        message: error.message,
       });
     }
-  } catch (error) {
-    res.status(400).json({
-      status: false,
-      message: error.message,
-    });
   }
-});
-
+);
 
 //sửa đơn hàng
 //http://localhost:3000/api/don-hang/sua-don-hang
@@ -271,13 +278,48 @@ router.post(
       if (result) {
         // gửi thông báo đơn trạng thái đơn hàng cho thiết bị cụ thể (đang vận chuyển)
         //==========================
+        let resultAddNotification;
+        let resultSendNotification;
         if (ma_trang_thai === 3) {
-          sendNotificationOrderStatusDelivering({ don_hang: result });
+          resultSendNotification = await sendNotificationOrderStatusDelivering({
+            don_hang: result,
+          });
+          resultAddNotification = await addNotificationToSpecificDevice({
+            id_user: result.id_user,
+            image: result.san_pham[0].hinh_anh_sp,
+            title: id_don_hang,
+            message: "Đơn hàng của bạn đang được vận chuyển!",
+            type: "Devivering",
+          });
         }
         // giao thanh cong
         if (ma_trang_thai === 4) {
-          sendNotificationOrderStatusArrived({ don_hang: result });
+          resultSendNotification = await sendNotificationOrderStatusArrived({
+            don_hang: result,
+          });
+
+          sendNotificationOrderStatusDelivering({ don_hang: result });
+          resultAddNotification = await addNotificationToSpecificDevice({
+            id_user: result.id_user,
+            image: result.san_pham[0].hinh_anh_sp,
+            title: id_don_hang,
+            message: "Đơn hàng của bạn đã được giao thành công!",
+            type: "Devivered",
+          });
         }
+
+        if (!resultAddNotification) {
+          console.log("ERROR ADD NOTIFICATION TO SPECIFIC ACCOUNT");
+        } else {
+          console.log("ADD NOTIFICATION TO SPECIFIC ACCOUNT SUCCESSFULLY");
+        }
+
+        if (!resultSendNotification) {
+          console.log("ERROR SEND NOTIFICATION TO SPECIFIC DEVICE");
+        } else {
+          console.log("SEND NOTIFICATION TO SPECIFIC DEVICE SUCCESSFULLY");
+        }
+
         res.status(200).json({
           status: true,
           message: "Cập nhật trạng thái thành công!",
