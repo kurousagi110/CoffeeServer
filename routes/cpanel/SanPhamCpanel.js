@@ -142,15 +142,16 @@ router.get('/xoa-san-pham/:id', [AuthenWeb], async function (req, res, next) {
     try {
       const id = req.params.id;
       const sanpham = await sanphamController.xoaSanPham(id);
+
       if (sanpham) {
-        res.status(200).redirect('/cpanel/san-pham'); // Corrected line
+        res.status(200).json({ result: 'success' });
       } else {
-        res.status(300).redirect('/cpanel/san-pham');
+        res.status(200).json({ result: 'failure' });
       }
     } catch (err) {
       console.log(err);
-      res.status(400).redirect('/cpanel/san-pham');
+      res.status(400).json({ result: 'error' });
     }
-  });
+});
 
 module.exports = router;

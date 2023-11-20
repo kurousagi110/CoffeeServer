@@ -235,17 +235,16 @@
                       <td>{{this.so_luong_danh_gia}}</td>
                       <td>{{this.tong_sao}}</td>
                       <td class="td-button">
-                        <button type="button" class="btn btn-primary btn-edit" style="margin-top: 0px;">
-                          <a href="/cpanel/san-pham/sua-san-pham/{{this.id}}">
-                            <span style="color: white;">Sửa</span>
-                          </a>
-                        </button>
+                        <a href="/cpanel/san-pham/sua-san-pham/{{this.id}}" class="btn btn-primary btn-edit"
+                          style="margin-top: 0px; color: white; text-decoration: none;">
+                          <span style="color: inherit;">Sửa</span>
+                        </a>
                       </td>
                       <td class="td-button">
-                        <button type="button" class="btn btn-danger btn-delete" style="margin-top: 0px;"
-                          onclick="confirmDelete({{this.id}})">
-                          <span style="color: white;">Xóa</span>
-                        </button>
+                        <a href="#" onclick="confirmDelete('{{this.id}}')" class="btn btn-danger btn-delete"
+                          style="margin-top: 0px; color: white; text-decoration: none;">
+                          <span style="color: inherit;">Xóa</span>
+                        </a>
                       </td>
                     </tr>
                     {{/each}}
@@ -269,58 +268,54 @@
 
   // Delete product
   async function deleteProduct(id) {
-  const url = `/cpanel/san-pham/xoa-san-pham/${id}`;
-  const option = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    const url = `/cpanel/san-pham/xoa-san-pham/${id}`;
+    const option = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    try {
+      const response = await fetchAPI(url, option);
+
+      if (response.result === 'success') {
+        Swal.fire({
+          title: 'Đã xóa!',
+          text: 'Xóa sản phẩm thành công.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1000,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        Swal.fire({
+          title: 'Lỗi!',
+          text: 'Xóa sản phẩm thất bại.',
+          icon: 'error',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  try {
-    const response = await fetchAPI(url, option);
-
-    if (response.result) {
-      Swal.fire({
-        title: 'Đã xóa!',
-        text: 'Xóa sản phẩm thành công.',
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1000,
-      });
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    } else {
-      Swal.fire({
-        title: 'Lỗi!',
-        text: 'Xóa sản phẩm thất bại.',
-        icon: 'error',
-      });
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
   // Confirm delete
- async function confirmDelete(id) {
-  Swal.fire({
-    title: 'Xác nhận xóa sản phẩm',
-    text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Xóa',
-    cancelButtonText: 'Hủy',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deleteProduct(id);
-    }
-  });
-}
-function test () {
-  Swal.fire('Hello world!');
-  console.log('test');
-};
+  async function confirmDelete(id) {
+    Swal.fire({
+      title: 'Xác nhận xóa sản phẩm',
+      text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteProduct(id);
+      }
+    });
+  }
 </script>
