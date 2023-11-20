@@ -293,7 +293,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
             let ma_trang_thai_2 = new Date();
             ma_trang_thai_2.setHours(ma_trang_thai_2.getHours() + 7);
             donHang.ma_trang_thai = ma_trang_thai;
-            donHang.ten_trang_thai = "Đã hủy";
+            donHang.ten_trang_thai = "Đã xác nhận";
             donHang.ngay_cap_nhat_2 = ma_trang_thai_2;
             await donHang.save();
             return donHang;
@@ -355,7 +355,6 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
                     tong_sao = tong_sao + sanPham.danh_gia[j].so_sao;
                 }
                 const sao = tong_sao / sanPham.danh_gia.length;
-                console.log("saooooooo" + sao);
                 sanPham.tong_sao = sao.toFixed(2);
                 await sanPham.save();
                 console.log(sanPham);
