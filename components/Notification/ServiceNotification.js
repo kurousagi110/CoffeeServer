@@ -4,8 +4,10 @@ const admin = require("firebase-admin");
 const express = require("express");
 const modelDonHang = require("../DonHang/ModelDonHang");
 const modelUser = require("../User/ModelUser");
+const modalNotification = require("./ModelNotification");
 
 const serviceAccount = require("../../login-143c8-firebase-adminsdk-mgzik-6009768ec8.json");
+const { default: mongoose } = require("mongoose");
 
 initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -171,8 +173,97 @@ const sendNotificationOrderStatusArrived = async ({ don_hang }) => {
   }
 };
 
+// add nofication base on user
+const addNotificationToSpecificDevice = async ({ id_user, image, title, message, type }) => {
+  // image, title, message, type, id_user
+  try {
+    const result = await modalNotification.findOne({ id_user: id_user });
+    if (!result) {
+      // If the document doesn't exist, create a new one
+      const newNotification = new modalNotification({
+        _id: new mongoose.Types.ObjectId(),
+        id_user: id_user,
+        notification: [
+          {
+            _id: new mongoose.Types.ObjectId(),
+            image: image,
+            title: title,
+            message: message,
+            type: type,
+            isRead: false,
+          },
+        ],
+      });
+
+      await newNotification.save(); // Save the new document
+      return true;
+    } else {
+      const updateNotification = await modalNotification.findOneAndUpdate(
+        { id_user: id_user },
+        {
+          $push: {
+            notification: {
+              image: image,
+              title: title,
+              message: message,
+              type: type,
+              isRead: false,
+            },
+          },
+        },
+        { new: true }
+      );
+      return true;
+    }
+  } catch (error) {
+    console.log("ERROR ADD NOTIFICATION: ", error);
+    return false;
+  }
+};
+
+const addNotificationToAllUser = async ({image, title, message, type}) => {
+  try {
+    const result = await modalNotification.updateMany(
+      {},
+      {
+        $push: {
+          notification: {
+            image: image,
+            title: title,
+            message: message,
+            type: type,
+            isRead: false,
+          },
+        },
+      }
+    );
+    console.log(`Updated  documents`);
+    return true;
+  } catch (error) {
+    console.log("ERROR AT ADD NOTIFICATION TO ALL USER: ", error);
+    return false;
+  }
+};
+
+const getAllNotification = async ({ id_user }) => {
+  try {
+    const result = await modalNotification.findOne({ id_user: id_user });
+    if (!result) {
+      return false;
+    } else {
+      return result.notification;
+    }
+  } catch (error) {
+    console.log("ERROR GET ALL NOTIFICATION: ", error);
+    return false;
+  }
+};
+
 module.exports = {
   sendNotificationNewProduct,
   sendNotificationOrderStatusDelivering,
   sendNotificationOrderStatusArrived,
+  addNotificationToSpecificDevice,
+  getAllNotification,
+  addNotificationToAllUser,
 };

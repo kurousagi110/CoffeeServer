@@ -7,6 +7,31 @@
     <div class="lds-pos"></div>
   </div>
 </div>
+
+{{!-- loading --}}
+<div id="loading-circle" class="hidden" style="
+    position: fixed;
+    {{!-- top: 50%;
+    right: 45%; --}}
+    width:100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(148, 147, 147, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+  ">
+  <div class="spinner" style="
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    "></div>
+</div>
 <!-- ============================================================== -->
 <!-- Main wrapper - style you can find in pages.scss -->
 <!-- ============================================================== -->
@@ -217,7 +242,7 @@
       <div class="row">
         <div class="col-12">
           <div class="card card-body">
-            <h4 class="card-title">Thêm User</h4>
+            <h4 class="card-title">Thêm Sản Phẩm</h4>
             <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
               method="post">
               <div class="form-group">
@@ -268,8 +293,20 @@
 
     </div>
     <script>
+
+      function showLoading() {
+        document.getElementById('loading-circle').style.display = 'flex';
+      }
+
+      function hideLoading() {
+        document.getElementById('loading-circle').style.display = 'none';
+      }
+
+
       async function validateAndSubmit() {
         // Validate the form data here
+        showLoading();
+
         const ten_san_pham = document.getElementById('ten_san_pham').value;
         const loai_san_pham = document.getElementById('loai_san_pham').value;
         const mo_ta = document.getElementById('mo_ta').value;
@@ -284,6 +321,7 @@
           });
 
           if (result.isConfirmed) {
+            hideLoading();
             return;
           }
         }
@@ -321,23 +359,27 @@
             });
 
             if (response.ok) {
+              hideLoading();
               Swal.fire({
                 icon: 'success',
                 title: 'Saved!',
                 showConfirmButton: false,
-                timer: 1000,
+                timer: 0,
               });
-              setTimeout(() => {
+             
                 window.location.href = '/cpanel/san-pham';
-              }, 1000);
+             
             } else {
+              hideLoading();
               Swal.fire('Lỗi', 'Tên sản phẩm bị trùng', 'error');
             }
           } catch (error) {
+            hideLoading();
             console.error(error);
             Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
           }
         } else if (confirmationResult.isDenied) {
+          hideLoading();
           Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
         }
       }
