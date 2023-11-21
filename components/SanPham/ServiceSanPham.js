@@ -101,6 +101,11 @@ const timKiemSanPhamTheoCategory = async (ten_loai_san_pham) => {
 //tìm kiếm san pham
 const timKiemSanPham = async (ten_san_pham) => {
   try {
+    const formatTen = ten_san_pham
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
+      .replace(/\s+/g, ""); // Remove spaces
+
     const tat_ca_san_pham = await sanPhamModel.find();
     const fuseOptions = {
       keys: ["ten_san_pham", "loai_san_pham.ten_loai_san_pham", "mo_ta"],
@@ -108,7 +113,7 @@ const timKiemSanPham = async (ten_san_pham) => {
     };
 
     const fuse = new Fuse(tat_ca_san_pham, fuseOptions);
-    const result = fuse.search(ten_san_pham);
+    const result = fuse.search(formatTen);
 
     if (result.length === 0) {
       return tat_ca_san_pham;
