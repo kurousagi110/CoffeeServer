@@ -285,9 +285,10 @@
               <input type="hidden" id="number" value="{{san_pham.size.length}}">
 
               <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
-                <button type="button" onclick="validateAndSubmit()" class="btn btn-primary"
-                  style="width: 95%">Lưu</button>
+                <a onclick="validateAndSubmit()" class="btn btn-primary"
+                  style="width: 95%; text-align: center; text-decoration: none; color: #fff; padding: 10px; display: inline-block;">Lưu</a>
               </div>
+
             </form>
 
           </div>
@@ -296,7 +297,9 @@
 
     </div>
     <script>
-      async function validateAndSubmit() {
+
+      validateAndSubmit = async function () {
+
         // Validate the form data here
         const ten_san_pham = document.getElementById('ten_san_pham').value;
         const loai_san_pham = document.getElementById('loai_san_pham').value;
@@ -307,7 +310,7 @@
 
         // Check if any input is empty
         if (!ten_san_pham || !loai_san_pham || !mo_ta || !filesInput.files.length) {
-          await Swal.fire({
+          const result = await Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'Bạn hãy nhập đầy đủ không được để trống.',
@@ -315,64 +318,77 @@
             cancelButtonText: 'OK',
             allowOutsideClick: false, // Prevent clicking outside the modal to close it
           });
-          return;
+            return;
         }
 
-        // Gather size information
-        const sizeContainer = document.getElementById('size-container');
-        const sizeInputs = sizeContainer.querySelectorAll('input[type="text"]');
-        const sizes = [];
+        const confirmationResult = await Swal.fire({
+          title: 'Bạn có chắc chắn muốn thêm sản phẩm này?',
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Lưu',
+          denyButtonText: "Chỉnh sửa."
+        });
 
-        for (let i = 0; i < number; i++) {
-          
-          const size = {
-            ten_size: document.getElementById(`input1_Size_${i + 1}`).value,
-            gia: document.getElementById(`input2_Giá_${i + 1}`).value,
-            giam_gia: document.getElementById(`input3_Giảm giá_${i + 1}`).value,
-          };
-          sizes.push(size);
-        }
+        if (confirmationResult.isConfirmed) {
+          // Gather size information
+          const sizeContainer = document.getElementById('size-container');
+          const sizeInputs = sizeContainer.querySelectorAll('input[type="text"]');
+          const sizes = [];
 
-        // Convert sizes array to JSON string
-        const sizesJSON = JSON.stringify(sizes);
+          for (let i = 0; i < number; i++) {
+            const size = {
+              ten_size: document.getElementById(`input1_Size_${i + 1}`).value,
+              gia: document.getElementById(`input2_Giá_${i + 1}`).value,
+              giam_gia: document.getElementById(`input3_Giảm giá_${i + 1}`).value,
+            };
+            sizes.push(size);
+          }
 
-        // Prepare form data
-        const formData = new FormData();
-        formData.append('ten_san_pham', ten_san_pham);
-        formData.append('loai_san_pham', loai_san_pham);
-        formData.append('mo_ta', mo_ta);
-        formData.append('sizes', sizesJSON); // Append the size information to the form data
+          // Convert sizes array to JSON string
+          const sizesJSON = JSON.stringify(sizes);
 
-        // Append files to the form data
-        for (let i = 0; i < filesInput.files.length; i++) {
-          formData.append('files', filesInput.files[i]);
-        }
+          // Prepare form data
+          const formData = new FormData();
+          formData.append('ten_san_pham', ten_san_pham);
+          formData.append('loai_san_pham', loai_san_pham);
+          formData.append('mo_ta', mo_ta);
+          formData.append('sizes', sizesJSON);
 
-        // Send the form data to the API
-        try {
-          const response = await fetch(`/cpanel/san-pham/sua-san-pham/${id}`, {
-            method: 'POST',
-            body: formData,
-          });
+          // Append files to the form data
+          for (let i = 0; i < filesInput.files.length; i++) {
+            formData.append('files', filesInput.files[i]);
+          }
 
-          if (response.result === 'success') {
-            await Swal.fire({
-              icon: 'success',
-              title: 'Cập nhật sản phẩm thành công',
-              showConfirmButton: false,
-              timer: 1000,
+          // Send the form data to the API using the POST method
+          try {
+            const response = await fetch(`/cpanel/san-pham/sua-san-pham/${id}`, {
+              method: 'POST',
+              body: formData,
             });
 
-            setTimeout(() => {
-              window.location.href = '/cpanel/san-pham';
-            }, 1000);
-          } else {
-            await Swal.fire('Lỗi', 'Tên sản phẩm bị trùng', 'error');
+            if (response.ok) {
+              await Swal.fire({
+                icon: 'success',
+                title: 'Cập nhật sản phẩm thành công',
+                showConfirmButton: false,
+                timer: 1000,
+              });
+
+              setTimeout(() => {
+                window.location.href = '/cpanel/san-pham';
+              }, 1000);
+            } else {
+              await Swal.fire('Lỗi', 'Tên sản phẩm bị trùng hoặc có lỗi khác.', 'error');
+            }
+          } catch (error) {
+            console.error(error);
+            await Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
+          } finally {
+            hideLoading();
           }
-        } catch (error) {
-          console.error(error);
-          await Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
+        } else if (confirmationResult.isDenied) {
+          hideLoading();
+          Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
         }
       }
-
     </script>

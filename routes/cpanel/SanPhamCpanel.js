@@ -170,13 +170,15 @@ router.post('/sua-san-pham/:id', [AuthenWeb, upload], async function (req, res, 
       result_loai_san_pham,
       mo_ta,
       hinh_anh_sp,
-      sizes: sizes
+      size: sizes
     };
     console.log("san_pham", san_pham);
     const sanpham = await sanphamController.suaSanPhamAll(id, san_pham);
+    console.log("sanpham", sanpham);
 
     if (sanpham) {
-      res.status(200).redirect('/cpanel/san-pham');
+      console.log("SUCCESS TO EDIT PRODUCT");
+      res.status(200).json({ result: 'success' });
     } else {
       res.status(300).render('sanpham/suasanpham');
     }

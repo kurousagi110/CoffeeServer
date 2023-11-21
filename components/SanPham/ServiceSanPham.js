@@ -385,10 +385,7 @@ const suaSize = async (id_san_pham, id_size, ten_size, gia, giam_gia) => {
         size.gia = gia || size.gia;
         size.giam_gia = giam_gia || size.giam_gia;
         console.log("gia: ", giam_gia);
-        size.gia_da_giam =
-          gia - (gia * giam_gia) / 100 ||
-          size.gia - (size.gia * size.giam_gia) / 100;
-
+        size.gia_da_giam = gia - (gia * giam_gia) / 100 || size.gia - (size.gia * size.giam_gia) / 100;
         await san_pham.save();
         return san_pham;
       }
@@ -455,9 +452,7 @@ const themSanPhamAll = async (san_pham) => {
         ten_size: san_pham.size[i].ten_size,
         gia: san_pham.size[i].gia,
         giam_gia: san_pham.size[i].giam_gia,
-        gia_da_giam:
-          san_pham.size[i].gia -
-          (san_pham.size[i].gia * san_pham.size[i].giam_gia) / 100,
+        gia_da_giam: san_pham.size[i].gia - (san_pham.size[i].gia * san_pham.size[i].giam_gia) / 100,
         isSelected: select,
       });
     }
@@ -492,6 +487,7 @@ const themSanPhamAll = async (san_pham) => {
 const suaSanPhamAll = async (id_san_pham, san_pham) => {
   try {
     const result_san_pham = await sanPhamModel.findOne({ _id: id_san_pham });
+    console.log("san_pham.size: ", san_pham.size);
     if (result_san_pham) {
       result_san_pham.ten_san_pham =
         san_pham.ten_san_pham || result_san_pham.ten_san_pham;
