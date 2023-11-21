@@ -287,9 +287,10 @@ router.post(
           resultAddNotification = await addNotificationToSpecificDevice({
             id_user: result.id_user,
             image: result.san_pham[0].hinh_anh_sp,
+            id_product: id_don_hang,
             title: id_don_hang,
             message: "Đơn hàng của bạn đang được vận chuyển!",
-            type: "Devivering",
+            type: "Delivering",
           });
         }
         // giao thanh cong
@@ -302,9 +303,10 @@ router.post(
           resultAddNotification = await addNotificationToSpecificDevice({
             id_user: result.id_user,
             image: result.san_pham[0].hinh_anh_sp,
+            id_product: id_don_hang,
             title: id_don_hang,
             message: "Đơn hàng của bạn đã được giao thành công!",
-            type: "Devivered",
+            type: "Delivered",
           });
         }
 

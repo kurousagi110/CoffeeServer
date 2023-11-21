@@ -10,6 +10,7 @@ const schema = new Schema({
       _id: { type: ObjectID },
       image: { type: String },
       title: { type: String },
+      id_product: { type: String },
       message: { type: String },
       type: { type: String },
       isRead: { type: Boolean },

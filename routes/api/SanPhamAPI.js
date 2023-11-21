@@ -668,6 +668,7 @@ router.post("/them-full-san-pham", async (req, res) => {
       const resultAddNotification = await addNotificationToAllUser({
         image: hinh_anh_sp,
         title: san_pham.ten_san_pham,
+        id_product: result._id,
         message: "Coffee.Love vừa cho ra sản phẩm mới đó",
         type: "NewProduct",
       });

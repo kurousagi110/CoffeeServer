@@ -174,7 +174,14 @@ const sendNotificationOrderStatusArrived = async ({ don_hang }) => {
 };
 
 // add nofication base on user
-const addNotificationToSpecificDevice = async ({ id_user, image, title, message, type }) => {
+const addNotificationToSpecificDevice = async ({
+  id_user,
+  image,
+  title,
+  id_product,
+  message,
+  type,
+}) => {
   // image, title, message, type, id_user
   try {
     const result = await modalNotification.findOne({ id_user: id_user });
@@ -188,6 +195,7 @@ const addNotificationToSpecificDevice = async ({ id_user, image, title, message,
             _id: new mongoose.Types.ObjectId(),
             image: image,
             title: title,
+            id_product: id_product,
             message: message,
             type: type,
             isRead: false,
@@ -205,6 +213,7 @@ const addNotificationToSpecificDevice = async ({ id_user, image, title, message,
             notification: {
               image: image,
               title: title,
+              id_product: id_product,
               message: message,
               type: type,
               isRead: false,
@@ -221,7 +230,13 @@ const addNotificationToSpecificDevice = async ({ id_user, image, title, message,
   }
 };
 
-const addNotificationToAllUser = async ({image, title, message, type}) => {
+const addNotificationToAllUser = async ({
+  image,
+  title,
+  id_product,
+  message,
+  type,
+}) => {
   try {
     const result = await modalNotification.updateMany(
       {},
@@ -230,6 +245,7 @@ const addNotificationToAllUser = async ({image, title, message, type}) => {
           notification: {
             image: image,
             title: title,
+            id_product: id_product,
             message: message,
             type: type,
             isRead: false,
