@@ -169,7 +169,6 @@
     <div class="page-breadcrumb">
       <div class="row">
         <div class="col-5 align-self-center">
-          <h4 class="page-title">Bảng Dữ Liệu</h4>
         </div>
         <div class="col-7 align-self-center">
           <div class="d-flex align-items-center justify-content-end">
@@ -179,7 +178,7 @@
                   <a href="#">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Bảng Dữ Liệu
+                  Sản phẩm
                 </li>
               </ol>
             </nav>
@@ -201,13 +200,14 @@
         <div class="col-12">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Bảng Sản Phẩm</h4>
-              <h6 class="card-title mt-5">
-                <i class="me-1 font-18 mdi mdi-numeric-1-box-multiple-outline"></i>
-                Dữ liệu Sản Phẩm
-              </h6>
-              <a href="http://localhost:3000/cpanel/san-pham/them-san-pham"><span type="button"
+              <h4 class="card-title">Danh sách sản phẩm</h4>
+
+              <a href="/cpanel/san-pham/them-san-pham"><span type="button"
                   class="btn btn-success text-white">Thêm sản phẩm</span></a>
+                  <br>
+                  <br>
+                  
+              <h6 class="card-subtitle">Danh sách sản phẩm hiện có trong hệ thống</h6>
 
               <div class="table-responsive">
                 <table class="table">
@@ -235,17 +235,16 @@
                       <td>{{this.so_luong_danh_gia}}</td>
                       <td>{{this.tong_sao}}</td>
                       <td class="td-button">
-                        <button type="button" class="btn btn-primary btn-edit" style="margin-top: 0px;">
-                          <a href="/cpanel/san-pham/sua-san-pham/{{this.id}}">
-                            <span style="color: white;">Sửa</span>
-                          </a>
-                        </button>
+                        <a href="/cpanel/san-pham/sua-san-pham/{{this.id}}" class="btn btn-primary btn-edit"
+                          style="margin-top: 0px; color: white; text-decoration: none;">
+                          <span style="color: inherit;">Sửa</span>
+                        </a>
                       </td>
                       <td class="td-button">
-                        <button type="button" class="btn btn-danger btn-delete" style="margin-top: 0px;"
-                          onclick="confirmDelete({{this.id}})">
-                          <span style="color: white;">Xóa</span>
-                        </button>
+                        <a href="#" onclick="confirmDelete('{{this.id}}')" class="btn btn-danger btn-delete"
+                          style="margin-top: 0px; color: white; text-decoration: none;">
+                          <span style="color: inherit;">Xóa</span>
+                        </a>
                       </td>
                     </tr>
                     {{/each}}
@@ -269,58 +268,54 @@
 
   // Delete product
   async function deleteProduct(id) {
-  const url = `/cpanel/san-pham/xoa-san-pham/${id}`;
-  const option = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    const url = `/cpanel/san-pham/xoa-san-pham/${id}`;
+    const option = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    try {
+      const response = await fetchAPI(url, option);
+
+      if (response.result === 'success') {
+        Swal.fire({
+          title: 'Đã xóa!',
+          text: 'Xóa sản phẩm thành công.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1000,
+        });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        Swal.fire({
+          title: 'Lỗi!',
+          text: 'Xóa sản phẩm thất bại.',
+          icon: 'error',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  try {
-    const response = await fetchAPI(url, option);
-
-    if (response.result) {
-      Swal.fire({
-        title: 'Đã xóa!',
-        text: 'Xóa sản phẩm thành công.',
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1000,
-      });
-
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
-    } else {
-      Swal.fire({
-        title: 'Lỗi!',
-        text: 'Xóa sản phẩm thất bại.',
-        icon: 'error',
-      });
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
   // Confirm delete
- async function confirmDelete(id) {
-  Swal.fire({
-    title: 'Xác nhận xóa sản phẩm',
-    text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Xóa',
-    cancelButtonText: 'Hủy',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deleteProduct(id);
-    }
-  });
-}
-function test () {
-  Swal.fire('Hello world!');
-  console.log('test');
-};
+  async function confirmDelete(id) {
+    Swal.fire({
+      title: 'Xác nhận xóa sản phẩm',
+      text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteProduct(id);
+      }
+    });
+  }
 </script>

@@ -253,7 +253,7 @@ const addNotificationToAllUser = async ({
         },
       }
     );
-    console.log(`Updated  documents`);
+    
     return true;
   } catch (error) {
     console.log("ERROR AT ADD NOTIFICATION TO ALL USER: ", error);
