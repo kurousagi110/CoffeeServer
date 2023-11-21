@@ -355,7 +355,7 @@
             body: formData,
           });
 
-          if (response.ok) {
+          if (response.result === 'success') {
             await Swal.fire({
               icon: 'success',
               title: 'Cập nhật sản phẩm thành công',

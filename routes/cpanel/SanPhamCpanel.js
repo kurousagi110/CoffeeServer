@@ -82,20 +82,19 @@ router.post(
         mo_ta,
         hinh_anh_sp,
       };
-
-
       const sanpham = await sanphamController.themSanPhamAll(san_pham);
-
+      console.log("sanpham", sanpham);
       if (sanpham) {
+        console.log("SUCCESS TO ADD PRODUCT");
+        res.status(200).json({ result: 'success' });
         const resultSendNotification = await sendNotificationNewProduct(san_pham);
         const resultAddNotification = await addNotificationToAllUser({
-          image: hinh_anh_sp,
+          image: hinh_anh_sp[0].hinh_anh_sp,
           title: san_pham.ten_san_pham,
-          id_product: result._id,
+          id_product: sanpham._id,
           message: "Coffee.Love vừa cho ra sản phẩm mới đó",
           type: "NewProduct",
         });
-
         if (!resultSendNotification) {
           console.log("FAIL TO FIREBASE SEND NEW MESSAGE TO ALL DEVICE");
         } else {
@@ -106,7 +105,7 @@ router.post(
         } else {
           console.log("SUCCESS TO ADD NOTIFICATION TO ALL USER");
         }
-        res.status(200).redirect('/cpanel/san-pham');
+        
       } else {
         const loai_san_pham = await loaiSanPhamController.layTatCaLoaiSanPham();
         res.status(300).render('sanpham/themsanpham', { loai_san_pham });
@@ -166,9 +165,6 @@ router.post('/sua-san-pham/:id', [AuthenWeb, upload], async function (req, res, 
 
     const result_loai_san_pham = await loaiSanPhamController.layLoaiSanPhamTheoId(loai_san_pham);
     // gửi thông báo có sản phẩm mới cho tất cả thiết bị
-
-
-
     const san_pham = {
       ten_san_pham,
       result_loai_san_pham,
@@ -208,84 +204,7 @@ router.get('/xoa-san-pham/:id', [AuthenWeb], async function (req, res, next) {
   }
 });
 
-//sửa sản phẩm
-//http://localhost:3000/cpanel/san-pham/sua-san-pham/:id
-router.get("/sua-san-pham/:id", [AuthenWeb], async function (req, res, next) {
-  try {
-    const id = req.params.id;
-    let san_pham = await sanphamController.getSanPhamById(id);
-    const loai_san_pham = await loaiSanPhamController.layTatCaLoaiSanPham();
-    for (let i = 0; i < san_pham.size.length; i++) {
-      san_pham.size[i].stt = i + 1;
-    }
-    res.status(200).render("sanpham/suasanpham", { san_pham, loai_san_pham });
-  } catch (err) {
-    console.log(err);
-    res.status(500).render("sanpham/suasanpham");
-  }
-});
 
-//sửa sản phẩm
-//http://localhost:3000/cpanel/san-pham/sua-san-pham/:id
-router.post(
-  "/sua-san-pham/:id",
-  [AuthenWeb, upload],
-  async function (req, res, next) {
-    try {
-      let { ten_san_pham, loai_san_pham, mo_ta } = req.body;
-      let files = req.files; // 'files' since you used upload.array
-      let id = req.params.id;
-      console.log("size", req.body.sizes);
-      let sizes = JSON.parse(req.body.sizes);
-      let hinh_anh_sp = [];
-      if (files && files.length > 0) {
-        hinh_anh_sp = files.map((file) => ({
-          hinh_anh_sp: `https://coffee.thaihoa.software/images/${encodeURIComponent(
-            file.filename
-          )}`,
-        }));
-      }
 
-      const result_loai_san_pham =
-        await loaiSanPhamController.layLoaiSanPhamTheoId(loai_san_pham);
-
-      const san_pham = {
-        ten_san_pham,
-        result_loai_san_pham,
-        mo_ta,
-        hinh_anh_sp,
-        sizes: sizes,
-      };
-      console.log("san_pham", san_pham);
-      const sanpham = await sanphamController.suaSanPhamAll(id, san_pham);
-
-      if (sanpham) {
-        res.status(200).redirect("/cpanel/san-pham");
-      } else {
-        res.status(300).render("sanpham/suasanpham");
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(400).render("sanpham/suasanpham");
-    }
-  }
-);
-
-//xóa sản phẩm
-//http://localhost:3000/cpanel/san-pham/xoa-san-pham/:id
-router.get("/xoa-san-pham/:id", [AuthenWeb], async function (req, res, next) {
-  try {
-    const id = req.params.id;
-    const sanpham = await sanphamController.xoaSanPham(id);
-    if (sanpham) {
-      res.status(200).redirect("/cpanel/san-pham"); // Corrected line
-    } else {
-      res.status(300).redirect("/cpanel/san-pham");
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(400).redirect("/cpanel/san-pham");
-  }
-});
 
 module.exports = router;

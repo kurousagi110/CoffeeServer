@@ -395,11 +395,15 @@ const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten) => {
                 ho_ten: ho_ten,
                 dia_chi: [],
                 tich_diem: 0,
+                diem_thanh_vien: 0,
+                hang_thanh_vien: "Thành viên mới.",
                 voucher_user: [],
                 otp: 0,
                 status: 1,
                 ma_khach_hang: ma_khach_hang,
                 device_token: "",
+                doi_diem: [],
+                lich_su: [],
             });
             return user;
         }
@@ -449,7 +453,7 @@ const loginEmail = async (email, avatar, ho_ten) => {
                 email: email,
                 avatar: avatar,
                 tai_khoan: "",
-                mat_khau: "123",
+                mat_khau: "0000",
                 ho_ten: ho_ten,
                 dia_chi: [],
                 tich_diem: 0,
