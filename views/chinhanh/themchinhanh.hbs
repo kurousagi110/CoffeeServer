@@ -4,6 +4,38 @@
 <!-- Include this in the head section of your HTML -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" defer></script>
+
+<script>
+  function showMap() {
+    // Show the map div
+    document.getElementById('map').style.display = 'block';
+
+    // Create a map centered at a default location (e.g., your city)
+    const defaultLocation = { lat: 10.7769, lng: 106.7009 };
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: defaultLocation,
+      zoom: 15,
+    });
+
+    // Create a marker to represent the selected location
+    const marker = new google.maps.Marker({
+      position: defaultLocation,
+      map: map,
+      draggable: true, // Allow the user to drag the marker
+    });
+
+    // Add an event listener for the dragend event (when the user stops dragging the marker)
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+      const selectedLocation = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+
+      // Store the selected location in the hidden input field
+      document.getElementById('selectedLocation').value = JSON.stringify(selectedLocation);
+    });
+  }
+</script>
 <!-- Replace YOUR_GOOGLE_MAPS_API_KEY with your actual API key -->
 <div class="preloader">
   <div class="lds-ripple">
@@ -185,7 +217,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/chinhanh" aria-expanded="false">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/chi-nhanh" aria-expanded="false">
               <i class="mdi mdi-file"></i>
               <span class="hide-menu">Chi Nhánh</span>
             </a>
@@ -260,9 +292,19 @@
                 <input type="text" id="dia_chi" name="dia_chi" class="form-control" placeholder="" />
               </div>
 
-              <button type="button" onclick="showMap()">Open Map</button>
-              <button type="button" id="openMapButton">Open Map</button>
+              <a onclick="showMap()"><span type="button" class="btn btn-success text-white">Show Map</span></a>
+
               <input type="hidden" id="selectedLocation" name="selectedLocation">
+
+              <div class="form-group">
+                <label for="mo_ta">Vị trí x: </label>
+                <input type="text" id="location_x" name="location_x" class="form-control" placeholder="" />
+              </div>
+
+              <div class="form-group">
+                <label for="mo_ta">Vị trí y:</label>
+                <input type="text" id="location_y" name="location_y" class="form-control" placeholder="" />
+              </div>
 
               <div id="map" style="width: 100%; height: 400px; display: none;"></div>
 
@@ -277,66 +319,10 @@
       </div>
 
     </div>
-    <script>
-       function showMap() {
-    // Show the map div
-    document.getElementById('map').style.display = 'block';
+  </div>
+</div>
 
-    // Create a map centered at a default location (e.g., your city)
-    const defaultLocation = { lat: 10.7769, lng: 106.7009 };
-    const map = new google.maps.Map(document.getElementById('map'), {
-      center: defaultLocation,
-      zoom: 15,
-    });
-
-    // Create a marker to represent the selected location
-    const marker = new google.maps.Marker({
-      position: defaultLocation,
-      map: map,
-      draggable: true, // Allow the user to drag the marker
-    });
-
-    // Add an event listener for the dragend event (when the user stops dragging the marker)
-    google.maps.event.addListener(marker, 'dragend', function (event) {
-      const selectedLocation = {
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng(),
-      };
-
-      // Store the selected location in the hidden input field
-      document.getElementById('selectedLocation').value = JSON.stringify(selectedLocation);
-    });
-  }
- function showMap() {
-    // Show the map div
-    document.getElementById('map').style.display = 'block';
-
-    // Create a map centered at a default location (e.g., your city)
-    const defaultLocation = { lat: 10.7769, lng: 106.7009 };
-    const map = new google.maps.Map(document.getElementById('map'), {
-      center: defaultLocation,
-      zoom: 15,
-    });
-
-    // Create a marker to represent the selected location
-    const marker = new google.maps.Marker({
-      position: defaultLocation,
-      map: map,
-      draggable: true, // Allow the user to drag the marker
-    });
-
-    // Add an event listener for the dragend event (when the user stops dragging the marker)
-    google.maps.event.addListener(marker, 'dragend', function (event) {
-      const selectedLocation = {
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng(),
-      };
-
-      // Store the selected location in the hidden input field
-      document.getElementById('selectedLocation').value = JSON.stringify(selectedLocation);
-    });
-  }
-
+<script>
   document.addEventListener('DOMContentLoaded', function () {
     const openMapButton = document.getElementById('openMapButton');
 
@@ -351,37 +337,33 @@
     });
   });
 
-  document.addEventListener('DOMContentLoaded', function () {
-    const openMapButton = document.getElementById('openMapButton');
 
-    openMapButton.addEventListener('click', function () {
-      // Show the map when the button is clicked
-      showMap();
 
-      // Open the map in a modal or a custom overlay
-      // You can use a library like Bootstrap Modal or create your custom modal
-      // For simplicity, we'll use the browser's built-in alert
-      alert('Select a location on the map.');
-    });
-  });
+
+  function showLoading() {
+    document.getElementById('loading-circle').style.display = 'flex';
+  }
+
+  function hideLoading() {
+    document.getElementById('loading-circle').style.display = 'none';
+  }
+
 
   async function validateAndSubmit() {
     // Validate the form data here
     showLoading();
 
-    const ten_chi_nhanh = document.getElementById('ten_chi_nhanh').value;
-    const dia_chi = document.getElementById('dia_chi').value;
+    const tenChiNhanh = document.getElementById('ten_chi_nhanh').value;
+    const diaChi = document.getElementById('dia_chi').value;
+    const locationX = document.getElementById('location_x').value;
+    const locationY = document.getElementById('location_y').value;
 
-    // ... (validate other fields as needed) ...
-
-    const selectedLocation = document.getElementById('selectedLocation').value;
-
-    if (!ten_chi_nhanh || !dia_chi || !selectedLocation) {
+    if (!tenChiNhanh || !diaChi || !locationX || !locationY) {
       const result = await Swal.fire({
         icon: 'Lỗi',
         title: 'Oops...',
         text: 'Bạn hãy nhập đầy đủ không được để trống.',
-        allowOutsideClick: false // Prevent clicking outside the modal to close it
+        allowOutsideClick: false, // Prevent clicking outside the modal to close it
       });
 
       if (result.isConfirmed) {
@@ -390,94 +372,66 @@
       }
     }
 
-      function showLoading() {
-        document.getElementById('loading-circle').style.display = 'flex';
-      }
+    // Show confirmation dialog
+    const confirmationResult = await Swal.fire({
+      title: 'Bạn có chắc chắn muốn thêm chi nhánh này?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Lưu',
+      denyButtonText: 'Chỉnh sửa.',
+    });
 
-      function hideLoading() {
-        document.getElementById('loading-circle').style.display = 'none';
-      }
+    if (confirmationResult.isConfirmed) {
+      // Prepare JSON data
+      const chiNhanhData = {
+        ten_chi_nhanh: tenChiNhanh,
+        dia_chi: diaChi,
+        location: {
+          x: parseFloat(locationX),
+          y: parseFloat(locationY),
+        },
+      };
+      const jsonData = JSON.stringify(chiNhanhData);
 
-
-      async function validateAndSubmit() {
-        // Validate the form data here
-        showLoading();
-
-        const ten_san_pham = document.getElementById('ten_san_pham').value;
-        const loai_san_pham = document.getElementById('loai_san_pham').value;
-        const mo_ta = document.getElementById('mo_ta').value;
-        const filesInput = document.getElementById('inputGroupFile01');
-
-        if (!ten_san_pham || !loai_san_pham || !mo_ta || !filesInput.files.length) {
-          const result = await Swal.fire({
-            icon: 'Lỗi',
-            title: 'Oops...',
-            text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            allowOutsideClick: false // Prevent clicking outside the modal to close it
-          });
-
-          if (result.isConfirmed) {
-            hideLoading();
-            return;
-          }
-        }
-
-        // Show confirmation dialog
-        const confirmationResult = await Swal.fire({
-          title: 'Bạn có chắc chắn muốn thêm sản phẩm này?',
-          showDenyButton: true,
-          showCancelButton: true,
-          confirmButtonText: 'Lưu',
-          denyButtonText: "Chỉnh sửa."
+      // Submit the form data as JSON
+      try {
+        const response = await fetch('/cpanel/chi-nhanh/them-chi-nhanh', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonData,
         });
 
-        if (confirmationResult.isConfirmed) {
-          // Submit the form
-          const formData = new FormData();
-          formData.append('ten_san_pham', ten_san_pham);
-          formData.append('loai_san_pham', loai_san_pham);
-          formData.append('mo_ta', mo_ta);
-
-          // Get the value from the hidden input field
-          const sizesInput = document.getElementById('sizesInput').value;
-
-          // Append the 'sizes' data to the form data
-          formData.append('sizes', sizesInput);
-
-          const filesInput = document.getElementById('inputGroupFile01');
-          for (let i = 0; i < filesInput.files.length; i++) {
-            formData.append('files', filesInput.files[i]);
-          }
-          try {
-            const response = await fetch('/cpanel/san-pham/them-san-pham', {
-              method: 'POST',
-              body: formData,
-            });
-
-            if (response.ok) {
-              hideLoading();
-              Swal.fire({
-                icon: 'success',
-                title: 'Saved!',
-                showConfirmButton: false,
-                timer: 0,
-              });
-
-              window.location.href = '/cpanel/san-pham';
-
-            } else {
-              hideLoading();
-              Swal.fire('Lỗi', 'Tên sản phẩm bị trùng', 'error');
-            }
-          } catch (error) {
-            hideLoading();
-            console.error(error);
-            Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
-          }
-        } else if (confirmationResult.isDenied) {
+        if (response.ok) {
           hideLoading();
-          Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
-        }
-      }
+          Swal.fire({
+            icon: 'success',
+            title: 'Saved!',
+            showConfirmButton: false,
+            timer: 0,
+          });
 
-    </script>
+          window.location.href = '/cpanel/chi-nhanh';
+        } else {
+          hideLoading();
+          Swal.fire('Lỗi', 'Tên chi nhánh bị trùng', 'error');
+        }
+      } catch (error) {
+        hideLoading();
+        console.error(error);
+        Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
+      }
+    } else if (confirmationResult.isDenied) {
+      hideLoading();
+      Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
+    }else{
+      hideLoading();
+    }
+  }
+
+
+
+</script>

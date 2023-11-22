@@ -32,18 +32,12 @@ router.get("/them-chi-nhanh", [AuthenWeb], async (req, res) => {
 //thêm chi nhánh
 router.post("/them-chi-nhanh", [AuthenWeb], async (req, res) => {
   try {
-    let { ten_chi_nhanh, dia_chi, sdt } = req.body;
-    
-    let chi_nhanh = {
-      ten_chi_nhanh,
-      dia_chi,
-      sdt,
-      hinh_anh_cn,
-    };
+    const { ten_chi_nhanh, dia_chi, location } = req.body;
 
-    const result = await chiNhanhController.themChiNhanh(chi_nhanh);
+    const result = await chiNhanhController.themChiNhanh(ten_chi_nhanh, dia_chi, location);
+
     if (result) {
-      res.redirect("/cpanel/chi-nhanh");
+        res.status(200).json({ result: 'success' });
     } else {
       res.redirect("/cpanel/chi-nhanh/them-chi-nhanh");
     }
@@ -53,9 +47,52 @@ router.post("/them-chi-nhanh", [AuthenWeb], async (req, res) => {
   }
 });
 
+//chuyển trang sửa chi nhánh
+router.get("/sua-chi-nhanh/:id", [AuthenWeb], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const chiNhanh = await chiNhanhController.layChiNhanhTheoID(id);
+    res.render("chinhanh/suachinhanh", { chiNhanh });
+  } catch (err) {
+    console.log(err);
+    res.redirect("/cpanel/chi-nhanh");
+  }
+});
 
+//sửa chi nhánh
+router.post("/sua-chi-nhanh/:id", [AuthenWeb], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { ten_chi_nhanh, dia_chi, location } = req.body;
 
+    const result = await chiNhanhController.suaChiNhanh(id, ten_chi_nhanh, dia_chi, location);
 
+    if (result) {
+        res.status(200).json({ result: 'success' });
+    } else {
+      res.redirect("/cpanel/chi-nhanh/sua-chi-nhanh/" + id);
+    }
+  } catch (err) {
+    console.log(err);
+    res.redirect("/cpanel/chi-nhanh");
+  }
+});
+
+//xóa chi nhánh
+router.get("/xoa-chi-nhanh/:id", [AuthenWeb], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await chiNhanhController.xoaChiNhanh(id);
+    if (result) {
+      res.status(200).json({ result: 'success' });
+    } else {
+      res.redirect("/cpanel/chi-nhanh");
+    }
+  } catch (err) {
+    console.log(err);
+    res.redirect("/cpanel/chi-nhanh");
+  }
+});
 
 
 

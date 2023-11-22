@@ -1,15 +1,82 @@
-<header>
-  <link rel="stylesheet" href="/dist/css/dialog.css" />
-</header>
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<!-- Include this in the head section of your HTML -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" defer></script>
+
+<script>
+  function showMap() {
+    // Show the map div
+    document.getElementById('map').style.display = 'block';
+
+    // Create a map centered at a default location (e.g., your city)
+    const defaultLocation = { lat: 10.7769, lng: 106.7009 };
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: defaultLocation,
+      zoom: 15,
+    });
+
+    // Create a marker to represent the selected location
+    const marker = new google.maps.Marker({
+      position: defaultLocation,
+      map: map,
+      draggable: true, // Allow the user to drag the marker
+    });
+
+    // Add an event listener for the dragend event (when the user stops dragging the marker)
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+      const selectedLocation = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+
+      // Store the selected location in the hidden input field
+      document.getElementById('selectedLocation').value = JSON.stringify(selectedLocation);
+    });
+  }
+</script>
+<!-- Replace YOUR_GOOGLE_MAPS_API_KEY with your actual API key -->
 <div class="preloader">
   <div class="lds-ripple">
     <div class="lds-pos"></div>
     <div class="lds-pos"></div>
   </div>
 </div>
+
+{{!-- loading --}}
+<div id="loading-circle" class="hidden" style="
+    position: fixed;
+    {{!-- top: 50%;
+    right: 45%; --}}
+    width:100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(148, 147, 147, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+  ">
+  <div class="spinner" style="
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    "></div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
 <div id="main-wrapper" data-navbarbg="skin6" data-theme="light" data-layout="vertical" data-sidebartype="full"
   data-boxed-layout="full">
-  <header class="topbar" data-navbarbg="skin6" style="background-color: rgba(20, 11, 11, 0)">
+  <!-- ============================================================== -->
+  <!-- Topbar header - style you can find in pages.scss -->
+  <!-- ============================================================== -->
+  <header class="topbar" data-navbarbg="skin6">
     <nav class="navbar top-navbar navbar-expand-md navbar-light">
       <div class="navbar-header" data-logobg="skin5">
         <!-- This is for the sidebar toggle which is visible on mobile only -->
@@ -25,20 +92,26 @@
             <b class="logo-icon">
               <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
               <!-- Dark Logo icon -->
-              <img src="../assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+              <img src="/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
               <!-- Light Logo icon -->
-              <img src="../assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+              <img src="/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
             </b>
             <!--End Logo icon -->
             <!-- Logo text -->
             <span class="logo-text">
               <!-- dark Logo text -->
-              <img src="../assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+              <img src="/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
               <!-- Light Logo text -->
-              <img src="../assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+              <img src="/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
             </span>
           </a>
         </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Toggle which is visible on mobile only -->
+        <!-- ============================================================== -->
       </div>
       <!-- ============================================================== -->
       <!-- End Logo -->
@@ -76,9 +149,14 @@
           <!-- User profile and search -->
           <!-- ============================================================== -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#" id="navbarDropdown"
-              role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="../assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31" />
+            <a class="
+                    nav-link
+                    dropdown-toggle
+                    text-muted
+                    waves-effect waves-dark
+                    pro-pic
+                  " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="/assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31" />
             </a>
             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="javascript:void(0)"><i class="mdi mdi-account m-r-5 m-l-5"></i> My
@@ -169,16 +247,17 @@
     <div class="page-breadcrumb">
       <div class="row">
         <div class="col-5 align-self-center">
+          <h4 class="page-title">Thêm Dữ liệu</h4>
         </div>
         <div class="col-7 align-self-center">
           <div class="d-flex align-items-center justify-content-end">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">Home</a>
+                  <a href="#">Trang chủ</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Sản phẩm
+                  Thêm Dữ Liệu
                 </li>
               </ol>
             </nav>
@@ -198,124 +277,163 @@
       <!-- ============================================================== -->
       <div class="row">
         <div class="col-12">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">Danh sách sản phẩm</h4>
-
-              <a href="/cpanel/chi-nhanh/them-chi-nhanh"><span type="button"
-                  class="btn btn-success text-white">Thêm sản phẩm</span></a>
-                  <br>
-                  <br>
-                  
-              <h6 class="card-subtitle">Danh sách sản phẩm hiện có trong hệ thống</h6>
-
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">STT</th>
-                      <th scope="col">Tên chi nhánh</th>
-                      <th scope="col">Địa chỉ</th>
-                      <th scope="col">Vị trí (x)</th>
-                      <th scope="col">Vị trí (y)</th>
-
-                      <th scope="col">Sửa</th>
-                      <th scope="col">Xóa</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {{#each listChiNhanh}}
-                    <tr>
-                      <th scope="row"><span class="stt">
-                          {{this.stt}}
-                        </span></th>
-                      <td>{{this.ten_chi_nhanh}}</td>
-                      <td>{{this.dia_chi}}</td>
-                      <td>{{this.location.x}}</td>
-                      <td>{{this.location.y}}</td>
-
-                      <td class="td-button">
-                        <a href="/cpanel/chi-nhanh/sua-chi-nhanh/{{this.id}}" class="btn btn-primary btn-edit"
-                          style="margin-top: 0px; color: white; text-decoration: none;">
-                          <span style="color: inherit;">Sửa</span>
-                        </a>
-                      </td>
-                      <td class="td-button">
-                        <a href="#" onclick="confirmDelete('{{this.id}}')" class="btn btn-danger btn-delete"
-                          style="margin-top: 0px; color: white; text-decoration: none;">
-                          <span style="color: inherit;">Xóa</span>
-                        </a>
-                      </td>
-                    </tr>
-                    {{/each}}
-                  </tbody>
-                </table>
+          <div class="card card-body">
+            <h4 class="card-title">Thêm Sản Phẩm</h4>
+            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
+              method="post">
+              <div class="form-group">
+                <label for="ten_san_pham">Tên chi nhánh</label>
+                <input value="{{chiNhanh.ten_chi_nhanh}}" type="text" id="ten_chi_nhanh" name="ten_chi_nhanh" class="form-control" placeholder="" />
               </div>
-            </div>
+
+
+              <div class="form-group">
+                <label for="mo_ta">Địa chỉ</label>
+                <input value="{{chiNhanh.dia_chi}}" type="text" id="dia_chi" name="dia_chi" class="form-control" placeholder="" />
+              </div>
+
+              <a onclick="showMap()"><span type="button" class="btn btn-success text-white">Show Map</span></a>
+
+              <input type="hidden" id="selectedLocation" name="selectedLocation">
+
+              <div class="form-group">
+                <label for="mo_ta">Vị trí x: </label>
+                <input value="{{chiNhanh.location.x}}" type="text" id="location_x" name="location_x" class="form-control" placeholder="" />
+              </div>
+
+              <div class="form-group">
+                <label for="mo_ta">Vị trí y:</label>
+                <input value="{{chiNhanh.location.y}}" type="text" id="location_y" name="location_y" class="form-control" placeholder="" />
+              </div>
+
+              <input type="hidden" id="id" name="id" value="{{chiNhanh._id}}">
+
+              <div id="map" style="width: 100%; height: 400px; display: none;"></div>
+
+              <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
+                <button type="button" onclick="validateAndSubmit()" class="btn btn-primary"
+                  style="width: 95%">Lưu</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
 
 <script>
-  // Call API
-  const fetchAPI = async (url, option) => {
-    const response = await fetch(url, option);
-    return response.json();
-  };
+  document.addEventListener('DOMContentLoaded', function () {
+    const openMapButton = document.getElementById('openMapButton');
 
-  // Delete product
-  async function deleteProduct(id) {
-    const url = `/cpanel/chi-nhanh/xoa-chi-nhanh/${id}`;
-    const option = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    };
+    openMapButton.addEventListener('click', function () {
+      // Show the map when the button is clicked
+      showMap();
 
-    try {
-      const response = await fetchAPI(url, option);
+      // Open the map in a modal or a custom overlay
+      // You can use a library like Bootstrap Modal or create your custom modal
+      // For simplicity, we'll use the browser's built-in alert
+      alert('Select a location on the map.');
+    });
+  });
 
-      if (response.result === 'success') {
-        Swal.fire({
-          title: 'Đã xóa!',
-          text: 'Xóa sản phẩm thành công.',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000,
-        });
 
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      } else {
-        Swal.fire({
-          title: 'Lỗi!',
-          text: 'Xóa sản phẩm thất bại.',
-          icon: 'error',
-        });
+
+
+  function showLoading() {
+    document.getElementById('loading-circle').style.display = 'flex';
+  }
+
+  function hideLoading() {
+    document.getElementById('loading-circle').style.display = 'none';
+  }
+
+
+  async function validateAndSubmit() {
+    // Validate the form data here
+    showLoading();
+
+    const tenChiNhanh = document.getElementById('ten_chi_nhanh').value;
+    const diaChi = document.getElementById('dia_chi').value;
+    const locationX = document.getElementById('location_x').value;
+    const locationY = document.getElementById('location_y').value;
+    const id = document.getElementById('id').value;
+
+    if (!tenChiNhanh || !diaChi || !locationX || !locationY) {
+      const result = await Swal.fire({
+        icon: 'Lỗi',
+        title: 'Oops...',
+        text: 'Bạn hãy nhập đầy đủ không được để trống.',
+        allowOutsideClick: false, // Prevent clicking outside the modal to close it
+      });
+
+      if (result.isConfirmed) {
+        hideLoading();
+        return;
       }
-    } catch (error) {
-      console.error(error);
     }
-  };
 
-  // Confirm delete
-  async function confirmDelete(id) {
-    Swal.fire({
-      title: 'Xác nhận xóa sản phẩm',
-      text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
-      icon: 'warning',
+    // Show confirmation dialog
+    const confirmationResult = await Swal.fire({
+      title: 'Bạn có chắc chắn muốn sửa chi nhánh này?',
+      showDenyButton: true,
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Xóa',
-      cancelButtonText: 'Hủy',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteProduct(id);
-      }
+      confirmButtonText: 'Lưu',
+      denyButtonText: 'Chỉnh sửa.',
     });
+
+    if (confirmationResult.isConfirmed) {
+      // Prepare JSON data
+      const chiNhanhData = {
+        ten_chi_nhanh: tenChiNhanh,
+        dia_chi: diaChi,
+        location: {
+          x: parseFloat(locationX),
+          y: parseFloat(locationY),
+        },
+      };
+      const jsonData = JSON.stringify(chiNhanhData);
+
+      // Submit the form data as JSON
+      try {
+        const response = await fetch(`/cpanel/chi-nhanh/sua-chi-nhanh/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonData,
+        });
+
+        if (response.ok) {
+          hideLoading();
+          Swal.fire({
+            icon: 'success',
+            title: 'Saved!',
+            showConfirmButton: false,
+            timer: 0,
+          });
+
+          window.location.href = '/cpanel/chi-nhanh';
+        } else {
+          hideLoading();
+          Swal.fire('Lỗi', 'Tên chi nhánh bị trùng', 'error');
+        }
+      } catch (error) {
+        hideLoading();
+        console.error(error);
+        Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
+      }
+    } else if (confirmationResult.isDenied) {
+      hideLoading();
+      Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
+    } else {
+      hideLoading();
+    }
   }
+
+
+
 </script>

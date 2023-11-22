@@ -5,16 +5,17 @@ const modelChiNhanh = require('./ModelChiNhanh');
 //lấy danh sách chi nhánh
 const layDanhSachChiNhanh = async () => {
     try {
-        const result = await modelChiNhanh.find();
-        if (result) {
-            return result;
-        }
-        return false;
+      const result = await modelChiNhanh.find({ status: { $ne: 0 } });
+      // Use { status: { $ne: 0 } } to exclude documents where status is 0
+      if (result) {
+        return result;
+      }
+      return false;
     } catch (error) {
-        console.log('layDanhSachChiNhanh error: ', error);
-        throw error;
+      console.log('layDanhSachChiNhanh error: ', error);
+      throw error;
     }
-};
+  };
 //lấy chi nhánh theo id
 const layChiNhanhTheoID = async (id_chi_nhanh) => {
     try {

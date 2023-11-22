@@ -8,7 +8,7 @@ const AuthenWeb = require('../components/MiddleWare/AuthenWeb');
 // http://localhost:3000/
 // hiển thị trang chủ
 router.get('/',[AuthenWeb], async(req, res, next) => {
-  res.render('Add');
+  res.render('sanpham/sanpham');
 });
 //http://localhost:3000/login
 //hiển thị trang login
