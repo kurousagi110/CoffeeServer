@@ -16,7 +16,12 @@ const {
 //http://localhost:3000/cpanel/san-pham
 router.get("/", [AuthenWeb], async function (req, res, next) {
   try {
-    const sanpham = await sanphamController.getAllSanPham();
+    let sanpham = await sanphamController.getAllSanPham();
+    let stt = 1;
+    for (let i = 0; i < sanpham.length; i++) {
+      sanpham[i].stt = stt;
+      stt++;
+    }
     res.render("sanpham/sanpham", { sanpham });
   } catch (err) {
     console.log(err);

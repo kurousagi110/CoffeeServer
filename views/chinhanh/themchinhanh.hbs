@@ -1,6 +1,10 @@
 <!-- ============================================================== -->
 <!-- Preloader - style you can find in spinners.css -->
 <!-- ============================================================== -->
+<!-- Include this in the head section of your HTML -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" defer></script>
+<!-- Replace YOUR_GOOGLE_MAPS_API_KEY with your actual API key -->
 <div class="preloader">
   <div class="lds-ripple">
     <div class="lds-pos"></div>
@@ -181,7 +185,7 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/chi-nhanh" aria-expanded="false">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/chinhanh" aria-expanded="false">
               <i class="mdi mdi-file"></i>
               <span class="hide-menu">Chi Nhánh</span>
             </a>
@@ -246,40 +250,21 @@
             <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
               method="post">
               <div class="form-group">
-                <label for="ten_san_pham">Tên sản phẩm</label>
-                <input type="text" id="ten_san_pham" name="ten_san_pham" class="form-control" placeholder="" />
+                <label for="ten_san_pham">Tên chi nhánh</label>
+                <input type="text" id="ten_chi_nhanh" name="ten_chi_nhanh" class="form-control" placeholder="" />
               </div>
+
 
               <div class="form-group">
-                <label for="loai_san_pham">Loại sản phẩm</label>
-                <select class="form-control" id="loai_san_pham" name="loai_san_pham">
-                  {{#each loai_san_pham}}
-                  <option value="{{this._id}}">{{this.ten_loai_san_pham}}</option>
-                  {{/each}}
-                </select>
+                <label for="mo_ta">Địa chỉ</label>
+                <input type="text" id="dia_chi" name="dia_chi" class="form-control" placeholder="" />
               </div>
 
-              <div class="form-group" id="ThemMang" class="d-flex align-items-center">
-                <div class="form-group">
-                  <div class="btn btn-primary" onclick="themTruongInput()"><i class="mdi mdi-plus-box me-2"></i> Thêm
-                    size</div>
-                </div>
-              </div>
+              <button type="button" onclick="showMap()">Open Map</button>
+              <button type="button" id="openMapButton">Open Map</button>
+              <input type="hidden" id="selectedLocation" name="selectedLocation">
 
-              <div class="form-group size-container" id="size-container">
-              </div>
-
-              <div class="form-group">
-                <label for="mo_ta">Mô tả</label>
-                <input type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
-              </div>
-
-              <div class="custom-file">
-                <input type="file" name="files" multiple class="custom-file-input" id="inputGroupFile01" />
-                <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
-              </div>
-
-              <input type="hidden" id="sizesInput" name="sizes" value="">
+              <div id="map" style="width: 100%; height: 400px; display: none;"></div>
 
               <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
                 <button type="button" onclick="validateAndSubmit()" class="btn btn-primary"
@@ -293,6 +278,117 @@
 
     </div>
     <script>
+       function showMap() {
+    // Show the map div
+    document.getElementById('map').style.display = 'block';
+
+    // Create a map centered at a default location (e.g., your city)
+    const defaultLocation = { lat: 10.7769, lng: 106.7009 };
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: defaultLocation,
+      zoom: 15,
+    });
+
+    // Create a marker to represent the selected location
+    const marker = new google.maps.Marker({
+      position: defaultLocation,
+      map: map,
+      draggable: true, // Allow the user to drag the marker
+    });
+
+    // Add an event listener for the dragend event (when the user stops dragging the marker)
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+      const selectedLocation = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+
+      // Store the selected location in the hidden input field
+      document.getElementById('selectedLocation').value = JSON.stringify(selectedLocation);
+    });
+  }
+ function showMap() {
+    // Show the map div
+    document.getElementById('map').style.display = 'block';
+
+    // Create a map centered at a default location (e.g., your city)
+    const defaultLocation = { lat: 10.7769, lng: 106.7009 };
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: defaultLocation,
+      zoom: 15,
+    });
+
+    // Create a marker to represent the selected location
+    const marker = new google.maps.Marker({
+      position: defaultLocation,
+      map: map,
+      draggable: true, // Allow the user to drag the marker
+    });
+
+    // Add an event listener for the dragend event (when the user stops dragging the marker)
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+      const selectedLocation = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+
+      // Store the selected location in the hidden input field
+      document.getElementById('selectedLocation').value = JSON.stringify(selectedLocation);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const openMapButton = document.getElementById('openMapButton');
+
+    openMapButton.addEventListener('click', function () {
+      // Show the map when the button is clicked
+      showMap();
+
+      // Open the map in a modal or a custom overlay
+      // You can use a library like Bootstrap Modal or create your custom modal
+      // For simplicity, we'll use the browser's built-in alert
+      alert('Select a location on the map.');
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const openMapButton = document.getElementById('openMapButton');
+
+    openMapButton.addEventListener('click', function () {
+      // Show the map when the button is clicked
+      showMap();
+
+      // Open the map in a modal or a custom overlay
+      // You can use a library like Bootstrap Modal or create your custom modal
+      // For simplicity, we'll use the browser's built-in alert
+      alert('Select a location on the map.');
+    });
+  });
+
+  async function validateAndSubmit() {
+    // Validate the form data here
+    showLoading();
+
+    const ten_chi_nhanh = document.getElementById('ten_chi_nhanh').value;
+    const dia_chi = document.getElementById('dia_chi').value;
+
+    // ... (validate other fields as needed) ...
+
+    const selectedLocation = document.getElementById('selectedLocation').value;
+
+    if (!ten_chi_nhanh || !dia_chi || !selectedLocation) {
+      const result = await Swal.fire({
+        icon: 'Lỗi',
+        title: 'Oops...',
+        text: 'Bạn hãy nhập đầy đủ không được để trống.',
+        allowOutsideClick: false // Prevent clicking outside the modal to close it
+      });
+
+      if (result.isConfirmed) {
+        hideLoading();
+        return;
+      }
+    }
 
       function showLoading() {
         document.getElementById('loading-circle').style.display = 'flex';
@@ -366,9 +462,9 @@
                 showConfirmButton: false,
                 timer: 0,
               });
-             
-                window.location.href = '/cpanel/san-pham';
-             
+
+              window.location.href = '/cpanel/san-pham';
+
             } else {
               hideLoading();
               Swal.fire('Lỗi', 'Tên sản phẩm bị trùng', 'error');
