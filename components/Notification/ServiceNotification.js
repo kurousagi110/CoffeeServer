@@ -211,6 +211,7 @@ const addNotificationToSpecificDevice = async ({
         {
           $push: {
             notification: {
+              _id: new mongoose.Types.ObjectId(),
               image: image,
               title: title,
               id_product: id_product,
@@ -243,6 +244,7 @@ const addNotificationToAllUser = async ({
       {
         $push: {
           notification: {
+            _id: new mongoose.Types.ObjectId(),
             image: image,
             title: title,
             id_product: id_product,
@@ -253,7 +255,7 @@ const addNotificationToAllUser = async ({
         },
       }
     );
-    
+
     return true;
   } catch (error) {
     console.log("ERROR AT ADD NOTIFICATION TO ALL USER: ", error);
@@ -275,6 +277,44 @@ const getAllNotification = async ({ id_user }) => {
   }
 };
 
+const handleReadNotification = async ({ id_user, id_notification }) => {
+  try {
+    const result = await modalNotification.findOne({ id_user: id_user });
+
+    if (!result) {
+      return false;
+    } else {
+      const notificationIndex = result.notification.findIndex(
+        (notification) => notification._id.toString() === id_notification
+      );
+
+      if (notificationIndex === -1) {
+        // Notification with the given ID not found
+        console.log("NOTIFICATION NOT FOUND")
+        return false;
+      }
+
+      const updateNotification = await modalNotification.findOneAndUpdate(
+        {
+          id_user: id_user,
+          "notification._id": id_notification,
+        },
+        {
+          $set: {
+            "notification.$.isRead": true,
+          },
+        },
+        { new: true }
+      );
+
+      return true;
+    }
+  } catch (error) {
+    console.log("ERROR AT HANDLE READ NOTIFICATION: ", error);
+    return false;
+  }
+};
+
 module.exports = {
   sendNotificationNewProduct,
   sendNotificationOrderStatusDelivering,
@@ -282,4 +322,5 @@ module.exports = {
   addNotificationToSpecificDevice,
   getAllNotification,
   addNotificationToAllUser,
+  handleReadNotification,
 };

@@ -3,8 +3,7 @@ var router = express.Router();
 const userController = require("../../components/User/ControllerUser");
 const AuthenToken = require("../../components/MiddleWare/AuthenToken");
 const serviceUser = require("../../components/User/ServiceUser");
-const {
-} = require("../../components/Notification/ServiceNotification");
+const {} = require("../../components/Notification/ServiceNotification");
 const serviceNotfication = require("../../components/Notification/ServiceNotification");
 
 //login cpanel
@@ -506,8 +505,6 @@ router.post("/dang-nhap-username", async (req, res, next) => {
       mat_khau
     );
     if (result) {
-      
-
       res.status(200).json({ trang_thai: true, data: result });
     } else {
       res.status(200).json({
@@ -595,21 +592,42 @@ router.post("/lay-thong-bao", AuthenToken, async (req, res, next) => {
       id_user: id_user,
     });
     if (result) {
-      res
-        .status(200)
-        .json({
-          trang_thai: true,
-          message: "Lấy thông báo thành công",
-          data: result,
-        });
+      res.status(200).json({
+        trang_thai: true,
+        message: "Lấy thông báo thành công",
+        data: result,
+      });
     } else {
-      res
-        .status(200)
-        .json({
-          trang_thai: false,
-          message: "Lấy thông báo thất bại",
-          data: [],
-        });
+      res.status(200).json({
+        trang_thai: false,
+        message: "Lấy thông báo thất bại",
+        data: [],
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ trang_thai: false, message: error.message });
+  }
+});
+
+// đã xem thông báo
+//http://localhost:3000/users/da-xem-thong-bao
+router.post("/da-xem-thong-bao", AuthenToken, async (req, res, next) => {
+  try {
+    const { id_user, id_notification } = req.body;
+    const result = await serviceNotfication.handleReadNotification({
+      id_user: id_user,
+      id_notification: id_notification,
+    });
+    if (result) {
+      res.status(200).json({
+        trang_thai: true,
+        message: "Đã xem thông báo thành công",
+      });
+    } else {
+      res.status(200).json({
+        trang_thai: false,
+        message: "Đã xem thông báo thất bại",
+      });
     }
   } catch (error) {
     res.status(400).json({ trang_thai: false, message: error.message });
