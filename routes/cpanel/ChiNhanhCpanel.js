@@ -35,15 +35,15 @@ router.post("/them-chi-nhanh", [AuthenWeb], async (req, res) => {
     const { ten_chi_nhanh, dia_chi, location } = req.body;
 
     const result = await chiNhanhController.themChiNhanh(ten_chi_nhanh, dia_chi, location);
-
+    console.log('result: ', result);
     if (result) {
         res.status(200).json({ result: 'success' });
-    } else {
-      res.redirect("/cpanel/chi-nhanh/them-chi-nhanh");
+    } else if (result == false) {
+      res.status(300).json({ result: 'fail' });
     }
   } catch (err) {
     console.log(err);
-    res.redirect("/cpanel/chi-nhanh");
+    res.status(500).json({ result: 'fail' });
   }
 });
 
