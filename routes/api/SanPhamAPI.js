@@ -659,7 +659,7 @@ router.post("/them-full-san-pham", async (req, res) => {
     const result = await sanPhamController.themSanPhamAll(san_pham);
     if (result) {
       // gửi thông báo có sản phẩm mới cho tất cả thiết bị
-      const resultSendNotification = await sendNotificationNewProduct(san_pham);
+      const resultSendNotification = await sendNotificationNewProduct(result);
 
       let hinh_anh_sp = null;
       if (san_pham.hinh_anh_sp.length > 0) {

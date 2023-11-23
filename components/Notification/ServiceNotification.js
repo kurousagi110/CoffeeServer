@@ -18,6 +18,8 @@ initializeApp({
 const sendNotificationNewProduct = async (san_pham) => {
   const topic = "new_product";
 
+  console.log("SAN PHAM TO NOTIFICATION: ", san_pham);
+
   try {
     let imageUrl = "";
     if (san_pham.hinh_anh_sp.length > 0) {
@@ -36,6 +38,7 @@ const sendNotificationNewProduct = async (san_pham) => {
         message: "Coffee.Love vừa cho ra sản phẩm mới đó",
         bigText: `${san_pham.ten_san_pham} là sản phẩm mới nhất của Coffee.Love đó, thử ngay nhé.`,
         image: imageUrl,
+        idDonHang: san_pham._id.toString(),
       },
       topic: topic,
     };
@@ -85,6 +88,7 @@ const sendNotificationOrderStatusDelivering = async ({ don_hang }) => {
         title: `${user.ho_ten} ơi`,
         message: "Đơn hàng của bạn đang được giao đến bạn đó",
         bigText: `Bạn đợi nhé, đơn hàng đang giao đến bạn trong thời gian sớm nhất`,
+        idDonHang: don_hang._id.toString(),
         image: imageUrl,
       },
       token: user.device_token,
@@ -290,7 +294,7 @@ const handleReadNotification = async ({ id_user, id_notification }) => {
 
       if (notificationIndex === -1) {
         // Notification with the given ID not found
-        console.log("NOTIFICATION NOT FOUND")
+        console.log("NOTIFICATION NOT FOUND");
         return false;
       }
 

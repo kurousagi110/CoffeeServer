@@ -299,7 +299,6 @@ router.post(
             don_hang: result,
           });
 
-          sendNotificationOrderStatusDelivering({ don_hang: result });
           resultAddNotification = await addNotificationToSpecificDevice({
             id_user: result.id_user,
             image: result.san_pham[0].hinh_anh_sp,
