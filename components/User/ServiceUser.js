@@ -71,6 +71,9 @@ const loginCpanel = async (tai_khoan, mat_khau) => {
         console.log('User service loginCpanel: ', tai_khoan, mat_khau);
         let user = await userModel.findOne({ tai_khoan: tai_khoan });
         console.log('User service loginCpanel: ', user);
+        if (!user) {
+            return false;
+        }
         if (user.status === 100) {
             const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
             const token = await taoToken(tai_khoan);
@@ -80,6 +83,8 @@ const loginCpanel = async (tai_khoan, mat_khau) => {
                 return user;
                 
             }
+        }else{
+            return false;
         }
     } catch (error) {
         console.log('Lỗi tại loginCpanel service: ', error)

@@ -72,6 +72,20 @@ const themVoucherUser = async (id_user, id_vong_quay) => {
     }
 };
 
+//lấy danh sách toàn bộ vòng quay
+const layDanhSachToanBoVongQuay = async () => {
+    try {
+        const list = await modelVongQuay.find();
+        if (!list) {
+            return false;
+        }
+        return list;
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+};
+
 //lấy danh sách vòng quay
 const layDanhSachVongQuay = async () => {
     try {
@@ -87,7 +101,7 @@ const layDanhSachVongQuay = async () => {
 };
 
 //thêm vòng quay
-const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh,giam_gia ) => {
+const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh, giam_gia, thoi_gian ) => {
     try {
         const check = await modelVongQuay.findOne({ ma_voucher: ma_voucher });
         if (check) {
@@ -104,7 +118,7 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
             giam_gia: giam_gia,
             gia_tri: gia_tri,
             ngay_bat_dau: themVongQuayDate,
-            ngay_ket_thuc: new Date(themVongQuayDate.getTime() + (30 * 24 * 60 * 60 * 1000)),
+            ngay_ket_thuc: new Date(themVongQuayDate.getTime() + (thoi_gian * 24 * 60 * 60 * 1000)),
             trang_thai: "Còn hiệu lực",
             hinh_anh: hinh_anh,
             status: 1,
@@ -163,4 +177,5 @@ const xoaVongQuay = async (id_vong_quay) => {
 
 
 
-module.exports = { themVoucherUser, layDanhSachVongQuay, themVongQuay, suaVongQuay, xoaVongQuay, suDungVongQuay };
+module.exports = { themVoucherUser, layDanhSachVongQuay, themVongQuay, suaVongQuay, xoaVongQuay, suDungVongQuay,
+    layDanhSachToanBoVongQuay };
