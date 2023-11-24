@@ -85,8 +85,9 @@
                 Profile</a>
               <a class="dropdown-item" href="javascript:void(0)"><i class="mdi mdi-wallet m-r-5 m-l-5"></i> My
                 Balance</a>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <i class="mdi mdi-power m-r-5 m-l-5"></i> Logout</a>
+              <a class="dropdown-item" href="/logout">
+                <i class="mdi mdi-power m-r-5 m-l-5"></i> Logout
+              </a>
             </ul>
           </li>
           <!-- ============================================================== -->
@@ -127,15 +128,9 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="Topping.html" aria-expanded="false">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/topping" aria-expanded="false">
               <i class="mdi mdi-border-none"></i>
               <span class="hide-menu">Topping</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="Oder.html" aria-expanded="false">
-              <i class="mdi mdi-face"></i>
-              <span class="hide-menu">Đơn Hàng</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -145,14 +140,14 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="Vongquay.html" aria-expanded="false">
-              <i class="mdi mdi-alert-outline"></i>
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/vong-quay" aria-expanded="false">
+              <i class="mdi mdi-checkbox-blank-circle-outline"></i>
               <span class="hide-menu">Vòng quay</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="Vongquay.html" aria-expanded="false">
-              <i class="mdi mdi-alert-outline"></i>
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/voucher" aria-expanded="false">
+              <i class="mdi mdi-credit-card"></i>
               <span class="hide-menu">Voucher</span>
             </a>
           </li>
@@ -184,7 +179,7 @@
                   <a href="#">Home</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Sản phẩm
+                  Chi nhánh
                 </li>
               </ol>
             </nav>
@@ -206,14 +201,14 @@
         <div class="col-12">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Danh sách sản phẩm</h4>
+              <h4 class="card-title">Danh sách chi nhánh</h4>
 
-              <a href="/cpanel/chi-nhanh/them-chi-nhanh"><span type="button"
-                  class="btn btn-success text-white">Thêm sản phẩm</span></a>
-                  <br>
-                  <br>
-                  
-              <h6 class="card-subtitle">Danh sách sản phẩm hiện có trong hệ thống</h6>
+              <a href="/cpanel/chi-nhanh/them-chi-nhanh"><span type="button" class="btn btn-success text-white">Thêm chi
+                  nhánh</span></a>
+              <br>
+              <br>
+
+              <h6 class="card-subtitle">Danh sách chi nhánh hiện có trong hệ thống</h6>
 
               <div class="table-responsive">
                 <table class="table">
@@ -286,7 +281,7 @@
       if (response.result === 'success') {
         Swal.fire({
           title: 'Đã xóa!',
-          text: 'Xóa sản phẩm thành công.',
+          text: 'Xóa chi nhánh thành công.',
           icon: 'success',
           showConfirmButton: false,
           timer: 1000,
@@ -298,7 +293,7 @@
       } else {
         Swal.fire({
           title: 'Lỗi!',
-          text: 'Xóa sản phẩm thất bại.',
+          text: 'Xóa chi nhánh thất bại.',
           icon: 'error',
         });
       }
@@ -310,8 +305,8 @@
   // Confirm delete
   async function confirmDelete(id) {
     Swal.fire({
-      title: 'Xác nhận xóa sản phẩm',
-      text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+      title: 'Xác nhận xóa chi nhánh',
+      text: 'Bạn có chắc chắn muốn xóa chi nhánh này?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

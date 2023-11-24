@@ -163,8 +163,9 @@
                 Profile</a>
               <a class="dropdown-item" href="javascript:void(0)"><i class="mdi mdi-wallet m-r-5 m-l-5"></i> My
                 Balance</a>
-              <a class="dropdown-item" href="javascript:void(0)">
-                <i class="mdi mdi-power m-r-5 m-l-5"></i> Logout</a>
+              <a class="dropdown-item" href="/logout">
+                <i class="mdi mdi-power m-r-5 m-l-5"></i> Logout
+              </a>
             </ul>
           </li>
           <!-- ============================================================== -->
@@ -205,15 +206,9 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="Topping.html" aria-expanded="false">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/topping" aria-expanded="false">
               <i class="mdi mdi-border-none"></i>
               <span class="hide-menu">Topping</span>
-            </a>
-          </li>
-          <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="Oder.html" aria-expanded="false">
-              <i class="mdi mdi-face"></i>
-              <span class="hide-menu">Đơn Hàng</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -223,14 +218,14 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="Vongquay.html" aria-expanded="false">
-              <i class="mdi mdi-alert-outline"></i>
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/vong-quay" aria-expanded="false">
+              <i class="mdi mdi-checkbox-blank-circle-outline"></i>
               <span class="hide-menu">Vòng quay</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="Vongquay.html" aria-expanded="false">
-              <i class="mdi mdi-alert-outline"></i>
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/voucher" aria-expanded="false">
+              <i class="mdi mdi-credit-card"></i>
               <span class="hide-menu">Voucher</span>
             </a>
           </li>
@@ -289,13 +284,15 @@
               method="post">
               <div class="form-group">
                 <label for="ten_san_pham">Tên chi nhánh</label>
-                <input value="{{chiNhanh.ten_chi_nhanh}}" type="text" id="ten_chi_nhanh" name="ten_chi_nhanh" class="form-control" placeholder="" />
+                <input value="{{chiNhanh.ten_chi_nhanh}}" type="text" id="ten_chi_nhanh" name="ten_chi_nhanh"
+                  class="form-control" placeholder="" />
               </div>
 
 
               <div class="form-group">
                 <label for="mo_ta">Địa chỉ</label>
-                <input value="{{chiNhanh.dia_chi}}" type="text" id="dia_chi" name="dia_chi" class="form-control" placeholder="" />
+                <input value="{{chiNhanh.dia_chi}}" type="text" id="dia_chi" name="dia_chi" class="form-control"
+                  placeholder="" />
               </div>
 
               <a onclick="showMap()"><span type="button" class="btn btn-success text-white">Show Map</span></a>
@@ -304,12 +301,14 @@
 
               <div class="form-group">
                 <label for="mo_ta">Vị trí x: </label>
-                <input value="{{chiNhanh.location.x}}" type="text" id="location_x" name="location_x" class="form-control" placeholder="" />
+                <input value="{{chiNhanh.location.x}}" type="text" id="location_x" name="location_x"
+                  class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
                 <label for="mo_ta">Vị trí y:</label>
-                <input value="{{chiNhanh.location.y}}" type="text" id="location_y" name="location_y" class="form-control" placeholder="" />
+                <input value="{{chiNhanh.location.y}}" type="text" id="location_y" name="location_y"
+                  class="form-control" placeholder="" />
               </div>
 
               <input type="hidden" id="id" name="id" value="{{chiNhanh._id}}">

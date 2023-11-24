@@ -39,13 +39,18 @@ router.post('/login', async (req, res, next) => {
   }
 });
 //logout
-router.get('/logout', async(req, res, next) => {
+router.get('/logout', async (req, res, next) => {
   try {
-    res.session.destroy();
-    return res.redirect('/login');
+    req.session.destroy((err) => {
+      if (err) {
+        console.log('logout error', err);
+        return res.redirect('/login');
+      }
+      return res.redirect('/login');
+    });
   } catch (error) {
     console.log('logout error', error);
-      return res.redirect('/login');
+    return res.redirect('/login');
   }
 });
 

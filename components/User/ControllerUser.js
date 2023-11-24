@@ -1,6 +1,41 @@
 
 const userServices = require('./ServiceUser');
 
+
+
+//login admin chi nhánh
+const loginAdminChiNhanh = async (tai_khoan, mat_khau) => {
+    try {
+        const user = await userServices.loginAdminChiNhanh(tai_khoan, mat_khau);
+        if (user) {
+            return user;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
+
+
+
+//đăng ký admin chi nhánh
+const dangKyAdminChiNhanh = async (tai_khoan, mat_khau, id_chi_nhanh) => {
+    try {
+        const user = await userServices.dangKyAdminChiNhanh(tai_khoan, mat_khau, id_chi_nhanh);
+        if (user) {
+            return user;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+
+}
+
+
+
+
 //thêm lịch sử tìm kiếm
 const themLichSuTimKiem = async (id_user, tu_khoa) => {
     try {
@@ -285,5 +320,6 @@ module.exports = { sendOTP, loginEmail, dangNhapBangUsername,
                     dangKyBangSoDienThoai, layThongTinUser, layThongTinTatCaUser, 
                     themDiaChi, suaDiaChi, xoaDiaChi, suaThongTinUser, xoaTaiKhoan, 
                     tichDiem, doiMatKhauOTP, doiMatKhau, suDungDiem, themLichSuTimKiem,
-                    xoaLichSuTimKiem, kiemTraOTP, layLichSuDiem, chinhDiaChiMacDinh
+                    xoaLichSuTimKiem, kiemTraOTP, layLichSuDiem, chinhDiaChiMacDinh,
+                    loginAdminChiNhanh, dangKyAdminChiNhanh
                     };

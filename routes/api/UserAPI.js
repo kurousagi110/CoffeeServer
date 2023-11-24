@@ -3,8 +3,57 @@ var router = express.Router();
 const userController = require("../../components/User/ControllerUser");
 const AuthenToken = require("../../components/MiddleWare/AuthenToken");
 const serviceUser = require("../../components/User/ServiceUser");
-const {} = require("../../components/Notification/ServiceNotification");
+const { } = require("../../components/Notification/ServiceNotification");
 const serviceNotfication = require("../../components/Notification/ServiceNotification");
+
+
+
+//login admin
+//http://localhost:3000/users/login-admin
+router.post("/login-admin", async (req, res, next) => {
+  try {
+    const { tai_khoan, mat_khau } = req.body;
+    const result = await serviceUser.loginAdminChiNhanh(tai_khoan, mat_khau);
+    console.log("result: ", result);
+    if (result) {
+      res.status(200).json({
+        trang_thai: true,
+        data: { result },
+      });
+    } else {
+      res
+        .status(200)
+        .json({ trang_thai: false, message: "Đăng nhập thất bại" });
+    }
+  } catch (error) {
+    res.status(400).json({ trang_thai: false, message: error.message });
+  }
+});
+
+//đăng ký admin
+//http://localhost:3000/users/dang-ky-admin
+router.post("/dang-ky-admin", async (req, res, next) => {
+  try {
+    const { tai_khoan, mat_khau, id_chi_nhanh } = req.body;
+    const result = await serviceUser.dangKyAdminChiNhanh(
+      tai_khoan,
+      mat_khau,
+      id_chi_nhanh
+    );
+    if (result) {
+      res.status(200).json({
+        trang_thai: true,
+        message: "Đăng ký thành công",
+      });
+    } else {
+      res
+        .status(200)
+        .json({ trang_thai: false, message: "Đăng ký thất bại" });
+    }
+  } catch (error) {
+    res.status(400).json({ trang_thai: false, message: error.message });
+  }
+});
 
 //login cpanel
 //http://localhost:3000/users/login-cpanel

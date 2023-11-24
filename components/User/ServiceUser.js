@@ -2,6 +2,67 @@ const userModel = require('./ModelUser');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const chiNhanhModel = require('../ChiNhanh/ModelChiNhanh');
+
+
+//login admin chi nhánh
+const loginAdminChiNhanh = async (tai_khoan, mat_khau) => {
+    try {
+        const user = await userModel.findOne({ tai_khoan: tai_khoan });
+        if (user) {
+            const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
+            if (isMatch) {
+                const token = await taoToken(tai_khoan);
+                const result = {
+                    id_user: user._id,
+                    id_chi_nhanh: user.ma_khach_hang,
+                    token: token,
+                };
+                return result;
+            }
+        }
+    } catch (error) {
+        console.log('Lỗi tại loginAdminChiNhanh service: ', error)
+    }
+    return false;
+};
+
+//đăng kí admin chi nhánh
+const dangKyAdminChiNhanh = async (tai_khoan, mat_khau, id_chi_nhanh) => {
+    try {
+        const result = await userModel.findOne({ tai_khoan: tai_khoan });
+        if (result) {
+            return false;
+        } else {
+            const chi_nhanh = await chiNhanhModel.findOne({ _id: id_chi_nhanh });
+            if (!chi_nhanh) {
+                return false;
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(mat_khau, salt);
+            const user = await userModel.create({
+                tai_khoan: tai_khoan,
+                mat_khau: hashPassword,
+                ma_khach_hang: id_chi_nhanh,
+                ho_ten: "Admin chi nhánh " + chi_nhanh.ten_chi_nhanh,
+                dia_chi: [],
+                tich_diem: 0,
+                diem_thanh_vien: 0,
+                hang_thanh_vien: "Thành viên mới.",
+                voucher_user: [],
+                otp: 0,
+                status: 1,
+                device_token: "",
+            });
+            return user;
+        }
+    } catch (error) {
+        console.log('Lỗi tại dangKyAdminChiNhanh service: ', error)
+    }
+    return false;
+
+}
+
 
 
 //login cpanel
@@ -571,5 +632,5 @@ module.exports = {
     themDiaChi, suaDiaChi, xoaDiaChi, suaThongTinUser, xoaTaiKhoan,
     tichDiem, doiMatKhauOTP, doiMatKhau, suDungDiem, themEmail,
     xoaLichSuTimKiem, themLichSuTimKiem, kiemTraOTP, layLichSuDiem,
-    chinhDiaChiMacDinh, loginCpanel
+    chinhDiaChiMacDinh, loginCpanel , dangKyAdminChiNhanh, loginAdminChiNhanh
 };

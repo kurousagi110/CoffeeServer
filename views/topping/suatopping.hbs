@@ -1,0 +1,369 @@
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+  <div class="lds-ripple">
+    <div class="lds-pos"></div>
+    <div class="lds-pos"></div>
+  </div>
+</div>
+
+{{!-- loading --}}
+<div id="loading-circle" class="hidden" style="
+    position: fixed;
+    {{!-- top: 50%;
+    right: 45%; --}}
+    width:100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(148, 147, 147, 0.5);
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+  ">
+  <div class="spinner" style="
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    "></div>
+</div>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper" data-navbarbg="skin6" data-theme="light" data-layout="vertical" data-sidebartype="full"
+  data-boxed-layout="full">
+  <!-- ============================================================== -->
+  <!-- Topbar header - style you can find in pages.scss -->
+  <!-- ============================================================== -->
+  <header class="topbar" data-navbarbg="skin6">
+    <nav class="navbar top-navbar navbar-expand-md navbar-light">
+      <div class="navbar-header" data-logobg="skin5">
+        <!-- This is for the sidebar toggle which is visible on mobile only -->
+        <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+          <i class="ti-menu ti-close"></i>
+        </a>
+        <!-- ============================================================== -->
+        <!-- Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-brand">
+          <a href="main.html" class="logo">
+            <!-- Logo icon -->
+            <b class="logo-icon">
+              <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+              <!-- Dark Logo icon -->
+              <img src="/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+              <!-- Light Logo icon -->
+              <img src="/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+            </b>
+            <!--End Logo icon -->
+            <!-- Logo text -->
+            <span class="logo-text">
+              <!-- dark Logo text -->
+              <img src="/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+              <!-- Light Logo text -->
+              <img src="/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+            </span>
+          </a>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Toggle which is visible on mobile only -->
+        <!-- ============================================================== -->
+      </div>
+      <!-- ============================================================== -->
+      <!-- End Logo -->
+      <!-- ============================================================== -->
+      <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin6">
+        <!-- ============================================================== -->
+        <!-- toggle and nav items -->
+        <!-- ============================================================== -->
+        <ul class="navbar-nav float-start me-auto">
+          <!-- ============================================================== -->
+          <!-- Search -->
+          <!-- ============================================================== -->
+          <li class="nav-item search-box">
+            <a class="nav-link waves-effect waves-dark" href="javascript:void(0)">
+              <div class="d-flex align-items-center">
+                <i class="mdi mdi-magnify font-20 me-1"></i>
+                <div class="ms-1 d-none d-sm-block">
+                  <span>Search</span>
+                </div>
+              </div>
+            </a>
+            <form class="app-search position-absolute">
+              <input type="text" class="form-control" placeholder="Search &amp; enter" />
+              <a class="srh-btn">
+                <i class="mdi mdi mdi-close"></i>
+              </a>
+            </form>
+          </li>
+        </ul>
+        <!-- ============================================================== -->
+        <!-- Right side toggle and nav items -->
+        <!-- ============================================================== -->
+        <ul class="navbar-nav float-end">
+          <!-- ============================================================== -->
+          <!-- User profile and search -->
+          <!-- ============================================================== -->
+          <li class="nav-item dropdown">
+            <a class="
+                    nav-link
+                    dropdown-toggle
+                    text-muted
+                    waves-effect waves-dark
+                    pro-pic
+                  " href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="/assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31" />
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="javascript:void(0)"><i class="mdi mdi-account m-r-5 m-l-5"></i> My
+                Profile</a>
+              <a class="dropdown-item" href="javascript:void(0)"><i class="mdi mdi-wallet m-r-5 m-l-5"></i> My
+                Balance</a>
+              <a class="dropdown-item" href="/logout">
+                <i class="mdi mdi-power m-r-5 m-l-5"></i> Logout</a>
+            </ul>
+          </li>
+          <!-- ============================================================== -->
+          <!-- User profile and search -->
+          <!-- ============================================================== -->
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- ============================================================== -->
+  <!-- End Topbar header -->
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  <!-- Left Sidebar - style you can find in sidebar.scss  -->
+  <!-- ============================================================== -->
+  <aside class="left-sidebar" data-sidebarbg="skin5">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+      <!-- Sidebar navigation-->
+      <nav class="sidebar-nav">
+        <ul id="sidebarnav">
+          <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="main.html" aria-expanded="false">
+              <i class="mdi mdi-av-timer"></i>
+              <span class="hide-menu">Trang Chủ</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="User.html" aria-expanded="false">
+              <i class="mdi mdi-account-network"></i>
+              <span class="hide-menu">Người Dùng</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/san-pham" aria-expanded="false">
+              <i class="mdi mdi-arrange-bring-forward"></i>
+              <span class="hide-menu">Sản Phẩm</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/topping" aria-expanded="false">
+              <i class="mdi mdi-border-none"></i>
+              <span class="hide-menu">Topping</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/chi-nhanh" aria-expanded="false">
+              <i class="mdi mdi-file"></i>
+              <span class="hide-menu">Chi Nhánh</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/vong-quay" aria-expanded="false">
+              <i class="mdi mdi-checkbox-blank-circle-outline"></i>
+              <span class="hide-menu">Vòng quay</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/voucher" aria-expanded="false">
+              <i class="mdi mdi-credit-card"></i>
+              <span class="hide-menu">Voucher</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+  </aside>
+  <!-- ============================================================== -->
+  <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  <!-- Page wrapper  -->
+  <!-- ============================================================== -->
+  <div class="page-wrapper">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="page-breadcrumb">
+      <div class="row">
+        <div class="col-5 align-self-center">
+          <h4 class="page-title">Thêm Dữ liệu</h4>
+        </div>
+        <div class="col-7 align-self-center">
+          <div class="d-flex align-items-center justify-content-end">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="#">Trang chủ</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Thêm Dữ Liệu
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Container fluid  -->
+    <!-- ============================================================== -->
+    <div class="container-fluid">
+      <!-- ============================================================== -->
+      <!-- Start Page Content -->
+      <!-- ============================================================== -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card card-body">
+            <h4 class="card-title">Thêm Topping</h4>
+            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
+              method="post">
+              <div class="form-group">
+                <label for="ten_san_pham">Tên sản phẩm</label>
+                <input value="{{topping.ten_topping}}" type="text" id="ten_topping" name="ten_topping" class="form-control" placeholder="" />
+              </div>
+
+              <div class="form-group">
+                <label for="gia">Giá</label>
+                <input value="{{topping.gia}}" type="text" id="gia" name="gia" class="form-control" placeholder="" />
+              </div>
+
+              <div class="form-group">
+                <label for="mo_ta">Mô tả</label>
+                <input value="{{topping.mo_ta}}" type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
+              </div>
+
+              <div class="custom-file">
+                <input type="file" name="files" multiple class="custom-file-input" id="inputGroupFile01" />
+                <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
+              </div>
+
+              <input value="{{topping._id}}" type="hidden" id="id" name="id" class="form-control" placeholder="" />
+
+              <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
+                <button type="button" onclick="validateAndSubmit()" class="btn btn-primary"
+                  style="width: 95%">Lưu</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script>
+
+      function showLoading() {
+        document.getElementById('loading-circle').style.display = 'flex';
+      }
+
+      function hideLoading() {
+        document.getElementById('loading-circle').style.display = 'none';
+      }
+
+
+      async function validateAndSubmit() {
+        // Validate the form data here
+        showLoading();
+
+        const ten_topping = document.getElementById('ten_topping').value;
+        const gia = document.getElementById('gia').value;
+        const mo_ta = document.getElementById('mo_ta').value;
+        const id = document.getElementById('id').value;
+        const filesInput = document.getElementById('inputGroupFile01');
+
+        if (!ten_topping || !gia || !filesInput.files.length) {
+          const result = await Swal.fire({
+            icon: 'Lỗi',
+            title: 'Oops...',
+            text: 'Bạn hãy nhập đầy đủ không được để trống.',
+            allowOutsideClick: false // Prevent clicking outside the modal to close it
+          });
+
+          if (result.isConfirmed) {
+            hideLoading();
+            return;
+          }
+        }
+
+        // Show confirmation dialog
+        const confirmationResult = await Swal.fire({
+          title: 'Bạn có chắc chắn muốn thêm topping này?',
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Lưu',
+          denyButtonText: "Chỉnh sửa."
+        });
+
+        if (confirmationResult.isConfirmed) {
+          // Submit the form
+          const formData = new FormData();
+          formData.append('ten_topping', ten_topping);
+          formData.append('gia', gia);
+          formData.append('mo_ta', mo_ta);
+
+          const filesInput = document.getElementById('inputGroupFile01');
+          for (let i = 0; i < filesInput.files.length; i++) {
+            formData.append('files', filesInput.files[i]);
+          }
+          try {
+            const response = await fetch(`/cpanel/topping/sua-topping/${id}`, {
+              method: 'POST',
+              body: formData,
+            });
+
+            if (response.result === 'success') {
+              hideLoading();
+              Swal.fire({
+                icon: 'success',
+                title: 'Saved!',
+                showConfirmButton: false,
+                timer: 0,
+              });
+
+              window.location.href = '/cpanel/topping';
+
+            } else {
+              hideLoading();
+              Swal.fire('Lỗi', 'Tên sản phẩm bị trùng', 'error');
+            }
+          } catch (error) {
+            hideLoading();
+            console.error(error);
+            Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
+          }
+        } else if (confirmationResult.isDenied) {
+          hideLoading();
+          Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
+        }
+      }
+
+    </script>

@@ -6,7 +6,7 @@ vietNamdate.setHours(vietNamdate.getHours() + 7);
 //lấy tất cả topping
 const layTatCaTopping = async () => {
     try {
-        const toppings = await toppingModel.find();
+        const toppings = await toppingModel.find( { status: 1 } );
         return toppings;
     } catch (error) {
         console.log(error);
@@ -29,14 +29,21 @@ const layToppingTheoId = async (id_topping) => {
 const themTopping = async (ten_topping, gia, hinh_anh, mota) => {
     try {
         const topping = await toppingModel.findOne({ ten_topping: ten_topping });
-        if (topping) {
+        if (topping && topping.status === 1) {
             return false;
+        }else if(topping && topping.status === 0){
+            topping.status = 1;
+            topping.gia = gia;
+            topping.hinh_anh = hinh_anh;
+            topping.mo_ta = mota;
+            await topping.save();
+            return true;
         }
         const newTopping = new toppingModel({
             ten_topping: ten_topping,
             gia: gia,
             hinh_anh: hinh_anh,
-            mota: mota,
+            mo_ta: mota,
             status: 1,
             isSelected: false,
         });
@@ -75,7 +82,7 @@ const suaTopping = async (id_topping, ten_topping, gia, hinh_anh, mota) => {
         topping.ten_topping = ten_topping;
         topping.gia = gia;
         topping.hinh_anh = hinh_anh;
-        topping.mota = mota;
+        topping.mo_ta = mota;
         await topping.save();
         return true;
     } catch (error) {
