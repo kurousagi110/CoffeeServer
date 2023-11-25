@@ -86,6 +86,20 @@ const layDanhSachToanBoVongQuay = async () => {
     }
 };
 
+//lấy danh sách vòng quay theo id
+const layDanhSachVongQuayTheoId = async (id_vong_quay) => {
+    try {
+        const list = await modelVongQuay.findById(id_vong_quay);
+        if (!list) {
+            return false;
+        }
+        return list;
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+};
+
 //lấy danh sách vòng quay
 const layDanhSachVongQuay = async () => {
     try {
@@ -131,7 +145,7 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
 };
 
 //sửa vòng quay
-const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh,giam_gia ) => {
+const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh,thoi_gian ) => {
     try {
         const vongquay = await modelVongQuay.findById(id_vong_quay);
         if (!vongquay) {
@@ -144,10 +158,9 @@ const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_v
         vongquay.ten_voucher = ten_voucher || vongquay.ten_voucher;
         vongquay.ma_voucher = ma_voucher || vongquay.ma_voucher;
         vongquay.diem = diem || vongquay.diem;
-        vongquay.giam_gia = giam_gia || vongquay.giam_gia;
         vongquay.gia_tri = gia_tri || vongquay.gia_tri;
         vongquay.ngay_bat_dau = suaVongQuayDate;
-        vongquay.ngay_ket_thuc = new Date(suaVongQuayDate.getTime() + (30 * 24 * 60 * 60 * 1000));
+        vongquay.ngay_ket_thuc = new Date(suaVongQuayDate.getTime() + (thoi_gian * 24 * 60 * 60 * 1000));
         vongquay.hinh_anh = hinh_anh || vongquay.hinh_anh;
         await vongquay.save();
         console.log(vongquay);
@@ -161,12 +174,10 @@ const suaVongQuay = async (id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_v
 //xóa vòng quay
 const xoaVongQuay = async (id_vong_quay) => {
     try {
-        const result = await modelVongQuay.findById(id_vong_quay);
+        const result = await modelVongQuay.findByIdAndDelete(id_vong_quay);
         if (!result) {
             return false;
         }
-        result.status = 0;
-        await result.save();
         return true;
     } catch (error) {
         console.log(error);
@@ -177,4 +188,4 @@ const xoaVongQuay = async (id_vong_quay) => {
 
 
 module.exports = { themVoucherUser, layDanhSachVongQuay, themVongQuay, suaVongQuay, xoaVongQuay, suDungVongQuay,
-    layDanhSachToanBoVongQuay };
+    layDanhSachToanBoVongQuay, layDanhSachVongQuayTheoId };

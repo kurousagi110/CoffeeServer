@@ -78,14 +78,6 @@
 			});
 
 			if (response.status === 200) {
-				// Successful login
-				const responseData = await response.json();
-				const { token } = responseData;
-
-				// Store the token in session or localStorage as needed
-				// For example, you can store it in a session cookie
-				document.cookie = `token=${token}; path=/`;
-
 				// Redirect to the dashboard after successful login
 				location.href = '/cpanel/san-pham';
 			} else {

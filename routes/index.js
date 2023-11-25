@@ -8,7 +8,7 @@ const AuthenWeb = require('../components/MiddleWare/AuthenWeb');
 // http://localhost:3000/
 // hiển thị trang chủ
 router.get('/', [AuthenWeb], async (req, res, next) => {
-  res.direct('/login');
+  res.redirect('/login');
 });
 
 //http://localhost:3000/login
@@ -27,7 +27,7 @@ router.post('/login', async (req, res, next) => {
     if (result) {
       const token = jwt.sign({ _id: result._id, role: result.status }, 'secret', { expiresIn: '3h' });
       req.session.token = token;
-      res.status(200).json({ token: token });
+      res.status(200).redirect('/cpanel/san-pham');
     } else {
       // Redirect to the login page if the login fails
       res.status(401).redirect('/login');
