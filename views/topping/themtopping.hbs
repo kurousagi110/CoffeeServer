@@ -247,7 +247,7 @@
             <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
               method="post">
               <div class="form-group">
-                <label for="ten_san_pham">Tên sản phẩm</label>
+                <label for="ten_san_pham">Tên Topping</label>
                 <input type="text" id="ten_topping" name="ten_topping" class="form-control" placeholder="" />
               </div>
 
@@ -361,6 +361,8 @@
         } else if (confirmationResult.isDenied) {
           hideLoading();
           Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
+        }else{
+          hideLoading();
         }
       }
 

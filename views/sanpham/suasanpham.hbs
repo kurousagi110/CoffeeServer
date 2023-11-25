@@ -390,6 +390,8 @@
         } else if (confirmationResult.isDenied) {
           hideLoading();
           Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
+        }else{
+          hideLoading();
         }
       }
     </script>

@@ -101,7 +101,7 @@ const layDanhSachVongQuay = async () => {
 };
 
 //thêm vòng quay
-const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh, giam_gia, thoi_gian ) => {
+const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh, thoi_gian ) => {
     try {
         const check = await modelVongQuay.findOne({ ma_voucher: ma_voucher });
         if (check) {
@@ -115,7 +115,6 @@ const themVongQuay = async (ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem 
             ten_voucher: ten_voucher,
             ma_voucher: ma_voucher,
             diem: diem,
-            giam_gia: giam_gia,
             gia_tri: gia_tri,
             ngay_bat_dau: themVongQuayDate,
             ngay_ket_thuc: new Date(themVongQuayDate.getTime() + (thoi_gian * 24 * 60 * 60 * 1000)),

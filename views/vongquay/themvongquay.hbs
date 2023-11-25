@@ -252,13 +252,33 @@
               </div>
 
               <div class="form-group">
-                <label for="gia">Giá</label>
-                <input type="text" id="gia" name="gia" class="form-control" placeholder="" />
+                <label for="mo_ta">Mô tả</label>
+                <input type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
-                <label for="mo_ta">Mô tả</label>
-                <input type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
+                <label for="ten_voucher">Tên voucher</label>
+                <input type="text" id="ten_voucher" name="ten_voucher" class="form-control" placeholder="" />
+              </div>
+
+              <div class="form-group">
+                <label for="ma_voucher">Mã voucher</label>
+                <input type="text" id="ma_voucher" name="ma_voucher" class="form-control" placeholder="" />
+              </div>
+
+              <div class="form-group">
+                <label for="gia_tri">Giá trị (Nếu là điểm thì giá trị bằng 0)</label>
+                <input type="number" id="gia_tri" name="gia_tri" class="form-control" placeholder="" />
+              </div>
+
+              <div class="form-group">
+                <label for="diem">Điểm (Nếu là vận chuyển thì điểm bằng 0)</label>
+                <input type="number" id="diem" name="diem" class="form-control" placeholder="" />
+              </div>
+
+              <div class="form-group">
+                <label for="thoi_gian">Thời gian khuyến mãi (Ngày)</label>
+                <input type="number" id="thoi_gian" name="thoi_gian" class="form-control" placeholder="" />
               </div>
 
               <div class="custom-file">
@@ -293,14 +313,19 @@
         // Validate the form data here
         showLoading();
 
-        const ten_topping = document.getElementById('ten_topping').value;
-        const gia = document.getElementById('gia').value;
+        const ten_vong_quay = document.getElementById('ten_vong_quay').value;
         const mo_ta = document.getElementById('mo_ta').value;
+        const ten_voucher = document.getElementById('ten_voucher').value;
+        const ma_voucher = document.getElementById('ma_voucher').value;
+        const gia_tri = document.getElementById('gia_tri').value;
+        const diem = document.getElementById('diem').value;
+        const thoi_gian = document.getElementById('thoi_gian').value;
         const filesInput = document.getElementById('inputGroupFile01');
 
-        if (!ten_topping || !gia || !filesInput.files.length) {
+
+        if (!ten_vong_quay || !mo_ta || !ten_voucher || !ma_voucher || !gia_tri || !diem || !thoi_gian || !filesInput.files.length) {
           const result = await Swal.fire({
-            icon: 'Lỗi',
+            icon: 'error',
             title: 'Oops...',
             text: 'Bạn hãy nhập đầy đủ không được để trống.',
             allowOutsideClick: false // Prevent clicking outside the modal to close it
@@ -314,7 +339,7 @@
 
         // Show confirmation dialog
         const confirmationResult = await Swal.fire({
-          title: 'Bạn có chắc chắn muốn thêm sản phẩm này?',
+          title: 'Bạn có chắc chắn muốn thêm phần thường vòng quay này?',
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: 'Lưu',
@@ -324,16 +349,20 @@
         if (confirmationResult.isConfirmed) {
           // Submit the form
           const formData = new FormData();
-          formData.append('ten_topping', ten_topping);
-          formData.append('gia', gia);
+          formData.append('ten_vong_quay', ten_vong_quay);
           formData.append('mo_ta', mo_ta);
+          formData.append('ten_voucher', ten_voucher);
+          formData.append('ma_voucher', ma_voucher);
+          formData.append('gia_tri', gia_tri);
+          formData.append('diem', diem);
+          formData.append('thoi_gian', thoi_gian);
 
           const filesInput = document.getElementById('inputGroupFile01');
           for (let i = 0; i < filesInput.files.length; i++) {
             formData.append('files', filesInput.files[i]);
           }
           try {
-            const response = await fetch('/cpanel/topping/them-topping', {
+            const response = await fetch('/cpanel/vong-quay/them-vong-quay', {
               method: 'POST',
               body: formData,
             });
@@ -347,11 +376,11 @@
                 timer: 0,
               });
 
-              window.location.href = '/cpanel/topping';
+              window.location.href = '/cpanel/vong-quay';
 
             } else {
               hideLoading();
-              Swal.fire('Lỗi', 'Tên sản phẩm bị trùng', 'error');
+              Swal.fire('Lỗi', 'Mã vòng quay bị trùng', 'error');
             }
           } catch (error) {
             hideLoading();
@@ -361,6 +390,8 @@
         } else if (confirmationResult.isDenied) {
           hideLoading();
           Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
+        }else{
+          hideLoading();
         }
       }
 

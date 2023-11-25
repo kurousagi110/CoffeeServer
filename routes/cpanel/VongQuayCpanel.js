@@ -34,37 +34,39 @@ router.get("/them-vong-quay", [AuthenWeb], async (req, res) => {
 //them vong quay
 router.post("/them-vong-quay", [AuthenWeb, upload], async (req, res) => {
   try {
-    let { ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, giam_gia } = req.body;
-    let files = req.files; // 'files' since you used upload.array
+    let { ten_vong_quay, mo_ta, ten_voucher, ma_voucher, diem, gia_tri, thoi_gian } = req.body;
+    let files = req.files;
     let hinh_anh;
-    console.log("file upload: " + files);
+  
     if (files && files.length > 0) {
       try {
         const keys = await Promise.all(files.map(async (file) => {
           try {
             const uploadResult = await uploadImageToS3(file.path);
-            return uploadResult;
+            return uploadResult.url;
           } catch (error) {
             console.error(`Error uploading file ${file.originalname}:`, error);
-            return null; // or handle the error in a way that suits your application
+            return null;
           }
         }));
         console.log("All uploads completed. Keys:", keys);
         hinh_anh = keys[0];
-        console.log("hinh anh vong quay: " + hinh_anh_vong_quay);
+        console.log("hinh anh vong quay: " + hinh_anh);
       } catch (error) {
         console.log("Error:", error);
-
       }
     }
-    const result = await vongQuayService.themVongQuay(ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh, giam_gia);
+  
+    const result = await vongQuayService.themVongQuay(ten_vong_quay, mo_ta, ten_voucher, ma_voucher, diem, gia_tri, hinh_anh, thoi_gian);
+    
     if (result) {
-        res.redirect("/cpanel/vong-quay");
+      res.status(200).json({ result: "success" });
+    } else {
+      res.status(300).json({ result: "fail" });
     }
-    res.redirect("/cpanel/vong-quay/them-vong-quay");
   } catch (error) {
     console.log(error);
-    res.redirect("/cpanel/vong-quay/them-vong-quay");
+    res.status(400).json({ result: "fail" });
   }
 });
 
