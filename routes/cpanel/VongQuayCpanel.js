@@ -28,7 +28,9 @@ router.get("/", [AuthenWeb], async (req, res) => {
       
       // Calculate the remaining days (rounded to the nearest whole number)
       vong_quay[i].ngay_con_lai = Math.round(duration.asHours() / 24);
-
+      if (vong_quay[i].ngay_con_lai < 0) {
+        vong_quay[i].ngay_con_lai = 0;
+      }
       vong_quay[i].stt = stt;
       stt++;
     }
@@ -152,7 +154,6 @@ router.get("/xoa-vong-quay/:id", [AuthenWeb], async (req, res) => {
   try {
     let id = req.params.id;
     const result = await vongQuayService.xoaVongQuay(id);
-
     if (result) {
       res.status(200).json({ result: "success" });
     } else {

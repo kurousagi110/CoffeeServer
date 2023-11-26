@@ -157,9 +157,9 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="User.html" aria-expanded="false">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/user" aria-expanded="false">
               <i class="mdi mdi-account-network"></i>
-              <span class="hide-menu">Người Dùng</span>
+              <span class="hide-menu">Admin Chi Nhánh</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -243,18 +243,9 @@
       <div class="row">
         <div class="col-12">
           <div class="card card-body">
-            <h4 class="card-title">Thêm Topping</h4>
-            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
+            <h4 class="card-title">Thêm voucher</h4>
+            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/voucher/them-voucher"
               method="post">
-              <div class="form-group">
-                <label for="ten_san_pham">Tên vòng quay</label>
-                <input type="text" id="ten_vong_quay" name="ten_vong_quay" class="form-control" placeholder="" />
-              </div>
-
-              <div class="form-group">
-                <label for="mo_ta">Mô tả</label>
-                <input type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
-              </div>
 
               <div class="form-group">
                 <label for="ten_voucher">Tên voucher</label>
@@ -272,14 +263,30 @@
               </div>
 
               <div class="form-group">
-                <label for="diem">Điểm (Nếu là vận chuyển thì điểm bằng 0)</label>
-                <input type="number" id="diem" name="diem" class="form-control" placeholder="" />
+                <label for="giam_gia">Thời gian khuyến mãi (Ngày)</label>
+                <input type="number" id="giam_gia" name="giam_gia" class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
-                <label for="thoi_gian">Thời gian khuyến mãi (Ngày)</label>
-                <input type="number" id="thoi_gian" name="thoi_gian" class="form-control" placeholder="" />
+                <label for="mo_ta">Mô tả</label>
+                <input type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
               </div>
+
+
+
+              <div class="form-group">
+                <label for="ngay_ket_thuc">Thời gian khuyến mãi (Ngày)</label>
+                <input type="number" id="ngay_ket_thuc" name="ngay_ket_thuc" class="form-control" placeholder="" />
+              </div>
+
+
+
+              <div class="form-group">
+                <label for="diem">Điểm (Điểm cần để đổi voucher nếu free điểm = 0)</label>
+                <input value="0" type="number" id="diem" name="diem" class="form-control" placeholder="" />
+              </div>
+
+
 
               <div class="custom-file">
                 <input type="file" name="files" multiple class="custom-file-input" id="inputGroupFile01" />
@@ -313,19 +320,17 @@
         // Validate the form data here
         showLoading();
 
-
-        
+        const mo_ta = document.getElementById('mo_ta').value;
         const ten_voucher = document.getElementById('ten_voucher').value;
         const ma_voucher = document.getElementById('ma_voucher').value;
-        const mo_ta = document.getElementById('mo_ta').value;
         const gia_tri = document.getElementById('gia_tri').value;
         const diem = document.getElementById('diem').value;
         const ngay_ket_thuc = document.getElementById('ngay_ket_thuc').value;
         const giam_gia = document.getElementById('giam_gia').value;
         const filesInput = document.getElementById('inputGroupFile01');
-        
 
-        if (!ten_vong_quay || !mo_ta || !ten_voucher || !ma_voucher || !gia_tri || !diem || !thoi_gian || !filesInput.files.length) {
+
+        if (!ten_voucher || !ma_voucher || !gia_tri || !diem || !ngay_ket_thuc || !giam_gia || !filesInput.files.length) {
           const result = await Swal.fire({
             icon: 'error',
             title: 'Oops...',
@@ -341,7 +346,7 @@
 
         // Show confirmation dialog
         const confirmationResult = await Swal.fire({
-          title: 'Bạn có chắc chắn muốn thêm phần thường vòng quay này?',
+          title: 'Bạn có chắc chắn muốn thêm voucher này?',
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: 'Lưu',
@@ -351,20 +356,21 @@
         if (confirmationResult.isConfirmed) {
           // Submit the form
           const formData = new FormData();
-          formData.append('ten_vong_quay', ten_vong_quay);
           formData.append('mo_ta', mo_ta);
           formData.append('ten_voucher', ten_voucher);
           formData.append('ma_voucher', ma_voucher);
           formData.append('gia_tri', gia_tri);
           formData.append('diem', diem);
-          formData.append('thoi_gian', thoi_gian);
+          formData.append('ngay_ket_thuc', ngay_ket_thuc);
+          formData.append('giam_gia', giam_gia);
+          
 
           const filesInput = document.getElementById('inputGroupFile01');
           for (let i = 0; i < filesInput.files.length; i++) {
             formData.append('files', filesInput.files[i]);
           }
           try {
-            const response = await fetch('/cpanel/vong-quay/them-vong-quay', {
+            const response = await fetch('/cpanel/voucher/them-voucher', {
               method: 'POST',
               body: formData,
             });
@@ -378,11 +384,11 @@
                 timer: 0,
               });
 
-              window.location.href = '/cpanel/vong-quay';
+              window.location.href = '/cpanel/voucher';
 
             } else {
               hideLoading();
-              Swal.fire('Lỗi', 'Mã vòng quay bị trùng', 'error');
+              Swal.fire('Lỗi', 'Mã voucher bị trùng', 'error');
             }
           } catch (error) {
             hideLoading();
@@ -392,7 +398,7 @@
         } else if (confirmationResult.isDenied) {
           hideLoading();
           Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
-        }else{
+        } else {
           hideLoading();
         }
       }

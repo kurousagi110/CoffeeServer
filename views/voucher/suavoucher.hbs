@@ -157,9 +157,9 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="User.html" aria-expanded="false">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/user" aria-expanded="false">
               <i class="mdi mdi-account-network"></i>
-              <span class="hide-menu">Người Dùng</span>
+              <span class="hide-menu">Admin Chi Nhánh</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -243,49 +243,47 @@
       <div class="row">
         <div class="col-12">
           <div class="card card-body">
-            <h4 class="card-title">Thêm Topping</h4>
-            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/vong-quay/them-vong-quay"
+            <h4 class="card-title">Sửa voucher</h4>
+            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/voucher/sua-voucher"
               method="post">
-              <div class="form-group">
-                <label for="ten_san_pham">Tên vòng quay</label>
-                <input value="{{vong_quay.ten_vong_quay}}" type="text" id="ten_vong_quay" name="ten_vong_quay"
-                  class="form-control" placeholder="" />
-              </div>
-
-              <div class="form-group">
-                <label for="mo_ta">Mô tả</label>
-                <input value="{{vong_quay.mo_ta}}" type="text" id="mo_ta" name="mo_ta" class="form-control"
-                  placeholder="" />
-              </div>
 
               <div class="form-group">
                 <label for="ten_voucher">Tên voucher</label>
-                <input value="{{vong_quay.ten_voucher}}" type="text" id="ten_voucher" name="ten_voucher"
-                  class="form-control" placeholder="" />
+                <input value="{{voucher.ten_voucher}}" type="text" id="ten_voucher" name="ten_voucher" class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
                 <label for="ma_voucher">Mã voucher</label>
-                <input value="{{vong_quay.ma_voucher}}" type="text" id="ma_voucher" name="ma_voucher"
-                  class="form-control" placeholder="" />
+                <input value="{{voucher.ma_voucher}}" type="text" id="ma_voucher" name="ma_voucher" class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
                 <label for="gia_tri">Giá trị (Nếu là điểm thì giá trị bằng 0)</label>
-                <input value="{{vong_quay.gia_tri}}" type="number" id="gia_tri" name="gia_tri" class="form-control"
-                  placeholder="" />
+                <input value="{{voucher.gia_tri}}" type="number" id="gia_tri" name="gia_tri" class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
-                <label for="diem">Điểm (Nếu là vận chuyển thì điểm bằng 0)</label>
-                <input value="{{vong_quay.diem}}" type="number" id="diem" name="diem" class="form-control"
-                  placeholder="" />
+                <label for="giam_gia">Giảm giá</label>
+                <input value="{{voucher.giam_gia}}" type="number" id="giam_gia" name="giam_gia" class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
-                <label for="thoi_gian">Thời gian khuyến mãi (Ngày)</label>
-                <input value="{{vong_quay.thoi_gian}}" type="number" id="thoi_gian" name="thoi_gian"
-                  class="form-control" placeholder="" />
+                <label for="mo_ta">Mô tả</label>
+                <input value="{{voucher.mo_ta}}" type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
+              </div>
+
+
+
+              <div class="form-group">
+                <label for="ngay_ket_thuc">Thời gian khuyến mãi (Ngày)</label>
+                <input value="{{voucher.ngay_ket_thuc}}" type="number" id="ngay_ket_thuc" name="ngay_ket_thuc" class="form-control" placeholder="" />
+              </div>
+
+
+
+              <div class="form-group">
+                <label for="diem">Điểm (Điểm cần để đổi voucher nếu free điểm = 0)</label>
+                <input value="{{voucher.diem}}" type="number" id="diem" name="diem" class="form-control" placeholder="" />
               </div>
 
               <div class="custom-file">
@@ -293,7 +291,7 @@
                 <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
               </div>
 
-              <input value="{{vong_quay._id}}" type="hidden" id="id" name="id" class="form-control" placeholder="" />
+              <input value="{{voucher._id}}" type="hidden" id="id" name="id" class="form-control" placeholder="" />
 
               <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
                 <button type="button" onclick="validateAndSubmit()" class="btn btn-primary"
@@ -322,16 +320,16 @@
         showLoading();
 
         const id = document.getElementById('id').value;
-        const ten_vong_quay = document.getElementById('ten_vong_quay').value;
         const mo_ta = document.getElementById('mo_ta').value;
         const ten_voucher = document.getElementById('ten_voucher').value;
         const ma_voucher = document.getElementById('ma_voucher').value;
         const gia_tri = document.getElementById('gia_tri').value;
         const diem = document.getElementById('diem').value;
-        const thoi_gian = document.getElementById('thoi_gian').value;
+        const ngay_ket_thuc = document.getElementById('ngay_ket_thuc').value;
+        const giam_gia = document.getElementById('giam_gia').value;
         const filesInput = document.getElementById('inputGroupFile01');
 
-        if (!ten_vong_quay || !mo_ta || !ten_voucher || !ma_voucher || !gia_tri || !diem || !thoi_gian || filesInput.files.length === 0) {
+        if (!ten_voucher || !ma_voucher || !gia_tri || !diem || !ngay_ket_thuc || !giam_gia || !filesInput.files[0]) {
           const result = await Swal.fire({
             icon: 'Lỗi',
             title: 'Oops...',
@@ -347,7 +345,7 @@
 
         // Show confirmation dialog
         const confirmationResult = await Swal.fire({
-          title: 'Bạn có chắc chắn muốn sửa topping này?',
+          title: 'Bạn có chắc chắn muốn sửa voucher này?',
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: 'Lưu',
@@ -357,13 +355,14 @@
         if (confirmationResult.isConfirmed) {
           // Submit the form
           const formData = new FormData();
-          formData.append('ten_vong_quay', ten_vong_quay);
           formData.append('mo_ta', mo_ta);
           formData.append('ten_voucher', ten_voucher);
           formData.append('ma_voucher', ma_voucher);
           formData.append('gia_tri', gia_tri);
           formData.append('diem', diem);
-          formData.append('thoi_gian', thoi_gian);
+          formData.append('ngay_ket_thuc', ngay_ket_thuc);
+          formData.append('giam_gia', giam_gia);
+
 
 
           const filesInput = document.getElementById('inputGroupFile01');
@@ -371,7 +370,7 @@
             formData.append('files', filesInput.files[i]);
           }
           try {
-            const response = await fetch(`/cpanel/vong-quay/sua-vong-quay/${id}`, {
+            const response = await fetch(`/cpanel/voucher/sua-voucher/${id}`, {
               method: 'POST',
               body: formData,
             });
@@ -385,11 +384,11 @@
                 timer: 0,
               });
 
-              window.location.href = '/cpanel/vong-quay';
+              window.location.href = '/cpanel/voucher';
 
             } else {
               hideLoading();
-              Swal.fire('Lỗi', 'Tên sản phẩm bị trùng', 'error');
+              Swal.fire('Lỗi', 'Tên voucher bị trùng', 'error');
             }
           } catch (error) {
             hideLoading();

@@ -299,13 +299,15 @@ const  suaVoucher = async (id_voucher, ten_voucher, ma_voucher, gia_tri, mo_ta, 
         }else{
             voucher.status = 2;
         }
+        let themVoucherDate = new Date();
+        themVoucherDate.setHours(themVoucherDate.getHours() + 7);
         voucher.ten_voucher = ten_voucher || voucher.ten_voucher;
         voucher.ma_voucher = ma_voucher || voucher.ma_voucher;
         voucher.gia_tri = gia_tri || voucher.gia_tri;
         voucher.mo_ta = mo_ta || voucher.mo_ta;
         voucher.giam_gia = giam_gia || voucher.giam_gia;
         voucher.hinh_anh = hinh_anh || voucher.hinh_anh;
-        voucher.ngay_ket_thuc = new Date(voucher.ngay_ket_thuc.getTime() + (ngay_ket_thuc * 24 * 60 * 60 * 1000));
+        voucher.ngay_ket_thuc = new Date(themVoucherDate.getTime() + (ngay_ket_thuc * 24 * 60 * 60 * 1000));
         await voucher.save();
         return true;
     } catch (error) {
@@ -317,16 +319,15 @@ const  suaVoucher = async (id_voucher, ten_voucher, ma_voucher, gia_tri, mo_ta, 
 //xóa voucher
 const xoaVoucher = async (id_voucher) => {
     try {
-        const voucher = await modelVoucher.findById(id_voucher);
-        voucher.trang_thai = "Hết hiệu lực";
-        voucher.status = 0;
-        await voucher.save();
+        const voucher = await modelVoucher.findByIdAndDelete(id_voucher);
+        if (!voucher) {
+            return false;
+        }
         return true;
     } catch (error) {
         console.log(error);
         throw new Error(error);
     }
-    return false;
 };
 
 

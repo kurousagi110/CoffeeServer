@@ -70,11 +70,11 @@ router.post("/sua-chi-nhanh/:id", [AuthenWeb], async (req, res) => {
     if (result) {
         res.status(200).json({ result: 'success' });
     } else {
-      res.redirect("/cpanel/chi-nhanh/sua-chi-nhanh/" + id);
+      res.status(300).json({ result: 'fail' });
     }
   } catch (err) {
     console.log(err);
-    res.redirect("/cpanel/chi-nhanh");
+    res.status(500).json({ result: 'fail' });
   }
 });
 
@@ -86,11 +86,11 @@ router.get("/xoa-chi-nhanh/:id", [AuthenWeb], async (req, res) => {
     if (result) {
       res.status(200).json({ result: 'success' });
     } else {
-      res.redirect("/cpanel/chi-nhanh");
+      res.status(300).json({ result: 'fail' });
     }
   } catch (err) {
     console.log(err);
-    res.redirect("/cpanel/chi-nhanh");
+    res.status(500).json({ result: 'fail' });
   }
 });
 

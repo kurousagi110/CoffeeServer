@@ -1,6 +1,42 @@
 <!-- ============================================================== -->
 <!-- Preloader - style you can find in spinners.css -->
 <!-- ============================================================== -->
+<!-- Include this in the head section of your HTML -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" defer></script>
+
+<script>
+  function showMap() {
+    // Show the map div
+    document.getElementById('map').style.display = 'block';
+
+    // Create a map centered at a default location (e.g., your city)
+    const defaultLocation = { lat: 10.7769, lng: 106.7009 };
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: defaultLocation,
+      zoom: 15,
+    });
+
+    // Create a marker to represent the selected location
+    const marker = new google.maps.Marker({
+      position: defaultLocation,
+      map: map,
+      draggable: true, // Allow the user to drag the marker
+    });
+
+    // Add an event listener for the dragend event (when the user stops dragging the marker)
+    google.maps.event.addListener(marker, 'dragend', function (event) {
+      const selectedLocation = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+
+      // Store the selected location in the hidden input field
+      document.getElementById('selectedLocation').value = JSON.stringify(selectedLocation);
+    });
+  }
+</script>
+<!-- Replace YOUR_GOOGLE_MAPS_API_KEY with your actual API key -->
 <div class="preloader">
   <div class="lds-ripple">
     <div class="lds-pos"></div>
@@ -128,7 +164,8 @@
               <a class="dropdown-item" href="javascript:void(0)"><i class="mdi mdi-wallet m-r-5 m-l-5"></i> My
                 Balance</a>
               <a class="dropdown-item" href="/logout">
-                <i class="mdi mdi-power m-r-5 m-l-5"></i> Logout</a>
+                <i class="mdi mdi-power m-r-5 m-l-5"></i> Logout
+              </a>
             </ul>
           </li>
           <!-- ============================================================== -->
@@ -174,7 +211,6 @@
               <span class="hide-menu">Topping</span>
             </a>
           </li>
-
           <li class="sidebar-item">
             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/chi-nhanh" aria-expanded="false">
               <i class="mdi mdi-file"></i>
@@ -243,48 +279,27 @@
       <div class="row">
         <div class="col-12">
           <div class="card card-body">
-            <h4 class="card-title">Thêm vòng quay</h4>
-            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
+            <h4 class="card-title">Sửa chi nhánh</h4>
+            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/user/sua-user"
               method="post">
+
               <div class="form-group">
-                <label for="ten_san_pham">Tên vòng quay</label>
-                <input type="text" id="ten_vong_quay" name="ten_vong_quay" class="form-control" placeholder="" />
+                <label for="ten_chi_nhanh">Tài khoản</label>
+                <input value="{{user.tai_khoan}}" type="text" id="tai_khoan" name="tai_khoan" class="form-control"
+                  placeholder="" readonly />
               </div>
 
               <div class="form-group">
-                <label for="mo_ta">Mô tả</label>
-                <input type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
+                <label for="mat_khau">Mật khẩu</label>
+                <input type="password" id="mat_khau" name="mat_khau" class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
-                <label for="ten_voucher">Tên voucher</label>
-                <input type="text" id="ten_voucher" name="ten_voucher" class="form-control" placeholder="" />
+                <label for="re_mat_khau">Nhập lại mật khẩu</label>
+                <input type="password" id="re_mat_khau" name="re_mat_khau" class="form-control" placeholder="" />
               </div>
 
-              <div class="form-group">
-                <label for="ma_voucher">Mã voucher</label>
-                <input type="text" id="ma_voucher" name="ma_voucher" class="form-control" placeholder="" />
-              </div>
-
-              <div class="form-group">
-                <label for="gia_tri">Giá trị (Nếu là điểm thì giá trị bằng 0)</label>
-                <input type="number" id="gia_tri" name="gia_tri" class="form-control" placeholder="" />
-              </div>
-
-              <div class="form-group">
-                <label for="diem">Điểm (Nếu là vận chuyển thì điểm bằng 0)</label>
-                <input type="number" id="diem" name="diem" class="form-control" placeholder="" />
-              </div>
-
-              <div class="form-group">
-                <label for="thoi_gian">Thời gian khuyến mãi (Ngày)</label>
-                <input type="number" id="thoi_gian" name="thoi_gian" class="form-control" placeholder="" />
-              </div>
-
-              <div class="custom-file">
-                <input type="file" name="files" multiple class="custom-file-input" id="inputGroupFile01" />
-                <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
-              </div>
+              <input type="hidden" id="id" name="id" value="{{user.id_user}}">
 
 
               <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
@@ -292,107 +307,118 @@
                   style="width: 95%">Lưu</button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
 
     </div>
-    <script>
+  </div>
+</div>
 
-      function showLoading() {
-        document.getElementById('loading-circle').style.display = 'flex';
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const openMapButton = document.getElementById('openMapButton');
+
+    openMapButton.addEventListener('click', function () {
+      // Show the map when the button is clicked
+      showMap();
+
+      // Open the map in a modal or a custom overlay
+      // You can use a library like Bootstrap Modal or create your custom modal
+      // For simplicity, we'll use the browser's built-in alert
+      alert('Select a location on the map.');
+    });
+  });
+
+
+
+
+  function showLoading() {
+    document.getElementById('loading-circle').style.display = 'flex';
+  }
+
+  function hideLoading() {
+    document.getElementById('loading-circle').style.display = 'none';
+  }
+
+
+  async function validateAndSubmit() {
+    // Validate the form data here
+    showLoading();
+
+    const tai_khoan = document.getElementById('tai_khoan').value;
+    const mat_khau = document.getElementById('mat_khau').value;
+    const re_mat_khau = document.getElementById('re_mat_khau').value;
+    const id = document.getElementById('id').value;
+
+    if (mat_khau != re_mat_khau) {
+      const result = await Swal.fire({
+        icon: 'Lỗi',
+        title: 'Oops...',
+        text: 'Mật khẩu không trùng nhau.',
+        allowOutsideClick: false, // Prevent clicking outside the modal to close it
+      });
+
+      if (result.isConfirmed) {
+        hideLoading();
+        return;
       }
+    }
 
-      function hideLoading() {
-        document.getElementById('loading-circle').style.display = 'none';
-      }
+    // Show confirmation dialog
+    const confirmationResult = await Swal.fire({
+      title: 'Bạn có chắc chắn muốn đổi mật khẩu admin chi nhánh này?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Lưu',
+      denyButtonText: 'Chỉnh sửa.',
+    });
 
+    if (confirmationResult.isConfirmed) {
+      // Prepare JSON data
+      const chiNhanhData = {
+        tai_khoan: tai_khoan,
+        mat_khau: mat_khau,
+      };
+      const jsonData = JSON.stringify(chiNhanhData);
 
-      async function validateAndSubmit() {
-        // Validate the form data here
-        showLoading();
-
-        const ten_vong_quay = document.getElementById('ten_vong_quay').value;
-        const mo_ta = document.getElementById('mo_ta').value;
-        const ten_voucher = document.getElementById('ten_voucher').value;
-        const ma_voucher = document.getElementById('ma_voucher').value;
-        const gia_tri = document.getElementById('gia_tri').value;
-        const diem = document.getElementById('diem').value;
-        const thoi_gian = document.getElementById('thoi_gian').value;
-        const filesInput = document.getElementById('inputGroupFile01');
-
-
-        if (!ten_vong_quay || !mo_ta || !ten_voucher || !ma_voucher || !gia_tri || !diem || !thoi_gian || !filesInput.files.length) {
-          const result = await Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            allowOutsideClick: false // Prevent clicking outside the modal to close it
-          });
-
-          if (result.isConfirmed) {
-            hideLoading();
-            return;
-          }
-        }
-
-        // Show confirmation dialog
-        const confirmationResult = await Swal.fire({
-          title: 'Bạn có chắc chắn muốn thêm phần thường vòng quay này?',
-          showDenyButton: true,
-          showCancelButton: true,
-          confirmButtonText: 'Lưu',
-          denyButtonText: "Chỉnh sửa."
+      // Submit the form data as JSON
+      try {
+        const response = await fetch(`/cpanel/user/sua-user/${id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonData,
         });
 
-        if (confirmationResult.isConfirmed) {
-          // Submit the form
-          const formData = new FormData();
-          formData.append('ten_vong_quay', ten_vong_quay);
-          formData.append('mo_ta', mo_ta);
-          formData.append('ten_voucher', ten_voucher);
-          formData.append('ma_voucher', ma_voucher);
-          formData.append('gia_tri', gia_tri);
-          formData.append('diem', diem);
-          formData.append('thoi_gian', thoi_gian);
-
-          const filesInput = document.getElementById('inputGroupFile01');
-          for (let i = 0; i < filesInput.files.length; i++) {
-            formData.append('files', filesInput.files[i]);
-          }
-          try {
-            const response = await fetch('/cpanel/vong-quay/them-vong-quay', {
-              method: 'POST',
-              body: formData,
-            });
-
-            if (response.status === 200) {
-              hideLoading();
-              Swal.fire({
-                icon: 'success',
-                title: 'Saved!',
-                showConfirmButton: false,
-                timer: 0,
-              });
-
-              window.location.href = '/cpanel/vong-quay';
-
-            } else {
-              hideLoading();
-              Swal.fire('Lỗi', 'Mã vòng quay bị trùng', 'error');
-            }
-          } catch (error) {
-            hideLoading();
-            console.error(error);
-            Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
-          }
-        } else if (confirmationResult.isDenied) {
+        if (response.ok) {
           hideLoading();
-          Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
-        }else{
+          Swal.fire({
+            icon: 'success',
+            title: 'Saved!',
+            showConfirmButton: false,
+            timer: 0,
+          });
+
+          window.location.href = '/cpanel/user';
+        } else {
           hideLoading();
+          Swal.fire('Lỗi', 'Lỗi ', 'error');
         }
+      } catch (error) {
+        hideLoading();
+        console.error(error);
+        Swal.fire('Lỗi', 'Có lỗi xảy ra.', 'error');
       }
+    } else if (confirmationResult.isDenied) {
+      hideLoading();
+      Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
+    } else {
+      hideLoading();
+    }
+  }
 
-    </script>
+
+
+</script>

@@ -157,9 +157,9 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="User.html" aria-expanded="false">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/user" aria-expanded="false">
               <i class="mdi mdi-account-network"></i>
-              <span class="hide-menu">Người Dùng</span>
+              <span class="hide-menu">Admin Chi Nhánh</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -243,7 +243,7 @@
       <div class="row">
         <div class="col-12">
           <div class="card card-body">
-            <h4 class="card-title">Thêm Topping</h4>
+            <h4 class="card-title">Sửa Topping</h4>
             <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/san-pham/them-san-pham"
               method="post">
               <div class="form-group">
@@ -316,7 +316,7 @@
 
         // Show confirmation dialog
         const confirmationResult = await Swal.fire({
-          title: 'Bạn có chắc chắn muốn thêm topping này?',
+          title: 'Bạn có chắc chắn muốn sửa topping này?',
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: 'Lưu',

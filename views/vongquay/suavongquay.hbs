@@ -157,9 +157,9 @@
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="User.html" aria-expanded="false">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/user" aria-expanded="false">
               <i class="mdi mdi-account-network"></i>
-              <span class="hide-menu">Người Dùng</span>
+              <span class="hide-menu">Admin Chi Nhánh</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -243,8 +243,8 @@
       <div class="row">
         <div class="col-12">
           <div class="card card-body">
-            <h4 class="card-title">Thêm Topping</h4>
-            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/vong-quay/them-vong-quay"
+            <h4 class="card-title">Sửa vòng quay</h4>
+            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/vong-quay/sua-vong-quay"
               method="post">
               <div class="form-group">
                 <label for="ten_san_pham">Tên vòng quay</label>
@@ -347,7 +347,7 @@
 
         // Show confirmation dialog
         const confirmationResult = await Swal.fire({
-          title: 'Bạn có chắc chắn muốn sửa topping này?',
+          title: 'Bạn có chắc chắn muốn sửa vòng quay này?',
           showDenyButton: true,
           showCancelButton: true,
           confirmButtonText: 'Lưu',

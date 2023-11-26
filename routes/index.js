@@ -8,7 +8,7 @@ const AuthenWeb = require('../components/MiddleWare/AuthenWeb');
 // http://localhost:3000/
 // hiển thị trang chủ
 router.get('/', [AuthenWeb], async (req, res, next) => {
-  res.redirect('/login');
+  res.redirect('/cpanel/san-pham');
 });
 
 //http://localhost:3000/login

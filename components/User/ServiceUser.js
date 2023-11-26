@@ -4,6 +4,50 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const chiNhanhModel = require('../ChiNhanh/ModelChiNhanh');
 
+//xóa user
+const xoaUser = async (id_user) => {
+    try {
+        const user = await userModel.findOne({ _id: id_user });
+        if (user) {
+            user.status = 0;
+            await user.save();
+            return user;
+        }
+    } catch (error) {
+        console.log('Lỗi tại xoaUser service: ', error)
+    }
+    return false;
+
+}
+
+//sửa thông tin admin chi nhánh
+const suaThongTinAdminChiNhanh = async (id_user, mat_khau) => {
+    try {
+        const user = await userModel.findOne({ _id: id_user });
+        if (user) {
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(mat_khau, salt);
+            user.mat_khau = hashPassword;
+            await user.save();
+            return user;
+        }
+    } catch (error) {
+        console.log('Lỗi tại suaThongTinAdminChiNhanh service: ', error)
+    }
+    return false;
+}
+//lấy thông tin admin chi nhánh
+const layThongTinAdminChiNhanh = async () => {
+    try {
+        const users = await userModel.find({ status: 10});
+        if (users) {
+            return users;
+        }
+    } catch (error) {
+        console.log('Lỗi tại layThongTinAdminChiNhanh service: ', error)
+    }
+    return false;
+}
 
 //login admin chi nhánh
 const loginAdminChiNhanh = async (tai_khoan, mat_khau) => {
@@ -31,9 +75,17 @@ const loginAdminChiNhanh = async (tai_khoan, mat_khau) => {
 const dangKyAdminChiNhanh = async (tai_khoan, mat_khau, id_chi_nhanh) => {
     try {
         const result = await userModel.findOne({ tai_khoan: tai_khoan });
-        if (result) {
+        if (result & result.status == 10) {
             return false;
-        } else {
+        } else if (result & result.status == 0) {
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(mat_khau, salt);
+            result.mat_khau = hashPassword;
+            result.status = 10;
+            await result.save();
+            return result;
+        }
+        else {
             const chi_nhanh = await chiNhanhModel.findOne({ _id: id_chi_nhanh });
             if (!chi_nhanh) {
                 return false;
@@ -51,7 +103,7 @@ const dangKyAdminChiNhanh = async (tai_khoan, mat_khau, id_chi_nhanh) => {
                 hang_thanh_vien: "Thành viên mới.",
                 voucher_user: [],
                 otp: 0,
-                status: 1,
+                status: 10,
                 device_token: "",
             });
             return user;
@@ -304,7 +356,7 @@ const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , n
 //lấy thông tin tất cả user
 const layThongTinTatCaUser = async () => {
     try {
-        const users = await userModel.find({});
+        const users = await userModel.find({ status: 1});
         if (users) {
             return users;
         }
@@ -637,5 +689,6 @@ module.exports = {
     themDiaChi, suaDiaChi, xoaDiaChi, suaThongTinUser, xoaTaiKhoan,
     tichDiem, doiMatKhauOTP, doiMatKhau, suDungDiem, themEmail,
     xoaLichSuTimKiem, themLichSuTimKiem, kiemTraOTP, layLichSuDiem,
-    chinhDiaChiMacDinh, loginCpanel , dangKyAdminChiNhanh, loginAdminChiNhanh
+    chinhDiaChiMacDinh, loginCpanel , dangKyAdminChiNhanh, loginAdminChiNhanh,
+    layThongTinAdminChiNhanh,suaThongTinAdminChiNhanh, xoaUser
 };

@@ -315,11 +315,24 @@ const doiMatKhauOTP = async (email, mat_khau,otp) => {
     }
 }
 
+//lấy thông tin admin chi nhánh
+const layThongTinAdminChiNhanh = async () => {
+    try {
+        const result = await userServices.layThongTinAdminChiNhanh();
+        if (result) {
+            return result;
+        }
+        return false;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = { sendOTP, loginEmail, dangNhapBangUsername, 
                     dangKyBangUsername, dangNhapBangSoDienThoai, 
                     dangKyBangSoDienThoai, layThongTinUser, layThongTinTatCaUser, 
                     themDiaChi, suaDiaChi, xoaDiaChi, suaThongTinUser, xoaTaiKhoan, 
                     tichDiem, doiMatKhauOTP, doiMatKhau, suDungDiem, themLichSuTimKiem,
                     xoaLichSuTimKiem, kiemTraOTP, layLichSuDiem, chinhDiaChiMacDinh,
-                    loginAdminChiNhanh, dangKyAdminChiNhanh
+                    loginAdminChiNhanh, dangKyAdminChiNhanh, layThongTinAdminChiNhanh
                     };
