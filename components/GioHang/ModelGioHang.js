@@ -20,7 +20,11 @@ const schema = new Schema({
                     ten_topping: {type: String},
                     gia: {type: Number},
                 }
-            ]
+            ],
+            hinh_anh_sp:[{
+                id_hinh_anh_sp: {type: ObjectID},
+                hinh_anh_sp: {type: String},
+            }],
         }
     ]
 });

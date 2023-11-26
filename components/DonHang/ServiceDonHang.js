@@ -4,6 +4,116 @@ const modelUser = require('../User/ModelUser');
 const moment = require('moment');
 
 
+//thêm đơn hàng offline
+const themDonHangOffline = async (
+    ma_khach_hang,
+    id_chi_nhanh,
+    loai_don_hang,
+    dia_chi,
+    san_pham,
+    ghi_chu,
+    giam_gia,
+    phi_van_chuyen,
+    thanh_tien,
+    thanh_toan,
+    ma_trang_thai,
+    ten_trang_thai
+  ) => {
+    try {
+      let tong_san_pham = 0;
+  
+      for (let i = 0; i < san_pham.length; i++) {
+        tong_san_pham += san_pham[i].so_luong;
+      }
+  
+      let themDonHangDate = new Date();
+      themDonHangDate.setHours(themDonHangDate.getHours() + 7);
+  
+      // Find the user data
+      const user = await modelUser.findOne({ ma_khach_hang: ma_khach_hang });
+  
+      const duLieu = {
+        id_user: user._id,
+        id_chi_nhanh: id_chi_nhanh,
+        loai_don_hang: loai_don_hang,
+        dia_chi: dia_chi,
+        ngay_dat: themDonHangDate,
+        san_pham: san_pham,
+        ghi_chu: ghi_chu,
+        so_diem_tich_luy: Math.floor(thanh_tien / 2500),
+        giam_gia: giam_gia,
+        phi_van_chuyen: phi_van_chuyen,
+        ma_trang_thai: ma_trang_thai,
+        ten_trang_thai: ten_trang_thai,
+        ngay_cap_nhat_1: themDonHangDate,
+        tong_san_pham: tong_san_pham,
+        thanh_tien: thanh_tien,
+        email: "",
+        ten_user: "",
+        so_sao: null,
+        danh_gia: "",
+        thanh_toan: thanh_toan,
+      };
+  
+      if (!user) {
+        // Create order for new user
+        const donHang = await modelDonHang.create(duLieu);
+        return donHang;
+      } else {
+        // Create order for existing user
+        const donHang = await modelDonHang.create(duLieu);
+        console.log(donHang);
+  
+        // Update product quantities
+        const productUpdates = donHang.san_pham.map(async (sanPham) => {
+          const updatedProduct = await modelSanPham.findByIdAndUpdate(
+            sanPham.id_san_pham,
+            { $inc: { so_luong_da_ban: sanPham.so_luong } },
+            { new: true }
+          );
+          return updatedProduct;
+        });
+  
+        await Promise.all(productUpdates);
+  
+        // Update user's information
+        const doi_diem = {
+          ten_doi_diem: "Cộng điểm đơn hàng",
+          ngay_doi: themDonHangDate,
+          so_diem: donHang.so_diem_tich_luy,
+        };
+  
+        user.tich_diem += donHang.so_diem_tich_luy;
+        user.doi_diem = doi_diem;
+        user.diem_tich_luy += donHang.so_diem_tich_luy;
+        user.diem_thanh_vien += donHang.so_diem_tich_luy;
+  
+        // Adjust the logic for user.hang_thanh_vien
+        const diem_thanh_vien = user.diem_thanh_vien;
+        if (diem_thanh_vien < 200) {
+          user.hang_thanh_vien = "Khách hàng mới";
+        } else if (diem_thanh_vien < 500) {
+          user.hang_thanh_vien = "Hạng đồng";
+        } else if (diem_thanh_vien < 1000) {
+          user.hang_thanh_vien = "Hạng bạc";
+        } else if (diem_thanh_vien < 2000) {
+          user.hang_thanh_vien = "Hạng vàng";
+        } else if (diem_thanh_vien < 5000) {
+          user.hang_thanh_vien = "Hạng kim cương";
+        } else {
+          user.hang_thanh_vien = "Khách hàng VIP";
+        }
+  
+        await Promise.all([user.save(), donHang.save()]);
+        return donHang;
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+  
+
+
 //lấy thống kê theo ngày của chi nhánh
 const thongKeTheoNgayChiNhanh = async (id_chi_nhanh, ngay) => {
     try {
@@ -11,8 +121,8 @@ const thongKeTheoNgayChiNhanh = async (id_chi_nhanh, ngay) => {
         if (!donHang || donHang.length === 0) {
             return []
         }
-        
-    }catch (error) {
+
+    } catch (error) {
         console.log(error);
         throw new Error(error);
     }
@@ -47,22 +157,31 @@ const thongKeDonHangTheoChiNhanh = async (id_chi_nhanh) => {
         let don_hang_da_huy = [];
         let don_hang_da_danh_gia = [];
         let tong_doanh_thu = 0;
-
+        let don_hang_chua_giao = [];
+        let don_hang_tai_chi_nhanh = [];
 
         for (let i = 0; i < donHang.length; i++) {
             tong_don_hang += 1;
             if (donHang[i].ma_trang_thai === 0) {
                 don_hang_da_huy.push(donHang[i]);
+                don_hang_chua_giao.push(donHang[i]);
             } else if (donHang[i].ma_trang_thai === 1) {
                 don_hang_chua_xac_nhan.push(donHang[i]);
+                don_hang_chua_giao.push(donHang[i]);
             } else if (donHang[i].ma_trang_thai === 2) {
                 don_hang_da_xac_nhan.push(donHang[i]);
+                don_hang_chua_giao.push(donHang[i]);
             } else if (donHang[i].ma_trang_thai === 3) {
                 don_hang_dang_giao.push(donHang[i]);
+                don_hang_chua_giao.push(donHang[i]);
             } else if (donHang[i].ma_trang_thai === 4) {
                 don_hang_da_giao.push(donHang[i]);
             } else if (donHang[i].ma_trang_thai === 5) {
                 don_hang_da_danh_gia.push(donHang[i]);
+                don_hang_da_giao.push(donHang[i]);
+            }else if (donHang[i].ma_trang_thai === 6) {
+                don_hang_tai_chi_nhanh.push(donHang[i]);
+                don_hang_da_giao.push(donHang[i]);
             }
             tong_doanh_thu += donHang[i].thanh_tien;
         }
@@ -75,6 +194,9 @@ const thongKeDonHangTheoChiNhanh = async (id_chi_nhanh) => {
             don_hang_da_huy: don_hang_da_huy,
             don_hang_da_danh_gia: don_hang_da_danh_gia,
             tong_doanh_thu: tong_doanh_thu,
+            don_hang_chua_giao: don_hang_chua_giao,
+            don_hang_tai_chi_nhanh: don_hang_tai_chi_nhanh
+            
         }
     } catch (error) {
         console.log(error);
@@ -150,6 +272,7 @@ const themDonHang = async (id_user, id_chi_nhanh, loai_don_hang, dia_chi, san_ph
         }
         let themDonHangDate = new Date();
         themDonHangDate.setHours(themDonHangDate.getHours() + 7);
+
         const duLieu = {
             id_user: id_user,
             id_chi_nhanh: id_chi_nhanh,
@@ -324,7 +447,7 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
         if (donHang.danh_gia) {
             return 10;
         }
-        if (donHang.ma_trang_thai === 4) {
+        if (donHang.ma_trang_thai === 4 || donHang.ma_trang_thai === 5) {
             let ma_trang_thai_4 = new Date();
             ma_trang_thai_4.setHours(ma_trang_thai_4.getHours() + 7);
             donHang.so_sao = so_sao;
@@ -373,5 +496,5 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
 
 module.exports = {
     themDonHang, layDonHang, layDonHangTheoIdUser, capNhatTrangThai, danhGia, layDanhSachSanPhamChuaDanhGia,
-    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh
+    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh , themDonHangOffline
 }

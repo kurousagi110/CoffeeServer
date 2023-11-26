@@ -65,6 +65,31 @@ const layDanhSachVoucherUser = async (id_user) => {
     }
 };
 
+//lấy danh sách all voucher
+const layDanhSachAllVoucher = async () => {
+    try {
+        const list = await modelVoucher.find();
+        let layVoucherDate = new Date();
+        layVoucherDate.setHours(layVoucherDate.getHours() + 7);
+        const currentDate = layVoucherDate;
+
+        for (const voucher of list) {
+            if (voucher.ngay_ket_thuc < currentDate && voucher.trang_thai !== "Hết hiệu lực") {
+                voucher.trang_thai = "Hết hiệu lực";
+                voucher.status = 0;
+                await voucher.save();
+            }
+        }
+
+        const data = await modelVoucher.find();
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+
+}
+
 
 
 
@@ -310,4 +335,4 @@ const xoaVoucher = async (id_voucher) => {
 
 
 module.exports = { layDanhSachVoucherUser, layDanhSachVoucher, doiDiemThanhVoucher, suDungVoucher, themVoucher, suaVoucher, xoaVoucher,
-                layDanhSachVoucherDoiDiem, layThongTinVoucher };
+                layDanhSachVoucherDoiDiem, layThongTinVoucher, layDanhSachAllVoucher };

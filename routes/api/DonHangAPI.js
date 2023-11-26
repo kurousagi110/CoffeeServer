@@ -9,6 +9,37 @@ const {
   addNotificationToSpecificDevice,
 } = require("../../components/Notification/ServiceNotification");
 
+
+
+//thêm đơn hàng offline
+//http://localhost:3000/api/don-hang/them-don-hang-offline
+router.post("/them-don-hang-offline", AuthenToken, async function (req, res, next) {
+  try {
+    const { ma_khach_hang, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu,
+      giam_gia, phi_van_chuyen, thanh_tien, thanh_toan, ma_trang_thai, ten_trang_thai } = req.body;
+    const result = await DonHangController.themDonHangOffline(ma_khach_hang, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu,
+      giam_gia, phi_van_chuyen, thanh_tien, thanh_toan, ma_trang_thai, ten_trang_thai);
+    if (result) {
+      res.status(200).json({
+        status: true,
+        message: "Thêm đơn hàng thành công!",
+        result: result,
+      });
+    } else {
+      res.status(200).json({
+        status: false,
+        message: "Thêm đơn hàng thất bại!",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+
+
 //lấy đơn hàng theo chi nhánh
 //http://localhost:3000/api/don-hang/lay-don-hang-theo-chi-nhanh/:id_chi_nhanh
 router.get(

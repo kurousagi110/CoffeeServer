@@ -89,7 +89,17 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
         throw new Error(error);
     }
 };
-
+//thêm đơn offline
+const themDonHangOffline = async (ma_khach_hang, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu,
+    giam_gia, phi_van_chuyen, thanh_tien, thanh_toan, ma_trang_thai, ten_trang_thai) => {
+    try {
+        const donHang = await serviceDonHang.themDonHangOffline(ma_khach_hang, id_chi_nhanh, loai_don_hang, dia_chi, san_pham, ghi_chu,
+            giam_gia, phi_van_chuyen, thanh_tien, thanh_toan, ma_trang_thai, ten_trang_thai);
+        return donHang;
+    } catch (error) {
+        throw new Error(error);
+    }
+};
 
 module.exports = { themDonHang, layDonHang, layDonHangTheoIdUser, capNhatTrangThai, danhGia,layDanhSachSanPhamChuaDanhGia,
-                    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh };
+                    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh, themDonHangOffline };

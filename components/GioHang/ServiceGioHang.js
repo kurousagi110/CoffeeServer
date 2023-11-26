@@ -56,6 +56,7 @@ const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san
         console.log(id_user, id_san_pham, size, so_luong);
         const result = await modelGioHang.findOne({ id_user: id_user });
         const sanPham = await modelSanPham.findById(id_san_pham);
+        console.log(sanPham);
         if (!sanPham) {
             return false;
         }
@@ -85,7 +86,8 @@ const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san
                         gia: data.gia,
                         giam_gia: data.giam_gia,
                         gia_da_giam: data.gia_da_giam,
-                        topping: topping
+                        topping: topping,
+                        hinh_anh_sp: sanPham.hinh_anh_sp
                     }
                 ]
             };
@@ -115,7 +117,8 @@ const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san
                     gia: data.gia,
                     giam_gia: data.giam_gia,
                     gia_da_giam: data.gia_da_giam,
-                    topping: topping
+                    topping: topping,
+                    hinh_anh_sp: sanPham.hinh_anh_sp
                 });
                 await result.save();
                 return result;

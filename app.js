@@ -29,6 +29,7 @@ var notificationRouter = require('./routes/api/FCMNofitication');
 var chiNhanhCpanelRouter = require('./routes/cpanel/ChiNhanhCpanel');
 var toppingCpanelRouter = require('./routes/cpanel/ToppingCpanel');
 var vongQuayCpanelRouter = require('./routes/cpanel/VongQuayCpanel');
+var voucherCpanelRouter = require('./routes/cpanel/VoucherCpanel');
 
 var app = express();
 
@@ -88,7 +89,7 @@ app.use('/api/notification', notificationRouter);
 app.use('/cpanel/chi-nhanh', chiNhanhCpanelRouter);
 app.use('/cpanel/topping', toppingCpanelRouter);
 app.use('/cpanel/vong-quay', vongQuayCpanelRouter);
-
+app.use('/cpanel/voucher', voucherCpanelRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
