@@ -526,11 +526,11 @@ router.post("/dang-nhap-email", async (req, res, next) => {
 //http://localhost:3000/users/dang-ky-username
 router.post("/dang-ky-username", async (req, res, next) => {
   try {
-    const { tai_khoan, mat_khau, ho_ten } = req.body;
+    const { tai_khoan, mat_khau, ho_ten, email, so_dien_thoai } = req.body;
     const result = await userController.dangKyBangUsername(
       tai_khoan,
       mat_khau,
-      ho_ten
+      ho_ten,email, so_dien_thoai
     );
     if (result) {
       res.status(200).json({ trang_thai: true, message: "Đăng ký thành công" });

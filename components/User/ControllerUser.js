@@ -239,9 +239,9 @@ const dangNhapBangSoDienThoai = async (so_dien_thoai, mat_khau) => {
     return false;
 };
 
-const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten) => {
+const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_thoai) => {
     try {
-        const user = await userServices.dangKyBangUsername(tai_khoan, mat_khau, ho_ten);
+        const user = await userServices.dangKyBangUsername(tai_khoan, mat_khau, ho_ten, email, so_dien_thoai);
         if (user) {
             return user;
         }

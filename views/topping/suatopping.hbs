@@ -163,6 +163,12 @@
             </a>
           </li>
           <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/tai-khoan" aria-expanded="false">
+              <i class="mdi mdi-account-circle"></i>
+              <span class="hide-menu">Quản lý User</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/san-pham" aria-expanded="false">
               <i class="mdi mdi-arrange-bring-forward"></i>
               <span class="hide-menu">Sản Phẩm</span>
@@ -248,7 +254,8 @@
               method="post">
               <div class="form-group">
                 <label for="ten_san_pham">Tên Topping</label>
-                <input value="{{topping.ten_topping}}" type="text" id="ten_topping" name="ten_topping" class="form-control" placeholder="" />
+                <input value="{{topping.ten_topping}}" type="text" id="ten_topping" name="ten_topping"
+                  class="form-control" placeholder="" />
               </div>
 
               <div class="form-group">
@@ -258,7 +265,8 @@
 
               <div class="form-group">
                 <label for="mo_ta">Mô tả</label>
-                <input value="{{topping.mo_ta}}" type="text" id="mo_ta" name="mo_ta" class="form-control" placeholder="" />
+                <input value="{{topping.mo_ta}}" type="text" id="mo_ta" name="mo_ta" class="form-control"
+                  placeholder="" />
               </div>
 
               <div class="custom-file">
@@ -363,7 +371,7 @@
         } else if (confirmationResult.isDenied) {
           hideLoading();
           Swal.fire('Thay đổi của bạn chưa được lưu', '', 'info');
-        }else{
+        } else {
           hideLoading();
         }
       }

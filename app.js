@@ -31,6 +31,7 @@ var toppingCpanelRouter = require('./routes/cpanel/ToppingCpanel');
 var vongQuayCpanelRouter = require('./routes/cpanel/VongQuayCpanel');
 var voucherCpanelRouter = require('./routes/cpanel/VoucherCpanel');
 var userCpanelRouter = require('./routes/cpanel/UserCpanel');
+var taiKhoanCpanelRouter = require('./routes/cpanel/TaiKhoanCpanel');
 
 var app = express();
 
@@ -92,6 +93,7 @@ app.use('/cpanel/topping', toppingCpanelRouter);
 app.use('/cpanel/vong-quay', vongQuayCpanelRouter);
 app.use('/cpanel/voucher', voucherCpanelRouter);
 app.use('/cpanel/user', userCpanelRouter);
+app.use('/cpanel/tai-khoan', taiKhoanCpanelRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

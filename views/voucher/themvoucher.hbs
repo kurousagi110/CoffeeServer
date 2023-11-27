@@ -163,6 +163,12 @@
             </a>
           </li>
           <li class="sidebar-item">
+            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/tai-khoan" aria-expanded="false">
+              <i class="mdi mdi-account-circle"></i>
+              <span class="hide-menu">Quản lý User</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/san-pham" aria-expanded="false">
               <i class="mdi mdi-arrange-bring-forward"></i>
               <span class="hide-menu">Sản Phẩm</span>
@@ -363,7 +369,7 @@
           formData.append('diem', diem);
           formData.append('ngay_ket_thuc', ngay_ket_thuc);
           formData.append('giam_gia', giam_gia);
-          
+
 
           const filesInput = document.getElementById('inputGroupFile01');
           for (let i = 0; i < filesInput.files.length; i++) {

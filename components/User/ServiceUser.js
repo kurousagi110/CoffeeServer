@@ -39,7 +39,7 @@ const suaThongTinAdminChiNhanh = async (id_user, mat_khau) => {
 //lấy thông tin admin chi nhánh
 const layThongTinAdminChiNhanh = async () => {
     try {
-        const users = await userModel.find({ status: 10});
+        const users = await userModel.find({ status: 10 });
         if (users) {
             return users;
         }
@@ -130,12 +130,12 @@ const loginCpanel = async (tai_khoan, mat_khau) => {
             const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
             const token = await taoToken(tai_khoan);
             if (isMatch) {
-                user = {user, token};
+                user = { user, token };
                 console.log('User service loginCpanel: ', user);
                 return user;
-                
+
             }
-        }else{
+        } else {
             return false;
         }
     } catch (error) {
@@ -149,11 +149,11 @@ const themLichSuTimKiem = async (id_user, tu_khoa) => {
     try {
         console.log('User service themLichSuTimKiem: ', id_user, tu_khoa);
         const user = await userModel.findOne({ _id: id_user });
-        
+
         if (user) {
-            if(user.lich_su.length > 0){
-                for(let i = 0; i < user.lich_su.length; i++){
-                    if(user.lich_su[i].tu_khoa == tu_khoa){
+            if (user.lich_su.length > 0) {
+                for (let i = 0; i < user.lich_su.length; i++) {
+                    if (user.lich_su[i].tu_khoa == tu_khoa) {
                         return false;
                     }
                 }
@@ -161,7 +161,7 @@ const themLichSuTimKiem = async (id_user, tu_khoa) => {
             const noi_dung = {
                 tu_khoa: tu_khoa,
             }
-            user.lich_su.push(noi_dung); 
+            user.lich_su.push(noi_dung);
             await user.save();
             return user;
         }
@@ -175,10 +175,10 @@ const themLichSuTimKiem = async (id_user, tu_khoa) => {
 const xoaLichSuTimKiem = async (id_user, tu_khoa) => {
     try {
         const user = await userModel.findOne({ _id: id_user });
-        console.log('User service xoaLichSuTimKiem: ', user, tu_khoa ,"123213123");
+        console.log('User service xoaLichSuTimKiem: ', user, tu_khoa, "123213123");
         if (user) {
-            for(let i = 0; i < user.lich_su.length; i++){
-                if(user.lich_su[i].tu_khoa == tu_khoa){
+            for (let i = 0; i < user.lich_su.length; i++) {
+                if (user.lich_su[i].tu_khoa == tu_khoa) {
                     user.lich_su.splice(i, 1);
                     await user.save();
                     return user;
@@ -216,7 +216,7 @@ const suDungDiem = async (id_user, diem) => {
             user.tich_diem -= diem;
             user.doi_diem = {
                 ngay_doi: suDungDiemDate,
-                so_diem : diem,
+                so_diem: diem,
             }
             await user.save();
             return user;
@@ -302,7 +302,7 @@ const xoaDiaChi = async (id_user, id_dia_chi) => {
 
 
 //sửa địa chỉ
-const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude  ) => {
+const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai, so_nha, tinh, nguoi_nhan, latitude, longitude) => {
     try {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
@@ -327,7 +327,7 @@ const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nh
 };
 
 //thêm địa chỉ
-const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , nguoi_nhan, latitude, longitude) => {
+const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai, so_nha, tinh, nguoi_nhan, latitude, longitude) => {
     try {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
@@ -356,7 +356,7 @@ const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , n
 //lấy thông tin tất cả user
 const layThongTinTatCaUser = async () => {
     try {
-        const users = await userModel.find({ status: 1});
+        const users = await userModel.find({ status: 1 });
         if (users) {
             return users;
         }
@@ -396,7 +396,7 @@ const layThongTinUser = async (id_user) => {
     return false;
 };
 //sửa thông tin user 
-const suaThongTinUser = async (id_user, ho_ten, avatar , email, so_dien_thoai,device_token) => {
+const suaThongTinUser = async (id_user, ho_ten, avatar, email, so_dien_thoai, device_token) => {
     try {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
@@ -495,9 +495,12 @@ const dangNhapBangSoDienThoai = async (so_dien_thoai, mat_khau) => {
 };
 
 //tạo tài khoản bằng username
-const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten) => {
+const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_thoai) => {
     try {
         const result = await userModel.findOne({ tai_khoan: tai_khoan });
+        if (email) {
+            sendOTPThongBao(email, mat_khau, tai_khoan);
+        }
         if (result) {
             return false;
         } else {
@@ -511,6 +514,8 @@ const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten) => {
                 tai_khoan: tai_khoan,
                 mat_khau: hashPassword,
                 ho_ten: ho_ten,
+                email: email,
+                so_dien_thoai: so_dien_thoai,
                 dia_chi: [],
                 tich_diem: 0,
                 diem_thanh_vien: 0,
@@ -564,6 +569,7 @@ const loginEmail = async (email, avatar, ho_ten) => {
             };
             return result;
         } else {
+
             const count = await userModel.countDocuments({});
             let dem = count + 1;
             const ma_khach_hang = "CL" + dem.toString().padStart(9, '0');
@@ -594,6 +600,204 @@ const loginEmail = async (email, avatar, ho_ten) => {
     }
 }
 
+//send OTP thông báo 
+const sendOTPThongBao = async (email, password, username) => {
+    try {
+        const emailto = email;
+        let mailOptions;
+        const templateEmailifnonpass = `
+        <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Thông Tin Đăng Nhập</title>
+          <style>
+            .container {
+        max-width: 600px;
+        margin: auto;
+        border: 1px solid #ddd;
+        padding: 20px;
+      }
+      
+      h1 {
+        text-align: center;
+      }
+      
+      p {
+        line-height: 1.5;
+      }
+      
+      .logo {
+        float: right;
+        width: 100px;
+        position: asolute;
+      }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>Chào mừng đến với</h1>
+            <h1>Coffee Love!</h1>
+            <p>
+              Xin chào, <span style="color:red; font-weight: bold;">${email}</span> Chào mừng bạn tới với chuỗi cửa hàng cà phê
+               <span style="color: cadetblue; font-weight: bold;">Coffee Love </span> của
+              chúng tôi.
+            </p>
+      
+            <p>Đây là một số thông tin dành cho bạn:
+              <ul>
+                <li>
+                  Coffee Love là chuỗi cửa hàng cà phê lớn nhất Việt Nam.
+                  </li>
+                  <li>
+                  Với hệ thống cửa hàng trải dài khắp các tỉnh thành trên cả nước.
+                  </li>
+                  <li>
+                  Chúng tôi luôn mong muốn mang đến cho khách hàng những trải nghiệm tuyệt vời nhất.
+                  </li>
+                  <li>
+                  Mong rằng bạn sẽ có những trải nghiệm tuyệt vời tại Coffee Love.
+                </li>
+              </ul>
+            </p>
+      
+            <p>
+              Bạn có thể đăng nhập vào app của chúng tôi và tiến hành trải nghiệm của bạn tại app.
+            </p>
+            <p>
+              Nếu bạn có thắc mắc hoặc phản hồi, góp ý gì hãy liên hệ với tôi qua mail
+              <a href="mailto:hoatrinh14020@gmail.com"><span style="color:navy; font-weight: bold;">hoatrinh14020@gmail.com</span></a>, Chúng tôi sẽ giải đáp thắc mắc của bạn.
+            </p>
+            <p>
+              Chúng tôi rất hân hạnh khi bạn đến với chúng tôi.
+            </p>
+      
+            <p>Cuối cùng, chúng tôi chúc bạn có một ngày vui vẻ.</p>
+            <p>
+              Trân trọng,<br />
+              Đội ngũ quản lý <span style="color: cadetblue; font-weight: bold;">Coffee Love </span><br />
+              Đại diện: <span style="color: chocolate; font-weight: bold;">Trịnh Thái Hòa</span>
+          </p>
+          
+      
+          </div>
+        </body>
+      </html>
+      `
+
+        const templateEmail = `
+  <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông Tin Đăng Nhập</title>
+    <style>
+      .container {
+  max-width: 600px;
+  margin: auto;
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.logo {
+  float: right;
+  width: 100px;
+  position: asolute;
+}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Chào mừng đến với</h1>
+      <h1>Coffee Love!</h1>
+      <p>
+        Xin chào, <span style="color:red; font-weight: bold;">${email}</span> Chào mừng bạn tới với chuỗi cửa hàng cà phê
+         <span style="color: cadetblue; font-weight: bold;">Coffee Love </span> của
+        chúng tôi.
+      </p>
+
+      <p>Đây là một số thông tin dành cho bạn:
+      <ul>
+      
+      <li>
+                  Coffee Love là chuỗi cửa hàng cà phê lớn nhất Việt Nam.
+                  </li>
+                  <li>
+                  Với hệ thống cửa hàng trải dài khắp các tỉnh thành trên cả nước.
+                  </li>
+                  <li>
+                  Chúng tôi luôn mong muốn mang đến cho khách hàng những trải nghiệm tuyệt vời nhất.
+                  </li>
+                  <li>
+                  Mong rằng bạn sẽ có những trải nghiệm tuyệt vời tại Coffee Love.
+                </li>
+    </ul>
+      </p>
+
+      <p>
+        Bạn có thể đăng nhập vào app của chúng tôi và tiến hành trải nghiệm của bạn tại app.
+      </p>
+      <p>
+        Nếu bạn có thắc mắc hoặc phản hồi, góp ý gì hãy liên hệ với tôi qua mail
+        <a href="mailto:hoatrinh14020@gmail.com"><span style="color:navy; font-weight: bold;">hoatrinh14020@gmail.com</span></a>, Chúng tôi sẽ giải đáp thắc mắc của bạn.
+      </p>
+      <p>
+        Chúng tôi rất hân hạnh khi bạn đến với chúng tôi.
+      </p>
+
+      <p>Cuối cùng, chúng tôi chúc bạn có một ngày vui vẻ.</p>
+      <p>
+        Trân trọng,<br />
+        Đội ngũ quản lý <span style="color: cadetblue; font-weight: bold;">Coffee Love </span><br />
+        Đại diện: <span style="color: chocolate; font-weight: bold;">Trịnh Thái Hòa</span>
+    </p>
+    <img class="logo" src="https://i.pinimg.com/736x/c7/c5/f1/c7c5f12c2fe442e8b3b34a949ed25b3f.jpg">
+
+    </div>
+  </body>
+</html>
+`
+        if (!password) {
+            mailOptions = {
+                from: 'hoatrinh14020@gmail.com',
+                to: `${emailto}`, // Set the recipient's email address correctly
+                subject: 'Chào mừng bạn tới với Coffee Love:',
+                html: templateEmailifnonpass
+            }
+        } else {
+            mailOptions = {
+                from: 'hoatrinh14020@gmail.com',
+                to: `${emailto}`, // Set the recipient's email address correctly
+                subject: 'Chào mừng bạn tới với Coffee Love:',
+                html: templateEmail
+            };
+        }
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'hoatrinh14020@gmail.com',
+                pass: 'hlof demb mkcg ftes'
+            }
+        });
+        await transporter.sendMail(mailOptions);
+        return true;
+    } catch {
+        console.log('User service sendOTP lỗi: ', error);
+        throw error;
+    }
+
+};
 
 //send OTP
 const sendOTP = async (email) => {
@@ -671,7 +875,7 @@ const doiMatKhauOTP = async (email, mat_khau, otp) => {
 require('dotenv').config({ path: './.env' });
 const taoToken = async (username) => {
     const secret = process.env.ACCESS_TOKEN_SECRET;
-    console.log('secret: ',secret);
+    console.log('secret: ', secret);
     const key = "iloveyou"
     const payload = { username: username }; // Đảm bảo payload là một đối tượng
     const token = jwt.sign(
@@ -689,6 +893,6 @@ module.exports = {
     themDiaChi, suaDiaChi, xoaDiaChi, suaThongTinUser, xoaTaiKhoan,
     tichDiem, doiMatKhauOTP, doiMatKhau, suDungDiem, themEmail,
     xoaLichSuTimKiem, themLichSuTimKiem, kiemTraOTP, layLichSuDiem,
-    chinhDiaChiMacDinh, loginCpanel , dangKyAdminChiNhanh, loginAdminChiNhanh,
-    layThongTinAdminChiNhanh,suaThongTinAdminChiNhanh, xoaUser
+    chinhDiaChiMacDinh, loginCpanel, dangKyAdminChiNhanh, loginAdminChiNhanh,
+    layThongTinAdminChiNhanh, suaThongTinAdminChiNhanh, xoaUser
 };

@@ -28,6 +28,9 @@ const themDonHangOffline = async (
   
       let themDonHangDate = new Date();
       themDonHangDate.setHours(themDonHangDate.getHours() + 7);
+      if(ma_khach_hang === "") {
+        ma_khach_hang = id_chi_nhanh;
+      }
   
       // Find the user data
       const user = await modelUser.findOne({ ma_khach_hang: ma_khach_hang });
