@@ -4,6 +4,74 @@ const modelUser = require('../User/ModelUser');
 const moment = require('moment');
 
 
+//thống kê đơn hàng theo ngày và chi nhánh
+const thongKeDonHangTheoNgayVaChiNhanh = async (ngaybatdau, ngayketthuc, chiNhanh) => {
+    try {
+        // Điều kiện tìm kiếm sẽ thay đổi tùy thuộc vào giá trị của chiNhanh
+        const condition = {
+            ngay_dat: { $gte: ngaybatdau, $lte: ngayketthuc }
+        };
+
+        if (chiNhanh) {
+            condition.id_chi_nhanh = chiNhanh;
+        }
+
+        const donHang = await modelDonHang.find(condition);
+
+        if (!donHang || donHang.length === 0) {
+            return [];
+        }
+
+        let tong_don_hang = 0;
+        let doanh_thu = 0;
+        let don_hang_da_huy = [];
+        let gia_tri_don_hang_da_huy = 0;
+        let so_luong_don_hang_da_huy = 0;
+        let don_hang_da_hoan_thanh = [];
+        let gia_tri_don_hang_da_hoan_thanh = 0;
+        let so_luong_don_hang_da_hoan_thanh = 0;
+        let don_hang_dang_xu_ly = [];
+        let gia_tri_don_hang_dang_xu_ly = 0;
+        let so_luong_don_hang_dang_xu_ly = 0;
+
+
+        for (let i = 0; i < donHang.length; i++) {
+            tong_don_hang += 1;
+            doanh_thu += donHang[i].thanh_tien;
+            if (donHang[i].ma_trang_thai === 0) {
+                don_hang_da_huy.push(donHang[i]);
+                gia_tri_don_hang_da_huy += donHang[i].thanh_tien;
+                so_luong_don_hang_da_huy += 1;
+            } else if (donHang[i].ma_trang_thai === 4 || donHang[i].ma_trang_thai === 5 || donHang[i].ma_trang_thai === 6) {
+                don_hang_da_hoan_thanh.push(donHang[i]);
+                gia_tri_don_hang_da_hoan_thanh += donHang[i].thanh_tien;
+                so_luong_don_hang_da_hoan_thanh += 1;
+            } else {
+                don_hang_dang_xu_ly.push(donHang[i]);
+                gia_tri_don_hang_dang_xu_ly += donHang[i].thanh_tien;
+                so_luong_don_hang_dang_xu_ly += 1;
+            }
+        }
+        return {
+            tong_don_hang: tong_don_hang,
+            doanh_thu: doanh_thu,
+            don_hang_da_huy: don_hang_da_huy,
+            gia_tri_don_hang_da_huy: gia_tri_don_hang_da_huy,
+            so_luong_don_hang_da_huy: so_luong_don_hang_da_huy,
+            don_hang_da_hoan_thanh: don_hang_da_hoan_thanh,
+            gia_tri_don_hang_da_hoan_thanh: gia_tri_don_hang_da_hoan_thanh,
+            so_luong_don_hang_da_hoan_thanh: so_luong_don_hang_da_hoan_thanh,
+            don_hang_dang_xu_ly: don_hang_dang_xu_ly,
+            gia_tri_don_hang_dang_xu_ly: gia_tri_don_hang_dang_xu_ly,
+            so_luong_don_hang_dang_xu_ly: so_luong_don_hang_dang_xu_ly
+        }
+        
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+};
+
 //thêm đơn hàng offline
 const themDonHangOffline = async (
     ma_khach_hang,
@@ -499,5 +567,6 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
 
 module.exports = {
     themDonHang, layDonHang, layDonHangTheoIdUser, capNhatTrangThai, danhGia, layDanhSachSanPhamChuaDanhGia,
-    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh , themDonHangOffline
+    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh , themDonHangOffline, thongKeDonHangTheoNgayVaChiNhanh
+    
 }

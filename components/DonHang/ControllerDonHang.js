@@ -1,5 +1,15 @@
 const serviceDonHang = require('./ServiceDonHang');
 
+//thống kê đơn hàng theo ngày và chi nhánh
+const thongKeDonHangTheoNgayVaChiNhanh = async (ngaybatdau, ngayketthuc, chiNhanh) => {
+    try {
+        const donHang = await serviceDonHang.thongKeDonHangTheoNgayVaChiNhanh(ngaybatdau, ngayketthuc, chiNhanh);
+        return donHang;
+    } catch (error) {
+        throw new Error(error);
+    }
+
+}
 
 //lấy đơn hàng theo chi nhánh
 const layDonHangTheoChiNhanh = async (id_chi_nhanh) => {
@@ -102,4 +112,5 @@ const themDonHangOffline = async (ma_khach_hang, id_chi_nhanh, loai_don_hang, di
 };
 
 module.exports = { themDonHang, layDonHang, layDonHangTheoIdUser, capNhatTrangThai, danhGia,layDanhSachSanPhamChuaDanhGia,
-                    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh, themDonHangOffline };
+                    suaDonHang, layDonHangTheoChiNhanh, thongKeDonHangTheoChiNhanh, themDonHangOffline,
+                    thongKeDonHangTheoNgayVaChiNhanh, layDonHangTheoChiNhanh };
