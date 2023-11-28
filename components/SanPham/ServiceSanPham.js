@@ -106,20 +106,50 @@ const timKiemSanPham = async (ten_san_pham) => {
       .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
       .replace(/\s+/g, ""); // Remove spaces
 
-    const tat_ca_san_pham = await sanPhamModel.find();
+    const all_products = await sanPhamModel.find();
+    const tat_ca_san_pham = all_products.map((item) => {
+      return { ...item._doc };
+    });
     const fuseOptions = {
-      keys: ["ten_san_pham", "loai_san_pham.ten_loai_san_pham", "mo_ta"],
+      keys: ["ten_san_pham", "loai_san_pham.ten_loai_san_pham"],
       threshold: 0.2, // Adjust the threshold based on your desired level of matching
     };
 
-    const fuse = new Fuse(tat_ca_san_pham, fuseOptions);
+    const normalizedData = tat_ca_san_pham.map((item) => {
+      const normalizedItem = { ...item };
+      normalizedItem.ten_san_pham = item.ten_san_pham
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
+        .replace(/\s+/g, ""); // Remove spaces
+      if (
+        normalizedItem.loai_san_pham &&
+        normalizedItem.loai_san_pham.length > 0
+      ) {
+        normalizedItem.loai_san_pham[0].ten_loai_san_pham =
+          item.loai_san_pham[0]?.ten_loai_san_pham
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
+            .replace(/\s+/g, "") || "";
+      } else {
+        // console.log("ITEM:  ", normalizedItem)
+      }
+      return normalizedItem;
+    });
+
+    const fuse = new Fuse(normalizedData, fuseOptions);
     const result = fuse.search(formatTen);
 
-    if (result.length === 0) {
+    const searchItems = result.map((item) => item.item);
+
+    const matchItemArray = tat_ca_san_pham.filter((value) =>
+      searchItems.map((item) => item._id).includes(value._id)
+    );
+
+    if (searchItems.length === 0) {
       return tat_ca_san_pham;
     }
 
-    return result.item;
+    return matchItemArray;
   } catch (error) {
     console.log("Lỗi tại timKiemSanPham service: ", error);
   }
@@ -390,7 +420,9 @@ const suaSize = async (id_san_pham, id_size, ten_size, gia, giam_gia) => {
         size.gia = gia || size.gia;
         size.giam_gia = giam_gia || size.giam_gia;
         console.log("gia: ", giam_gia);
-        size.gia_da_giam = gia - (gia * giam_gia) / 100 || size.gia - (size.gia * size.giam_gia) / 100;
+        size.gia_da_giam =
+          gia - (gia * giam_gia) / 100 ||
+          size.gia - (size.gia * size.giam_gia) / 100;
         await san_pham.save();
         return san_pham;
       }
@@ -457,7 +489,9 @@ const themSanPhamAll = async (san_pham) => {
         ten_size: san_pham.size[i].ten_size,
         gia: san_pham.size[i].gia,
         giam_gia: san_pham.size[i].giam_gia,
-        gia_da_giam: san_pham.size[i].gia - (san_pham.size[i].gia * san_pham.size[i].giam_gia) / 100,
+        gia_da_giam:
+          san_pham.size[i].gia -
+          (san_pham.size[i].gia * san_pham.size[i].giam_gia) / 100,
         isSelected: select,
       });
     }
