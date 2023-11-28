@@ -50,6 +50,22 @@ router.get("/xoa-tai-khoan/:id", AuthenWeb, async function (req, res) {
     }
 });
 
+//unlock user
+router.get("/unlock-tai-khoan/:id", AuthenWeb, async function (req, res) {
+    try {
+        const { id } = req.params;
+        const user = await serviceUser.unlockTaiKhoan(id);
+        if (user) {
+            res.status(200).json({ result: 'success' });
+        } else {
+            res.status(300).json({ result: 'fail' });
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+});
+
 
 
 

@@ -4,6 +4,21 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const chiNhanhModel = require('../ChiNhanh/ModelChiNhanh');
 
+
+//unlockTaiKhoan
+const unlockTaiKhoan = async (id_user) => {
+    try {
+        const user = await userModel.findOne({ _id: id_user });
+        if (user) {
+            user.status = 1;
+            await user.save();
+            return user;
+        }
+    } catch (error) {
+        console.log('Lỗi tại unlockTaiKhoan service: ', error)
+    }
+    return false;
+};
 //xóa user
 const xoaUser = async (id_user) => {
     try {
@@ -356,12 +371,12 @@ const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai, so_nha, tinh, ngu
 //lấy thông tin tất cả user
 const layThongTinTatCaUser = async () => {
     try {
-        const users = await userModel.find({ status: 1 });
+        const users = await userModel.find({ status: { $in: [0, 1] } });
         if (users) {
             return users;
         }
     } catch (error) {
-        console.log('Lỗi tại layThongTinTatCaUser service: ', error)
+        console.log('Lỗi tại layThongTinTatCaUser service: ', error);
     }
     return false;
 };
@@ -894,5 +909,5 @@ module.exports = {
     tichDiem, doiMatKhauOTP, doiMatKhau, suDungDiem, themEmail,
     xoaLichSuTimKiem, themLichSuTimKiem, kiemTraOTP, layLichSuDiem,
     chinhDiaChiMacDinh, loginCpanel, dangKyAdminChiNhanh, loginAdminChiNhanh,
-    layThongTinAdminChiNhanh, suaThongTinAdminChiNhanh, xoaUser
+    layThongTinAdminChiNhanh, suaThongTinAdminChiNhanh, xoaUser, unlockTaiKhoan
 };

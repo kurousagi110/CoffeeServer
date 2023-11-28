@@ -1,5 +1,6 @@
 <!-- ============================================================== -->
 <!-- Preloader - style you can find in spinners.css -->
+
 <!-- ============================================================== -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="preloader">
@@ -315,7 +316,7 @@
                     allowOutsideClick: false,
                 });
                 return;
-            } else if (!ngayBatDau || !ngayKetThuc) {
+            } else if (ngayBatDau === 'Invalid Date' || ngayKetThuc === null) {
                 await Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
