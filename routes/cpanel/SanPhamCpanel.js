@@ -90,27 +90,33 @@ router.post(
       const sanpham = await sanphamController.themSanPhamAll(san_pham);
       console.log("sanpham", sanpham);
       if (sanpham) {
+
+        const resultSendNotification = await sendNotificationNewProduct(sanpham);
+
+      let hinh_anh_sp = null;
+      if (san_pham.hinh_anh_sp.length > 0) {
+        hinh_anh_sp = san_pham.hinh_anh_sp[0].hinh_anh_sp;
+      }
+      const resultAddNotification = await addNotificationToAllUser({
+        image: hinh_anh_sp,
+        title: san_pham.ten_san_pham,
+        id_product: sanpham._id,
+        message: "Coffee.Love vừa cho ra sản phẩm mới đó",
+        type: "NewProduct",
+      });
+
+      if (!resultSendNotification) {
+        console.log("FAIL TO FIREBASE SEND NEW MESSAGE TO ALL DEVICE");
+      }else{
+        console.log("SUCCESS TO FIREBASE SEND NEW MESSAGE TO ALL DEVICE");
+      }
+      if (!resultAddNotification) {
+        console.log("FAIL TO ADD NOTIFICATION TO ALL USER");
+      }else{
+        console.log("SUCCESS TO ADD NOTIFICATION TO ALL USER");
+      }
         console.log("SUCCESS TO ADD PRODUCT");
         res.status(200).json({ result: 'success' });
-        const resultSendNotification = await sendNotificationNewProduct(san_pham);
-        const resultAddNotification = await addNotificationToAllUser({
-          image: hinh_anh_sp[0].hinh_anh_sp,
-          title: san_pham.ten_san_pham,
-          id_product: sanpham._id,
-          message: "Coffee.Love vừa cho ra sản phẩm mới đó",
-          type: "NewProduct",
-        });
-        if (!resultSendNotification) {
-          console.log("FAIL TO FIREBASE SEND NEW MESSAGE TO ALL DEVICE");
-        } else {
-          console.log("SUCCESS TO FIREBASE SEND NEW MESSAGE TO ALL DEVICE");
-        }
-        if (!resultAddNotification) {
-          console.log("FAIL TO ADD NOTIFICATION TO ALL USER");
-        } else {
-          console.log("SUCCESS TO ADD NOTIFICATION TO ALL USER");
-        }
-        
       } else {
         const loai_san_pham = await loaiSanPhamController.layTatCaLoaiSanPham();
         res.status(300).render('sanpham/themsanpham', { loai_san_pham });
@@ -151,21 +157,21 @@ router.post('/sua-san-pham/:id', [AuthenWeb, upload], async function (req, res, 
     let hinh_anh_sp = [];
     if (files && files.length > 0) {
       try {
-          const keys = await Promise.all(files.map(async (file) => {
-            try {
-              const uploadResult = await uploadImageToS3(file.path);
-              return uploadResult;
-            } catch (error) {
-              console.error(`Error uploading file ${file.originalname}:`, error);
-              return null; // or handle the error in a way that suits your application
-            }
-          }));
+        const keys = await Promise.all(files.map(async (file) => {
+          try {
+            const uploadResult = await uploadImageToS3(file.path);
+            return uploadResult;
+          } catch (error) {
+            console.error(`Error uploading file ${file.originalname}:`, error);
+            return null; // or handle the error in a way that suits your application
+          }
+        }));
 
-          console.log("All uploads completed. Keys:", keys);
-          hinh_anh_sp = keys
-        } catch (error) {
-          console.log("Error:", error);
-        }
+        console.log("All uploads completed. Keys:", keys);
+        hinh_anh_sp = keys
+      } catch (error) {
+        console.log("Error:", error);
+      }
     }
 
     const result_loai_san_pham = await loaiSanPhamController.layLoaiSanPhamTheoId(loai_san_pham);

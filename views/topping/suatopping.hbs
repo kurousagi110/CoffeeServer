@@ -270,8 +270,9 @@
               </div>
 
               <div class="custom-file">
-                <input type="file" name="files" multiple class="custom-file-input" id="inputGroupFile01" />
+                <input type="file" accept="image/*" multiple class="custom-file-input" id="inputGroupFile01">
                 <label class="custom-file-label" for="inputGroupFile01">Chọn file</label>
+                <div id="img-preview"></div>
               </div>
 
               <input value="{{topping._id}}" type="hidden" id="id" name="id" class="form-control" placeholder="" />
@@ -288,6 +289,45 @@
 
     </div>
     <script>
+
+      const imgPreview = document.getElementById('img-preview');
+
+      const imgs = [];
+
+      function showImagePreview(file) {
+        if (file.type.match('image.*')) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            imgs.push(e.target.result);
+            showImages();
+          };
+          reader.readAsDataURL(file);
+        } else {
+          imgPreview.innerHTML = `<p style="color: red;">Vui lòng chọn file ảnh.</p>`;
+        }
+      }
+
+      const inputGroupFile01 = document.getElementById('inputGroupFile01');
+      inputGroupFile01.addEventListener('change', function (event) {
+        if (event.target.files.length > 0) {
+          for (const file of event.target.files) {
+            showImagePreview(file);
+          }
+        } else {
+          imgPreview.innerHTML = '';
+        }
+      });
+
+      function showImages() {
+        imgPreview.innerHTML = '';
+        for (const img of imgs) {
+          const imgElement = document.createElement('img');
+          imgElement.src = img;
+          imgElement.width = 200;
+          imgElement.height = 200;
+          imgPreview.appendChild(imgElement);
+        }
+      }
 
       function showLoading() {
         document.getElementById('loading-circle').style.display = 'flex';

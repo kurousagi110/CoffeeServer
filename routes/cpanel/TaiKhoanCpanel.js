@@ -18,7 +18,7 @@ const moment = require('moment');
 router.get("/", AuthenWeb, async function (req, res) {
     try {
         const user = await serviceUser.layThongTinTatCaUser();
-
+        
         let stt = 1;
         
         for (let i = 0; i < user.length; i++) {
@@ -44,6 +44,24 @@ router.get("/xoa-tai-khoan/:id", AuthenWeb, async function (req, res) {
         } else {
             res.status(300).json({ result: 'fail' });
         }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+});
+
+//lay danh sach tai khoan bi khoa
+router.get("/tai-khoan-bi-khoa", AuthenWeb, async function (req, res) {
+    try {
+        const user = await serviceUser.layThongTinTaiKhoanBiKhoa();
+        let stt = 1;
+        for (let i = 0; i < user.length; i++) {
+            user[i].stt = stt;
+            stt++;
+        }
+        console.log('user: ', user);
+        res.render("taikhoan/unbantaikhoan", { user });
+
     } catch (error) {
         console.log(error);
         throw error;
