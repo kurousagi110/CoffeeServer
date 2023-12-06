@@ -356,16 +356,23 @@
         const number = document.getElementById('number').value;
 
         // Check if any input is empty
-        if (!ten_san_pham || !loai_san_pham || !mo_ta || !filesInput.files.length) {
+        const missingField = !ten_san_pham ? 'Tên sản phẩm' :
+          !loai_san_pham ? 'Loại sản phẩm' :
+            !mo_ta ? 'Mô tả' :
+                null;
+
+        if (missingField) {
           const result = await Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            showCancelButton: true,
-            cancelButtonText: 'OK',
-            allowOutsideClick: false, // Prevent clicking outside the modal to close it
+            text: `Bạn hãy nhập ${missingField}, không được để trống.`,
+            allowOutsideClick: false
           });
-          return;
+
+          if (result.isConfirmed) {
+            hideLoading();
+            return;
+          }
         }
 
         const confirmationResult = await Swal.fire({

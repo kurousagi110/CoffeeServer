@@ -232,6 +232,7 @@ router.post("/xoa-dia-chi", AuthenToken, async (req, res, next) => {
       res.status(200).json({
         trang_thai: true,
         message: "Xóa địa chỉ thành công",
+        dia_chi: result.dia_chi,
       });
     } else {
       res.status(200).json({
@@ -277,6 +278,7 @@ router.post("/sua-dia-chi", AuthenToken, async (req, res, next) => {
       res.status(200).json({
         trang_thai: true,
         message: "Sửa địa chỉ thành công",
+        dia_chi: result.dia_chi,
       });
     } else {
       res.status(200).json({
@@ -320,6 +322,7 @@ router.post("/them-dia-chi", AuthenToken, async (req, res, next) => {
       res.status(200).json({
         trang_thai: true,
         message: "Thêm địa chỉ thành công",
+        dia_chi : result.dia_chi
       });
     } else {
       res.status(200).json({
@@ -511,7 +514,10 @@ router.post("/dang-nhap-email", async (req, res, next) => {
   try {
     const { email, avatar, ho_ten } = req.body;
     const result = await userController.loginEmail(email, avatar, ho_ten);
-    if (result) {
+    if(result === 10){
+      res.status(200).json({ trang_thai: false, message: "Tài khoản đã bị khóa" });
+    }
+    else if (isNaN(result)) {
       res.status(200).json({ trang_thai: true, data: result });
     } else {
       res
@@ -530,7 +536,7 @@ router.post("/dang-ky-username", async (req, res, next) => {
     const result = await userController.dangKyBangUsername(
       tai_khoan,
       mat_khau,
-      ho_ten,email, so_dien_thoai
+      ho_ten, email, so_dien_thoai
     );
     if (result) {
       res.status(200).json({ trang_thai: true, message: "Đăng ký thành công" });
@@ -553,7 +559,10 @@ router.post("/dang-nhap-username", async (req, res, next) => {
       tai_khoan,
       mat_khau
     );
-    if (result) {
+    if (result === 10) {
+      res.status(200).json({ trang_thai: false, message: "Tài khoản đã bị khóa" });
+    }
+    else if (isNaN(result)) {
       res.status(200).json({ trang_thai: true, data: result });
     } else {
       res.status(200).json({

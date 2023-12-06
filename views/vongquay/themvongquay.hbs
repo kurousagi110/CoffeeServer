@@ -369,12 +369,21 @@
         const filesInput = document.getElementById('inputGroupFile01');
 
 
-        if (!ten_vong_quay || !mo_ta || !ten_voucher || !ma_voucher || !gia_tri || !diem || !thoi_gian || !filesInput.files.length) {
+        const missingField = !ten_vong_quay ? 'Tên vòng quay' :
+          !mo_ta ? 'Mô tả' :
+            !ten_voucher ? 'Tên voucher' :
+              !ma_voucher ? 'Mã voucher' :
+                !gia_tri ? 'Giá trị' :
+                  !diem ? 'Điểm' :
+                    !thoi_gian ? 'Thời gian' :
+                      null;
+
+        if (missingField) {
           const result = await Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            allowOutsideClick: false // Prevent clicking outside the modal to close it
+            text: `Bạn hãy nhập ${missingField}, không được để trống.`,
+            allowOutsideClick: false
           });
 
           if (result.isConfirmed) {
@@ -387,7 +396,6 @@
         const confirmationResult = await Swal.fire({
           title: 'Bạn có chắc chắn muốn thêm phần thường vòng quay này?',
           showDenyButton: true,
-          showCancelButton: true,
           confirmButtonText: 'Lưu',
           denyButtonText: "Chỉnh sửa."
         });

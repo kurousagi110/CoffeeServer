@@ -199,7 +199,7 @@
               <span class="hide-menu">Admin Chi Nhánh</span>
             </a>
           </li>
-                    <li class="sidebar-item">
+          <li class="sidebar-item">
             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/tai-khoan" aria-expanded="false">
               <i class="mdi mdi-account-circle"></i>
               <span class="hide-menu">Quản lý User</span>
@@ -364,12 +364,18 @@
     const re_mat_khau = document.getElementById('re_mat_khau').value;
     const loai_san_pham = document.getElementById('loai_san_pham').value;
 
-    if (!tai_khoan || !mat_khau || !re_mat_khau || !loai_san_pham) {
+    const missingField = !tai_khoan ? 'Tài khoản' :
+      !mat_khau ? 'Mật khẩu' :
+        !re_mat_khau ? 'Nhập lại mật khẩu' :
+          !loai_san_pham ? 'Chi nhánh' :
+            null;
+
+    if (missingField) {
       const result = await Swal.fire({
-        icon: 'Lỗi',
+        icon: 'error', // Corrected the icon to 'error'
         title: 'Oops...',
-        text: 'Bạn hãy nhập đầy đủ không được để trống.',
-        allowOutsideClick: false, // Prevent clicking outside the modal to close it
+        text: `Bạn hãy nhập ${missingField}, không được để trống.`,
+        allowOutsideClick: false
       });
 
       if (result.isConfirmed) {
@@ -377,6 +383,7 @@
         return;
       }
     }
+
     if (mat_khau != re_mat_khau) {
       const result = await Swal.fire({
         icon: 'Lỗi',

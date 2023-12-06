@@ -265,14 +265,9 @@
                   placeholder="" />
               </div>
 
-              <div class="form-group">
-                <label for="gia_tri">Giá trị (Nếu là điểm thì giá trị bằng 0)</label>
-                <input value="{{voucher.gia_tri}}" type="number" id="gia_tri" name="gia_tri" class="form-control"
-                  placeholder="" />
-              </div>
 
               <div class="form-group">
-                <label for="giam_gia">Giảm giá</label>
+                <label for="giam_gia">Giảm giá (%)</label>
                 <input value="{{voucher.giam_gia}}" type="number" id="giam_gia" name="giam_gia" class="form-control"
                   placeholder="" />
               </div>
@@ -319,7 +314,7 @@
 
     </div>
     <script>
-const imgPreview = document.getElementById('img-preview');
+      const imgPreview = document.getElementById('img-preview');
 
       const imgs = [];
 
@@ -376,18 +371,29 @@ const imgPreview = document.getElementById('img-preview');
         const mo_ta = document.getElementById('mo_ta').value;
         const ten_voucher = document.getElementById('ten_voucher').value;
         const ma_voucher = document.getElementById('ma_voucher').value;
-        const gia_tri = document.getElementById('gia_tri').value;
         const diem = document.getElementById('diem').value;
         const ngay_ket_thuc = document.getElementById('ngay_ket_thuc').value;
         const giam_gia = document.getElementById('giam_gia').value;
         const filesInput = document.getElementById('inputGroupFile01');
 
-        if (!ten_voucher || !ma_voucher || !gia_tri || !diem || !ngay_ket_thuc || !giam_gia || !filesInput.files[0]) {
+        const missingField = !ten_voucher ? 'Tên voucher' :
+          !ma_voucher ? 'Mã voucher' :
+            !mo_ta ? 'Mô tả' :
+              !diem ? 'Điểm' :
+                !ngay_ket_thuc ? 'Ngày kết thúc' :
+                  !giam_gia ? 'Giảm giá' :
+                    !ten_voucher ? 'Tên voucher' :
+                    
+                    
+
+                      null;
+
+        if (missingField) {
           const result = await Swal.fire({
-            icon: 'Lỗi',
+            icon: 'error',
             title: 'Oops...',
-            text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            allowOutsideClick: false // Prevent clicking outside the modal to close it
+            text: `Bạn hãy nhập ${missingField}, không được để trống.`,
+            allowOutsideClick: false
           });
 
           if (result.isConfirmed) {
@@ -400,7 +406,6 @@ const imgPreview = document.getElementById('img-preview');
         const confirmationResult = await Swal.fire({
           title: 'Bạn có chắc chắn muốn sửa voucher này?',
           showDenyButton: true,
-          showCancelButton: true,
           confirmButtonText: 'Lưu',
           denyButtonText: "Chỉnh sửa."
         });

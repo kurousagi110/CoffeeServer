@@ -217,7 +217,39 @@ router.get('/xoa-san-pham/:id', [AuthenWeb], async function (req, res, next) {
   }
 });
 
+//san pham bi xoa 
+//http://localhost:3000/cpanel/san-pham/san-pham-bi-xoa
+router.get('/san-pham-bi-xoa', [AuthenWeb], async function (req, res, next) {
+  try {
+    let sanpham = await sanphamController.getAllSanPhamBiXoa();
+    let stt = 1;
+    for (let i = 0; i < sanpham.length; i++) {
+      sanpham[i].stt = stt;
+      stt++;
+    }
+    res.render('sanpham/sanphambixoa', { sanpham });
+  } catch (err) {
+    console.log(err);
+    res.render('sanpham/sanpham-bi-xoa', { sanpham: [] });
+  }
+});
+//khôi phục sản phẩm
+//http://localhost:3000/cpanel/san-pham/khoi-phuc-san-pham/:id
+router.get('/khoi-phuc-san-pham/:id', [AuthenWeb], async function (req, res, next) {
+  try {
+    const id = req.params.id;
+    const sanpham = await sanphamController.khoiPhucSanPham(id);
 
+    if (sanpham) {
+      res.status(200).json({ result: 'success' });
+    } else {
+      res.status(200).json({ result: 'failure' });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ result: 'error' });
+  }
+});
 
 
 module.exports = router;

@@ -22,6 +22,7 @@ const unlockTaiKhoan = async (id_user) => {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
             user.status = 1;
+            user.version += 1;
             await user.save();
             return user;
         }
@@ -36,6 +37,7 @@ const xoaUser = async (id_user) => {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
             user.status = 0;
+            user.version += 1;
             await user.save();
             return user;
         }
@@ -79,10 +81,11 @@ const layThongTinAdminChiNhanh = async () => {
 const loginAdminChiNhanh = async (tai_khoan, mat_khau) => {
     try {
         const user = await userModel.findOne({ tai_khoan: tai_khoan });
+        await user.save();
         if (user) {
             const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
             if (isMatch) {
-                const token = await taoToken(tai_khoan);
+                const token = await taoToken(tai_khoan, user.version);
                 const result = {
                     id_user: user._id,
                     id_chi_nhanh: user.ma_khach_hang,
@@ -131,6 +134,7 @@ const dangKyAdminChiNhanh = async (tai_khoan, mat_khau, id_chi_nhanh) => {
                 otp: 0,
                 status: 10,
                 device_token: "",
+                version: 1,
             });
             return user;
         }
@@ -317,7 +321,7 @@ const xoaDiaChi = async (id_user, id_dia_chi) => {
                 }
                 user.dia_chi.splice(dia_chiIndex, 1);
                 await user.save();
-                return true;
+                return user;
             }
         }
     } catch (error) {
@@ -450,6 +454,7 @@ const doiMatKhau = async (id_user, mat_khau_cu, mat_khau_moi) => {
                 const salt = await bcrypt.genSalt(10);
                 const hashPassword = await bcrypt.hash(mat_khau_moi, salt);
                 user.mat_khau = hashPassword;
+                user.version += 1;
                 await user.save();
                 return user;
             } else {
@@ -553,6 +558,7 @@ const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_th
                 device_token: "",
                 doi_diem: [],
                 lich_su: [],
+                version: 1,
             });
             return user;
         }
@@ -565,10 +571,14 @@ const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_th
 const dangNhapBangUsername = async (tai_khoan, mat_khau) => {
     try {
         const user = await userModel.findOne({ tai_khoan: tai_khoan });
+        if(user.status == 0){
+            return 10;
+        }
         if (user) {
+            await user.save();
             const isMatch = await bcrypt.compare(mat_khau, user.mat_khau);
             if (isMatch) {
-                const token = await taoToken(tai_khoan);
+                const token = await taoToken(tai_khoan, user.version);
                 const result = {
                     id_user: user._id,
                     token: token,
@@ -586,8 +596,13 @@ const dangNhapBangUsername = async (tai_khoan, mat_khau) => {
 const loginEmail = async (email, avatar, ho_ten) => {
     try {
         let user = await userModel.findOne({ email: email });
+        await user.save();
+        
+        if(user.status == 0){
+            return 10;
+        }
         console.log(user);
-        const token = await taoToken(email);
+        const token = await taoToken(email, user.version);
         if (user) {
             const result = {
                 id_user: user._id,
@@ -616,6 +631,7 @@ const loginEmail = async (email, avatar, ho_ten) => {
                 status: 1,
                 ma_khach_hang: ma_khach_hang,
                 device_token: "",
+                version: 1,
             });
             console.log(user1, "221312313");
             return { success: true, user: user1 };
@@ -887,6 +903,7 @@ const doiMatKhauOTP = async (email, mat_khau, otp) => {
                 const hashPassword = await bcrypt.hash(mat_khau, salt);
                 user.mat_khau = hashPassword;
                 user.otp = Math.floor(1000 + Math.random() * 9000);
+                user.version += 1;
                 await user.save();
                 return user;
             } else
@@ -899,11 +916,9 @@ const doiMatKhauOTP = async (email, mat_khau, otp) => {
 };
 
 require('dotenv').config({ path: './.env' });
-const taoToken = async (username) => {
-    const secret = process.env.ACCESS_TOKEN_SECRET;
-    console.log('secret: ', secret);
-    const key = "iloveyou"
-    const payload = { username: username }; // Đảm bảo payload là một đối tượng
+const taoToken = async (username, version) => {
+    const key = "iloveyou";  // Use the same key as in your AuthenToken middleware
+    const payload = { username: username, version: version };
     const token = jwt.sign(
         payload,
         key,

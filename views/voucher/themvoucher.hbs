@@ -263,13 +263,9 @@
                 <input type="text" id="ma_voucher" name="ma_voucher" class="form-control" placeholder="" />
               </div>
 
-              <div class="form-group">
-                <label for="gia_tri">Giá trị (Nếu là điểm thì giá trị bằng 0)</label>
-                <input type="number" id="gia_tri" name="gia_tri" class="form-control" placeholder="" />
-              </div>
 
               <div class="form-group">
-                <label for="giam_gia">Thời gian khuyến mãi (Ngày)</label>
+                <label for="giam_gia">Giảm giá (%)</label>
                 <input type="number" id="giam_gia" name="giam_gia" class="form-control" placeholder="" />
               </div>
 
@@ -282,7 +278,7 @@
 
               <div class="form-group">
                 <label for="ngay_ket_thuc">Thời gian khuyến mãi (Ngày)</label>
-                <input type="number" id="ngay_ket_thuc" name="ngay_ket_thuc" class="form-control" placeholder="" />
+                <input value="0" type="number" id="ngay_ket_thuc" name="ngay_ket_thuc" class="form-control" placeholder="" />
               </div>
 
 
@@ -372,16 +368,25 @@
         const gia_tri = document.getElementById('gia_tri').value;
         const diem = document.getElementById('diem').value;
         const ngay_ket_thuc = document.getElementById('ngay_ket_thuc').value;
-        const giam_gia = document.getElementById('giam_gia').value;
         const filesInput = document.getElementById('inputGroupFile01');
 
 
-        if (!ten_voucher || !ma_voucher || !gia_tri || !diem || !ngay_ket_thuc || !giam_gia || !filesInput.files.length) {
+        const missingField = !ten_voucher ? 'Tên voucher' :
+          !ma_voucher ? 'Mã voucher' :
+            !ten_voucher ? 'Tên voucher':
+            !gia_tri ? 'Giá trị' :
+              !diem ? 'Điểm' :
+                !ngay_ket_thuc ? 'Ngày kết thúc' :
+                    !gia_tri ? 'Giá trị' :
+                      !filesInput.files.length ? 'Ảnh' :
+                    null;
+
+        if (missingField) {
           const result = await Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            allowOutsideClick: false // Prevent clicking outside the modal to close it
+            text: `Bạn hãy nhập ${missingField}, không được để trống.`,
+            allowOutsideClick: false
           });
 
           if (result.isConfirmed) {
@@ -394,7 +399,6 @@
         const confirmationResult = await Swal.fire({
           title: 'Bạn có chắc chắn muốn thêm voucher này?',
           showDenyButton: true,
-          showCancelButton: true,
           confirmButtonText: 'Lưu',
           denyButtonText: "Chỉnh sửa."
         });

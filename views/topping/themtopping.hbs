@@ -344,12 +344,18 @@
         const mo_ta = document.getElementById('mo_ta').value;
         const filesInput = document.getElementById('inputGroupFile01');
 
-        if (!ten_topping || !gia || !filesInput.files.length) {
+        const missingField = !ten_topping ? 'Tên topping' :
+          !gia ? 'Giá' :
+            !filesInput.files.length ? 'Ảnh' :
+              !mo_ta ? 'Mô tả' :
+                null;
+
+        if (missingField) {
           const result = await Swal.fire({
-            icon: 'Lỗi',
+            icon: 'error',
             title: 'Oops...',
-            text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            allowOutsideClick: false // Prevent clicking outside the modal to close it
+            text: `Bạn hãy nhập ${missingField}, không được để trống.`,
+            allowOutsideClick: false
           });
 
           if (result.isConfirmed) {

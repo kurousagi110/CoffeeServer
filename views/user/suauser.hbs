@@ -357,6 +357,26 @@
     const re_mat_khau = document.getElementById('re_mat_khau').value;
     const id = document.getElementById('id').value;
 
+    const missingField = !tai_khoan ? 'Tài khoản' :
+      !mat_khau ? 'Mật khẩu' :
+        !re_mat_khau ? 'Nhập lại mật khẩu' :
+            null;
+
+    if (missingField) {
+      const result = await Swal.fire({
+        icon: 'error', // Corrected the icon to 'error'
+        title: 'Oops...',
+        text: `Bạn hãy nhập ${missingField}, không được để trống.`,
+        allowOutsideClick: false
+      });
+
+      if (result.isConfirmed) {
+        hideLoading();
+        return;
+      }
+    }
+
+
     if (mat_khau != re_mat_khau) {
       const result = await Swal.fire({
         icon: 'Lỗi',

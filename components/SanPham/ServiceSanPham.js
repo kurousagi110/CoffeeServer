@@ -1,6 +1,33 @@
 const sanPhamModel = require("./ModelSanPham");
 const Fuse = require("fuse.js");
 
+//khoi phuc san pham
+const khoiPhucSanPham = async (id_san_pham) => {
+  try {
+    const san_pham = await sanPhamModel.findByIdAndUpdate(
+      id_san_pham,
+      { status: 1 },
+      { new: true }
+    );
+    if (san_pham) {
+      return san_pham;
+    }
+  } catch (error) {
+    console.log("Lỗi tại khoiPhucSanPham service: ", error);
+  }
+  return false;
+};
+
+//sản pham bi xoa
+const getAllSanPhamBiXoa = async () => {
+  try {
+    const san_pham = await sanPhamModel.find({ status: 0 });
+    return san_pham;
+  } catch (error) {
+    console.log("Lỗi tại getAllSanPhamBiXoa service: ", error);
+  }
+  return false;
+}
 //them du lieu
 const suaDuLieu = async (
   id_san_pham,
@@ -527,30 +554,44 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
   try {
     const result_san_pham = await sanPhamModel.findOne({ _id: id_san_pham });
     console.log("san_pham.size: ", san_pham.size);
-    if (result_san_pham) {
-      result_san_pham.ten_san_pham =
-        san_pham.ten_san_pham || result_san_pham.ten_san_pham;
-      result_san_pham.mo_ta = san_pham.mo_ta || result_san_pham.mo_ta;
-      result_san_pham.size = san_pham.size || result_san_pham.size;
-      result_san_pham.loai_san_pham =
-        san_pham.loai_san_pham || result_san_pham.loai_san_pham;
-      result_san_pham.hinh_anh_sp =
-        san_pham.hinh_anh_sp || result_san_pham.hinh_anh_sp;
-      await result_san_pham.save();
-      return result_san_pham;
+    let size = [];
+    for (let i = 0; i < san_pham.size.length; i++) {
+      let select = false;
+      if (san_pham.size[i].ten_size === "M") {
+        select = true;
+      } else {
+        select = false;
+      }
+      size.push({
+        ten_size: san_pham.size[i].ten_size,
+        gia: san_pham.size[i].gia,
+        giam_gia: san_pham.size[i].giam_gia,
+        gia_da_giam:
+          san_pham.size[i].gia -
+          (san_pham.size[i].gia * san_pham.size[i].giam_gia) / 100,
+        isSelected: select,
+      });
     }
+    result_san_pham.ten_san_pham = san_pham.ten_san_pham || result_san_pham.ten_san_pham;
+    result_san_pham.mo_ta = san_pham.mo_ta || result_san_pham.mo_ta;
+    result_san_pham.size = size || result_san_pham.size;
+    result_san_pham.loai_san_pham = san_pham.loai_san_pham || result_san_pham.loai_san_pham;
+    result_san_pham.hinh_anh_sp = san_pham.hinh_anh_sp || result_san_pham.hinh_anh_sp;
+    await result_san_pham.save();
+    return result_san_pham;
+
   } catch (error) {
     console.log("Lỗi tại suaSanPhamAll service: ", error);
+    throw error;
   }
-  return false;
 };
 
 //xóa sản phẩm
 const xoaSanPham = async (id_san_pham) => {
   try {
-    const san_pham = await sanPhamModel.findByIdAndDelete(id_san_pham);
+    const san_pham = await sanPhamModel.findByIdAndUpdate({ _id: id_san_pham }, { status: 0 }, { new: true });
     if (san_pham) {
-      return true;
+      return san_pham;
     }
   } catch (error) {
     console.log("Lỗi tại xoaSanPham service: ", error);
@@ -582,4 +623,6 @@ module.exports = {
   getSanPhamMoi,
   suaSanPhamAll,
   xoaSanPham,
+  getAllSanPhamBiXoa,
+  khoiPhucSanPham,
 };

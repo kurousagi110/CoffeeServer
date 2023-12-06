@@ -23,9 +23,9 @@ router.get("/", AuthenWeb, async function (req, res) {
         let ten_chi_nhanh = "";
         for (let i = 0; i < user.length; i++) {
             user[i].stt = stt;
-            if (user[i].chi_nhanh_id) {
+            if (user[i].ma_khach_hang) {
                 ten_chi_nhanh = await serviceChiNhanh.layChiNhanhTheoID(
-                    user[i].chi_nhanh_id
+                    user[i].ma_khach_hang
                 );
                 user[i].ten_chi_nhanh = ten_chi_nhanh.ten_chi_nhanh;
             } else {

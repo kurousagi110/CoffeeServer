@@ -359,12 +359,18 @@
         const mo_ta = document.getElementById('mo_ta').value;
         const filesInput = document.getElementById('inputGroupFile01');
 
-        if (!ten_san_pham || !loai_san_pham || !mo_ta || !filesInput.files.length) {
+        const missingField = !ten_san_pham ? 'Tên sản phẩm' :
+          !loai_san_pham ? 'Loại sản phẩm' :
+            !mo_ta ? 'Mô tả' :
+              !filesInput.files.length ? 'Ảnh' :
+                null;
+
+        if (missingField) {
           const result = await Swal.fire({
-            icon: 'Lỗi',
+            icon: 'error',
             title: 'Oops...',
-            text: 'Bạn hãy nhập đầy đủ không được để trống.',
-            allowOutsideClick: false // Prevent clicking outside the modal to close it
+            text: `Bạn hãy nhập ${missingField}, không được để trống.`,
+            allowOutsideClick: false
           });
 
           if (result.isConfirmed) {

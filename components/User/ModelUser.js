@@ -53,6 +53,7 @@ const userSchema = new Schema({
         tu_khoa: {type: String},
     }],
     device_token: {type: String},
+    version: {type: Number},
  });
 
 
