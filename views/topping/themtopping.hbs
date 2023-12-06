@@ -366,11 +366,10 @@
 
         // Show confirmation dialog
         const confirmationResult = await Swal.fire({
-          title: 'Bạn có chắc chắn muốn thêm sản phẩm này?',
+          title: 'Bạn có chắc chắn muốn thêm topping này?',
           showDenyButton: true,
-          showCancelButton: true,
-          confirmButtonText: 'Lưu',
-          denyButtonText: "Chỉnh sửa."
+          confirmButtonText: 'Xác nhận',
+          denyButtonText: "Chỉnh sửa"
         });
 
         if (confirmationResult.isConfirmed) {
