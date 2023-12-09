@@ -71,7 +71,7 @@ const danhSachDanhGiaTheoSanPham = async (id_san_pham) => {
 //danh sách sản phẩm đánh giá tốt nhất giới hạn 10 sản phẩm
 const danhSachSanPhamDanhGiaTotNhat = async () => {
   try {
-    const san_pham = await sanPhamModel.find().sort({ tong_sao: -1 }).limit(5);
+    const san_pham = await sanPhamModel.find({status : 1 }).sort({ tong_sao: -1 }).limit(5);
     return san_pham;
   } catch (error) {
     console.log("Lỗi tại danhSachSanPhamDanhGiaTotNhat service: ", error);
@@ -83,7 +83,7 @@ const danhSachSanPhamDanhGiaTotNhat = async () => {
 //trả về sản phẩm theo list category
 const timKiemSanPhamTheoListCategory = async () => {
   try {
-    const san_pham = await sanPhamModel.find();
+    const san_pham = await sanPhamModel.find({status : 1});
     const result = [];
 
     san_pham.forEach((item) => {
@@ -133,7 +133,7 @@ const timKiemSanPham = async (ten_san_pham) => {
       .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
       .replace(/\s+/g, ""); // Remove spaces
 
-    const all_products = await sanPhamModel.find();
+    const all_products = await sanPhamModel.find({status : 1});
     const tat_ca_san_pham = all_products.map((item) => {
       return { ...item._doc };
     });
@@ -187,7 +187,7 @@ const timKiemSanPham = async (ten_san_pham) => {
 //lọc sản phẩm theo giá từ thấp đến cao
 const locSanPhamTheoGiaTuThapDenCao = async () => {
   try {
-    const san_pham = await sanPhamModel.find().sort({ gia: 1 });
+    const san_pham = await sanPhamModel.find({status:1}).sort({ gia: 1 });
     return san_pham;
   } catch (error) {
     console.log("Lỗi tại locSanPhamTheoGiaTuThapDenCao service: ", error);
@@ -208,7 +208,7 @@ const getSanPhamById = async (id_san_pham) => {
 //get sản phẩm giảm giá
 const getSanPhamGiamGia = async () => {
   try {
-    const san_pham = await sanPhamModel.find({ check_gia_giam: true });
+    const san_pham = await sanPhamModel.find({ check_gia_giam: true ,status : 1 });
     return san_pham;
   } catch (error) {
     console.log("Lỗi tại getSanPhamGiamGia service: ", error);
@@ -220,8 +220,8 @@ const getSanPhamGiamGia = async () => {
 const getAllSanPham = async () => {
   try {
     let getAllDate = new Date();
-    getAllDate.setHours(getAllDate.getHours() + 7);
-    const sanPham = await sanPhamModel.find();
+    getAllDate.setHours(getAllDate.getHours());
+    const sanPham = await sanPhamModel.find({ status: 1 });
     let check = false;
     if (sanPham.ngay_san_pham_moi < getAllDate) {
       sanPham.is_san_pham_moi = false;
@@ -254,7 +254,7 @@ const getAllSanPham = async () => {
     // If any product's discount has expired, generate new discounted products
     if (check) {
       const sanPhamNgauNhien = await sanPhamModel.aggregate([
-        { $match: { is_san_pham_moi: false } },
+        { $match: { status: 1, is_san_pham_moi: false } },
         { $sample: { size: 5 } },
       ]);
       const date = new Date();
@@ -279,13 +279,15 @@ const getAllSanPham = async () => {
                 sanPham[j].size[k].gia -
                 (sanPham[j].size[k].gia * sanPham[j].size[k].giam_gia) / 100;
             }
+
             await sanPham[j].save();
+            console.log("sanPham[j]: ", sanPham[j]);
           }
         }
       }
     }
     // Return all products
-    return await sanPhamModel.find();
+    return await sanPhamModel.find({ status: 1});
   } catch (error) {
     console.error("Error in getAllSanPham service:", error);
     return false;
@@ -295,7 +297,7 @@ const getAllSanPham = async () => {
 //lấy sản phẩm ngãu nhiên theo ngày
 const getSanPhamMoi = async () => {
   try {
-    const sanPham = await sanPhamModel.find({ is_san_pham_moi: true });
+    const sanPham = await sanPhamModel.find({ is_san_pham_moi: true, status: 1 });
     return sanPham;
   } catch (error) {
     console.log("Lỗi tại getSanPhamMoi service: ", error);

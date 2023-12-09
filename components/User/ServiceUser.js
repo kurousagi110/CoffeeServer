@@ -454,7 +454,6 @@ const doiMatKhau = async (id_user, mat_khau_cu, mat_khau_moi) => {
                 const salt = await bcrypt.genSalt(10);
                 const hashPassword = await bcrypt.hash(mat_khau_moi, salt);
                 user.mat_khau = hashPassword;
-                user.version += 1;
                 await user.save();
                 return user;
             } else {
@@ -473,6 +472,7 @@ const xoaTaiKhoan = async (id_user) => {
         const user = await userModel.findOne({ _id: id_user });
         if (user) {
             user.status = 0;
+            user.version += 1;
             await user.save();
             return user;
         }

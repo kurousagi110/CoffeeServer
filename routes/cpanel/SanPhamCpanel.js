@@ -76,13 +76,14 @@ router.post(
         } catch (error) {
           console.log("Error:", error);
         }
-      }
-
+      } 
+      console.log("hinh_anh_sp", loai_san_pham);
       const result_loai_san_pham = await loaiSanPhamController.layLoaiSanPhamTheoId(loai_san_pham);
+      console.log("result_loai_san_pham", result_loai_san_pham);
 
       const san_pham = {
         ten_san_pham,
-        result_loai_san_pham,
+        loai_san_pham: result_loai_san_pham,
         size: sizes,
         mo_ta,
         hinh_anh_sp,
@@ -178,7 +179,7 @@ router.post('/sua-san-pham/:id', [AuthenWeb, upload], async function (req, res, 
     // gửi thông báo có sản phẩm mới cho tất cả thiết bị
     const san_pham = {
       ten_san_pham,
-      result_loai_san_pham,
+      loai_san_pham: result_loai_san_pham,
       mo_ta,
       hinh_anh_sp,
       size: sizes
