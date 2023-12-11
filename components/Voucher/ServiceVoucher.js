@@ -287,7 +287,7 @@ const  themVoucher = async (ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_th
 };
 
 //sửa voucher
-const  suaVoucher = async (id_voucher, ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, hinh_anh, giam_gia) => {
+const  suaVoucher = async (id_voucher, ten_voucher, ma_voucher, mo_ta, ngay_ket_thuc, hinh_anh, giam_gia) => {
     try {
         const voucher = await modelVoucher.findById(id_voucher);
         if (!voucher) {
@@ -303,7 +303,6 @@ const  suaVoucher = async (id_voucher, ten_voucher, ma_voucher, gia_tri, mo_ta, 
         themVoucherDate.setHours(themVoucherDate.getHours() + 7);
         voucher.ten_voucher = ten_voucher || voucher.ten_voucher;
         voucher.ma_voucher = ma_voucher || voucher.ma_voucher;
-        voucher.gia_tri = gia_tri || voucher.gia_tri;
         voucher.mo_ta = mo_ta || voucher.mo_ta;
         voucher.giam_gia = giam_gia || voucher.giam_gia;
         voucher.hinh_anh = hinh_anh || voucher.hinh_anh;

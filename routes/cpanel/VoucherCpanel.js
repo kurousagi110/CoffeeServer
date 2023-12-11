@@ -52,7 +52,7 @@ router.get("/them-voucher", [AuthenWeb], async (req, res) => {
 //them voucher
 router.post("/them-voucher", [AuthenWeb, upload], async (req, res) => {
     try {
-        let { ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, giam_gia } = req.body;
+        let { ten_voucher, ma_voucher, mo_ta, ngay_ket_thuc, diem, giam_gia } = req.body;
         let files = req.files;
         let hinh_anh;
         console.log("ngay ket thuc: " + ngay_ket_thuc);
@@ -77,7 +77,7 @@ router.post("/them-voucher", [AuthenWeb, upload], async (req, res) => {
                 console.log("Error:", error);
             }
         }
-        const result = await voucherService.themVoucher(ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, hinh_anh, giam_gia);
+        const result = await voucherService.themVoucher(ten_voucher, ma_voucher, mo_ta, ngay_ket_thuc, diem, hinh_anh, giam_gia);
         if (result) {
             res.status(200).json({ result: "success" });
         } else {
@@ -107,7 +107,7 @@ router.get("/sua-voucher/:id", [AuthenWeb], async (req, res) => {
 router.post("/sua-voucher/:id", [AuthenWeb, upload], async (req, res) => {
     try {
         let id = req.params.id;
-        let { ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, giam_gia } = req.body;
+        let { ten_voucher, ma_voucher, mo_ta, ngay_ket_thuc, diem, giam_gia } = req.body;
         let files = req.files;
         let hinh_anh;
         console.log("ngay ket thuc: " + ngay_ket_thuc);
@@ -132,7 +132,7 @@ router.post("/sua-voucher/:id", [AuthenWeb, upload], async (req, res) => {
                 console.log("Error:", error);
             }
         }
-        const result = await voucherService.suaVoucher(id, ten_voucher, ma_voucher, gia_tri, mo_ta, ngay_ket_thuc, diem, hinh_anh, giam_gia);
+        const result = await voucherService.suaVoucher(id, ten_voucher, ma_voucher, mo_ta, ngay_ket_thuc, diem, hinh_anh, giam_gia);
         if (result) {
             res.status(200).json({ result: "success" });
         } else {

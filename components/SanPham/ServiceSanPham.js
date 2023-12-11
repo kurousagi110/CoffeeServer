@@ -507,10 +507,12 @@ const themSanPhamAll = async (san_pham) => {
     }
     console.log("san_pham: ", san_pham);
     let size = [];
+    let check = false;
     for (let i = 0; i < san_pham.size.length; i++) {
       let select = false;
       if (san_pham.size[i].ten_size === "M") {
         select = true;
+        check = true;
       } else {
         select = false;
       }
@@ -523,6 +525,9 @@ const themSanPhamAll = async (san_pham) => {
           (san_pham.size[i].gia * san_pham.size[i].giam_gia) / 100,
         isSelected: select,
       });
+    }
+    if (!check) {
+      size[0].isSelected = true;
     }
     console.log("size: ", size);
     let them_all_date = new Date();
@@ -559,8 +564,10 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
     let size = [];
     for (let i = 0; i < san_pham.size.length; i++) {
       let select = false;
+      let check = false;
       if (san_pham.size[i].ten_size === "M") {
         select = true;
+        check = true;
       } else {
         select = false;
       }
@@ -573,6 +580,9 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
           (san_pham.size[i].gia * san_pham.size[i].giam_gia) / 100,
         isSelected: select,
       });
+    }
+    if (check === false) {
+      size[0].isSelected = true;
     }
     result_san_pham.ten_san_pham = san_pham.ten_san_pham || result_san_pham.ten_san_pham;
     result_san_pham.mo_ta = san_pham.mo_ta || result_san_pham.mo_ta;

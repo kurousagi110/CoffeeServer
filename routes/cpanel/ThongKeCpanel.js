@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
     try {
       const { ngaybatdau, ngayketthuc, chiNhanh } = req.body;
       console.log(ngaybatdau, ngayketthuc, chiNhanh);
-  
+
       // Gọi hàm thống kê từ controller
       const thongKe = await donHangController.thongKeDonHangTheoNgayVaChiNhanh(
         ngaybatdau,

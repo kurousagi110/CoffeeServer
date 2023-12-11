@@ -278,7 +278,8 @@
 
               <div class="form-group">
                 <label for="ngay_ket_thuc">Thời gian khuyến mãi (Ngày)</label>
-                <input value="0" type="number" id="ngay_ket_thuc" name="ngay_ket_thuc" class="form-control" placeholder="" />
+                <input value="0" type="number" id="ngay_ket_thuc" name="ngay_ket_thuc" class="form-control"
+                  placeholder="" />
               </div>
 
 
@@ -365,7 +366,6 @@
         const mo_ta = document.getElementById('mo_ta').value;
         const ten_voucher = document.getElementById('ten_voucher').value;
         const ma_voucher = document.getElementById('ma_voucher').value;
-        const gia_tri = document.getElementById('gia_tri').value;
         const diem = document.getElementById('diem').value;
         const ngay_ket_thuc = document.getElementById('ngay_ket_thuc').value;
         const filesInput = document.getElementById('inputGroupFile01');
@@ -373,12 +373,10 @@
 
         const missingField = !ten_voucher ? 'Tên voucher' :
           !ma_voucher ? 'Mã voucher' :
-            !ten_voucher ? 'Tên voucher':
-            !gia_tri ? 'Giá trị' :
+            !ten_voucher ? 'Tên voucher' :
               !diem ? 'Điểm' :
                 !ngay_ket_thuc ? 'Ngày kết thúc' :
-                    !gia_tri ? 'Giá trị' :
-                      !filesInput.files.length ? 'Ảnh' :
+                  !filesInput.files.length ? 'Ảnh' :
                     null;
 
         if (missingField) {
@@ -409,7 +407,6 @@
           formData.append('mo_ta', mo_ta);
           formData.append('ten_voucher', ten_voucher);
           formData.append('ma_voucher', ma_voucher);
-          formData.append('gia_tri', gia_tri);
           formData.append('diem', diem);
           formData.append('ngay_ket_thuc', ngay_ket_thuc);
           formData.append('giam_gia', giam_gia);

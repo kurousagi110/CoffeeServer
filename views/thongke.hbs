@@ -270,6 +270,7 @@
                             <!-- Thêm select cho chọn chi nhánh -->
                             <label for="chiNhanhSelect">Chọn Chi nhánh:</label>
                             <select id="chiNhanhSelect">
+                                <option value="all">Thống kê tất cả chi nhánh</option>
                                 {{#each listChiNhanh}}
                                 <option value="{{this.id}}" data-ten-chi-nhanh="{{this.ten_chi_nhanh}}">
                                     {{this.ten_chi_nhanh}}
