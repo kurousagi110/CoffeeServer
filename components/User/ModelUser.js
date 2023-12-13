@@ -42,7 +42,7 @@ const userSchema = new Schema({
         mo_ta: {type: String},
         ngay_bat_dau: {type: Date},
         ngay_ket_thuc: {type: Date},
-        trang_thai: {type: Number},
+        trang_thai: {type: String},
         hinh_anh: { type: String },
         status: {type: Number},
     }],

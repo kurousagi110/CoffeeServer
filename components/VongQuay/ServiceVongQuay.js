@@ -58,6 +58,7 @@ const themVoucherUser = async (id_user, id_vong_quay) => {
             giam_gia: vongquay.giam_gia,
             gia_tri: vongquay.gia_tri,
             mo_ta: vongquay.mo_ta,
+            trang_thai: vongquay.trang_thai,
             hinh_anh: vongquay.hinh_anh,
             ngay_bat_dau: vongquay.ngay_bat_dau,
             ngay_ket_thuc: vongquay.ngay_ket_thuc,

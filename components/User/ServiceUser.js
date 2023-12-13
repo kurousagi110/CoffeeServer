@@ -454,7 +454,6 @@ const doiMatKhau = async (id_user, mat_khau_cu, mat_khau_moi) => {
                 const salt = await bcrypt.genSalt(10);
                 const hashPassword = await bcrypt.hash(mat_khau_moi, salt);
                 user.mat_khau = hashPassword;
-                user.version += 1;
                 await user.save();
                 return user;
             } else {
