@@ -211,7 +211,7 @@
               <span class="hide-menu">Sản Phẩm</span>
             </a>
           </li>
-                    <li class="sidebar-item">
+          <li class="sidebar-item">
             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/cpanel/loai-san-pham" aria-expanded="false">
               <i class="mdi mdi-cube-outline"></i>
               <span class="hide-menu">Loại Sản Phẩm</span>
@@ -270,7 +270,7 @@
                   <a href="#">Trang chủ</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Thêm Dữ Liệu
+                  Sửa loại sản phẩm
                 </li>
               </ol>
             </nav>
@@ -292,27 +292,15 @@
         <div class="col-12">
           <div class="card card-body">
             <h4 class="card-title">Sửa chi nhánh</h4>
-            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/user/sua-user"
+            <form class="form-horizontal mt-4" enctype="multipart/form-data" action="/cpanel/loai-san-pham/sua-loai-san-pham"
               method="post">
-
               <div class="form-group">
-                <label for="ten_chi_nhanh">Tài khoản</label>
-                <input value="{{user.tai_khoan}}" type="text" id="tai_khoan" name="tai_khoan" class="form-control"
-                  placeholder="" readonly />
+                <label for="ten_loai_san_pham">Tên chi nhánh</label>
+                <input value="{{loaiSanPham.ten_loai_san_pham}}" type="text" id="ten_loai_san_pham" name="ten_loai_san_pham"
+                  class="form-control" placeholder="" />
               </div>
 
-              <div class="form-group">
-                <label for="mat_khau">Mật khẩu</label>
-                <input type="password" id="mat_khau" name="mat_khau" class="form-control" placeholder="" />
-              </div>
-
-              <div class="form-group">
-                <label for="re_mat_khau">Nhập lại mật khẩu</label>
-                <input type="password" id="re_mat_khau" name="re_mat_khau" class="form-control" placeholder="" />
-              </div>
-
-              <input type="hidden" id="id" name="id" value="{{user.id_user}}">
-
+              <input type="hidden" id="id" name="id" value="{{loaiSanPham._id}}">
 
               <div style="width: 100%; height:100%; display: flex; justify-content: center; align-items: center;">
                 <button type="button" onclick="validateAndSubmit()" class="btn btn-primary"
@@ -358,36 +346,14 @@
     // Validate the form data here
     showLoading();
 
-    const tai_khoan = document.getElementById('tai_khoan').value;
-    const mat_khau = document.getElementById('mat_khau').value;
-    const re_mat_khau = document.getElementById('re_mat_khau').value;
+    const ten_loai_san_pham = document.getElementById('ten_loai_san_pham').value;
     const id = document.getElementById('id').value;
 
-    const missingField = !tai_khoan ? 'Tài khoản' :
-      !mat_khau ? 'Mật khẩu' :
-        !re_mat_khau ? 'Nhập lại mật khẩu' :
-            null;
-
-    if (missingField) {
-      const result = await Swal.fire({
-        icon: 'error', // Corrected the icon to 'error'
-        title: 'Oops...',
-        text: `Bạn hãy nhập ${missingField}, không được để trống.`,
-        allowOutsideClick: false
-      });
-
-      if (result.isConfirmed) {
-        hideLoading();
-        return;
-      }
-    }
-
-
-    if (mat_khau != re_mat_khau) {
+    if (!ten_loai_san_pham) {
       const result = await Swal.fire({
         icon: 'Lỗi',
         title: 'Oops...',
-        text: 'Mật khẩu không trùng nhau.',
+        text: 'Bạn hãy nhập đầy đủ không được để trống.',
         allowOutsideClick: false, // Prevent clicking outside the modal to close it
       });
 
@@ -399,7 +365,7 @@
 
     // Show confirmation dialog
     const confirmationResult = await Swal.fire({
-      title: 'Bạn có chắc chắn muốn đổi mật khẩu admin chi nhánh này?',
+      title: 'Bạn có chắc chắn muốn sửa chi nhánh này?',
       showDenyButton: true,
       confirmButtonText: 'Xác nhận',
       denyButtonText: 'Chỉnh sửa',
@@ -408,14 +374,13 @@
     if (confirmationResult.isConfirmed) {
       // Prepare JSON data
       const chiNhanhData = {
-        tai_khoan: tai_khoan,
-        mat_khau: mat_khau,
+        ten_loai_san_pham: ten_loai_san_pham,
       };
       const jsonData = JSON.stringify(chiNhanhData);
 
       // Submit the form data as JSON
       try {
-        const response = await fetch(`/cpanel/user/sua-user/${id}`, {
+        const response = await fetch(`/cpanel/loai-san-pham/sua-loai-san-pham/${id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -432,10 +397,10 @@
             timer: 0,
           });
 
-          window.location.href = '/cpanel/user';
+          window.location.href = '/cpanel/loai-san-pham';
         } else {
           hideLoading();
-          Swal.fire('Lỗi', 'Lỗi ', 'error');
+          Swal.fire('Lỗi', 'Tên chi nhánh bị trùng', 'error');
         }
       } catch (error) {
         hideLoading();

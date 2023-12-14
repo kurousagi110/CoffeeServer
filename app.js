@@ -33,6 +33,7 @@ var voucherCpanelRouter = require('./routes/cpanel/VoucherCpanel');
 var userCpanelRouter = require('./routes/cpanel/UserCpanel');
 var taiKhoanCpanelRouter = require('./routes/cpanel/TaiKhoanCpanel');
 var thongKeCpanelRouter = require('./routes/cpanel/ThongKeCpanel');
+var loaiSanPhamCpanelRouter = require('./routes/cpanel/LoaiSanPhamCpanel');
 
 var app = express();
 
@@ -96,6 +97,7 @@ app.use('/cpanel/voucher', voucherCpanelRouter);
 app.use('/cpanel/user', userCpanelRouter);
 app.use('/cpanel/tai-khoan', taiKhoanCpanelRouter);
 app.use('/cpanel/thong-ke', thongKeCpanelRouter);
+app.use('/cpanel/loai-san-pham', loaiSanPhamCpanelRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

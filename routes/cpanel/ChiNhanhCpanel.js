@@ -15,18 +15,26 @@ const {
 
 //hien thi trang chi nhanh
 router.get("/", [AuthenWeb], async (req, res) => {
-  let listChiNhanh = await chiNhanhController.layDanhSachChiNhanh();
-  let stt = 1;
+  try {
+    let listChiNhanh = await chiNhanhController.layDanhSachChiNhanh();
+    let stt = 1;
     for (let i = 0; i < listChiNhanh.length; i++) {
-        listChiNhanh[i].stt = stt;
-        stt++;
+      listChiNhanh[i].stt = stt;
+      stt++;
     }
-  res.render("chinhanh/chinhanh", { listChiNhanh });
+    res.render("chinhanh/chinhanh", { listChiNhanh });
+  } catch (error) {
+    res.redirect("/cpanel");
+  }
 });
 
 //chuyển trang thêm chi nhánh
 router.get("/them-chi-nhanh", [AuthenWeb], async (req, res) => {
-  res.render("chinhanh/themchinhanh");
+  try {
+    res.render("chinhanh/themchinhanh");
+  } catch (error) {
+    res.redirect("/cpanel");
+  }
 });
 
 //thêm chi nhánh
@@ -37,7 +45,7 @@ router.post("/them-chi-nhanh", [AuthenWeb], async (req, res) => {
     const result = await chiNhanhController.themChiNhanh(ten_chi_nhanh, dia_chi, location);
     console.log('result: ', result);
     if (result) {
-        res.status(200).json({ result: 'success' });
+      res.status(200).json({ result: 'success' });
     } else if (result == false) {
       res.status(300).json({ result: 'fail' });
     }
@@ -68,7 +76,7 @@ router.post("/sua-chi-nhanh/:id", [AuthenWeb], async (req, res) => {
     const result = await chiNhanhController.suaChiNhanh(id, ten_chi_nhanh, dia_chi, location);
 
     if (result) {
-        res.status(200).json({ result: 'success' });
+      res.status(200).json({ result: 'success' });
     } else {
       res.status(300).json({ result: 'fail' });
     }

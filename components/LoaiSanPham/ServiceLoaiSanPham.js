@@ -22,17 +22,18 @@ const layLoaiSanPhamTheoId = async (id_loai_san_pham) => {
 };
 
 //thêm loại sản phẩm
-const themLoaiSanPham = async (ten_loai_san_pham, ma_loai_san_pham) => {
+const themLoaiSanPham = async (ten_loai_san_pham) => {
     try {
 
         const result = await modelLoaiSanPham.findOne({ ten_loai_san_pham: ten_loai_san_pham });
+        const loai_san_phams = await modelLoaiSanPham.find();
         if (result) {
             return false;
         }
         else {
             const loai_san_pham = {
                 ten_loai_san_pham: ten_loai_san_pham,
-                ma_loai_san_pham: ma_loai_san_pham,
+                ma_loai_san_pham: loai_san_phams.length + 1,
                 status: 1,
             }
             const result = await modelLoaiSanPham.create(loai_san_pham);
