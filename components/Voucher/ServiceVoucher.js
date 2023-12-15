@@ -15,7 +15,6 @@ const layDanhSachVoucherUser = async (id_user) => {
         let VoucherHieuLuc = [];
         let VoucherHetHieuLuc = [];
 
-
         for (const item of voucher) {
             if (item.ngay_ket_thuc < currentDate) {
                 if (item.trang_thai !== "Hết hiệu lực") {
@@ -34,18 +33,26 @@ const layDanhSachVoucherUser = async (id_user) => {
                 }
             }
         }
+        
         let userVoucherHieuLuc = [];
         let userVoucherHetHieuLuc = [];
+
         for (let i = 0; i < user.voucher_user.length; i++) {
-            const item = user.voucher_user[i];
-            if (item.status > 0) {
-                userVoucherHieuLuc.push(item);
+            const userVoucher = user.voucher_user[i];
+
+            if (userVoucher.status > 0) {
+                userVoucherHieuLuc.push(userVoucher);
             } else {
-                userVoucherHetHieuLuc.push(item);
+                userVoucherHetHieuLuc.push(userVoucher);
+                
+                // Remove from VoucherHieuLuc if conditions match
+                const indexToRemove = VoucherHieuLuc.findIndex(voucher => voucher._id.toString() === userVoucher.id_voucher.toString() && userVoucher.status === 0);
+                
+                if (indexToRemove !== -1) {
+                    VoucherHieuLuc.splice(indexToRemove, 1);
+                }
             }
         }
-        // const userVoucherHieuLuc = user.voucher_user.filter((item) => item.status > 0 && !item.diem);
-        // const userVoucherHetHieuLuc = user.voucher_user.filter((item) => item.status < 1 && !item.diem);
 
         // Ghép lại thành VoucherHieuLuc và VoucherHetHieuLuc
         VoucherHieuLuc.push(...userVoucherHieuLuc);
@@ -54,7 +61,7 @@ const layDanhSachVoucherUser = async (id_user) => {
         VoucherHieuLuc.sort((a, b) => {
             return a.ngay_ket_thuc - b.ngay_ket_thuc;
         });
-        console.log(VoucherHieuLuc);
+
         return {
             VoucherHieuLuc,
             VoucherHetHieuLuc,
@@ -210,9 +217,17 @@ const doiDiemThanhVoucher = async (id_user, id_voucher) => {
 // sử dụng voucher
 const suDungVoucher = async (id_user, id_voucher) => {
     try {
-        const voucher = await modelVoucher.findById(id_voucher);
+        console.log("id_user" + id_user);
+        console.log("id_voucher" + id_voucher);
+        let voucher;
+        voucher = await modelVoucher.findById(id_voucher);
+        console.log("voucher 1111" + voucher);
+        if (!voucher) {
+            voucher = await modelUser.findOne({ "voucher_user._id": id_voucher }, { "voucher_user.$": 1 });
+            console.log("voucher" + voucher);
+        }
         const user = await modelUser.findById(id_user);
-        console.log(voucher);
+        console.log("user" + user);
         if (voucher.trang_thai === "Hết hiệu lực") {
             return false;
         }

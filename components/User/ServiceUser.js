@@ -545,6 +545,7 @@ const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_th
                 tai_khoan: tai_khoan,
                 mat_khau: hashPassword,
                 ho_ten: ho_ten,
+                avatar: "https://public-coffeelove.s3.ap-southeast-1.amazonaws.com/public/Untitled%20design.png",
                 email: email,
                 so_dien_thoai: so_dien_thoai,
                 dia_chi: [],
@@ -616,7 +617,7 @@ const loginEmail = async (email, avatar, ho_ten) => {
             const ma_khach_hang = "CL" + dem.toString().padStart(9, '0');
             let user1 = await userModel.create({
                 email: email,
-                avatar: avatar,
+                avatar: avatar || "https://public-coffeelove.s3.ap-southeast-1.amazonaws.com/public/Untitled%20design.png",
                 tai_khoan: "",
                 mat_khau: "0000",
                 ho_ten: ho_ten,

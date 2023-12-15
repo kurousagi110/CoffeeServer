@@ -48,7 +48,7 @@ router.get('/lay-danh-sach-voucher', async (req, res) => {
             });
         }else{
             res.status(200).json({
-                trang_thai : true,
+                trang_thai : false,
                 message: 'Lấy danh sách voucher thất bại',
             });
         }
@@ -74,7 +74,7 @@ router.get('/lay-danh-sach-voucher-doi-diem',AuthenToken, async (req, res) => {
             });
         }else{
             res.status(200).json({
-                trang_thai : true,
+                trang_thai : false,
                 message: 'Lấy danh sách voucher thất bại',
             });
         }
@@ -101,7 +101,7 @@ router.get('/lay-thong-tin-voucher/:id_voucher',AuthenToken, async (req, res) =>
             });
         }else{
             res.status(200).json({
-                trang_thai : true,
+                trang_thai : false,
                 message: 'Lấy thông tin voucher thất bại',
             });
         }
@@ -128,7 +128,7 @@ router.post('/doi-diem-thanh-voucher',AuthenToken, async (req, res) => {
             });
         }else{
             res.status(200).json({
-                trang_thai : true,
+                trang_thai : false,
                 message: 'Đổi điểm thất bại',
             });
         }
@@ -155,7 +155,7 @@ router.post('/su-dung-voucher',AuthenToken, async (req, res) => {
             });
         }else{
             res.status(200).json({
-                trang_thai : true,
+                trang_thai : false,
                 message: 'Sử dụng voucher thất bại',
             });
         }
@@ -181,7 +181,7 @@ router.post('/them-voucher',AuthenToken, async (req, res) => {
             });
         }else{
             res.status(200).json({
-                trang_thai : true,
+                trang_thai : false,
                 message: 'Thêm voucher thất bại',
             });
         }

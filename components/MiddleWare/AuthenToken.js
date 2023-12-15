@@ -28,10 +28,8 @@ function AuthenToken(req, res, next) {
 
         // Check user.version against the database
         try {
-            console.log('user:', user);
             const foundUser = await User.findOne({ tai_khoan: user.username });
             const foundEmail = await User.findOne({ email: user.username });
-            console.log('foundUser:', foundUser);
             if (!foundUser && !foundEmail) {
                 return res.status(401).json({ message: 'User not found' });
             }

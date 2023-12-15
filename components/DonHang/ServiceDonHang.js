@@ -519,7 +519,8 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
         if (!donHang) {
             return 100;
         }
-        if (donHang.danh_gia) {
+
+        if (donHang.so_sao !== null) {
             return 10;
         }
         if (donHang.ma_trang_thai === 4 || donHang.ma_trang_thai === 5) {
@@ -527,6 +528,7 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
             ma_trang_thai_4.setHours(ma_trang_thai_4.getHours() + 7);
             donHang.so_sao = so_sao;
             donHang.danh_gia = danh_gia;
+
             donHang.hinh_anh_danh_gia = hinh_anh_danh_gia;
             donHang.email = email;
             donHang.ten_user = ten_user;
@@ -538,6 +540,11 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
                 await donHang.save();
             for (let i = 0; i < donHang.san_pham.length; i++) {
                 const sanPham = await modelSanPham.findById(donHang.san_pham[i].id_san_pham);
+                console.log("SanPham" + sanPham);
+                if (!sanPham) {
+                    return 1000;
+                }
+                console.log("SanPhamdanhgia" + sanPham.danh_gia);
                 sanPham.danh_gia.push({
                     so_sao: so_sao,
                     danh_gia: danh_gia,
@@ -555,7 +562,6 @@ const danhGia = async (id_don_hang, so_sao, danh_gia, hinh_anh_danh_gia, email, 
                 const sao = tong_sao / sanPham.danh_gia.length;
                 sanPham.tong_sao = sao.toFixed(2);
                 await sanPham.save();
-                console.log(sanPham);
             }
             return donHang;
         } else {
