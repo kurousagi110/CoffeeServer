@@ -543,7 +543,7 @@ router.post("/dang-ky-username", async (req, res, next) => {
     } else {
       res
         .status(200)
-        .json({ trang_thai: false, message: "Tài khoản bị trùng" });
+        .json({ trang_thai: false, message: "Tài khoản hoặc email bị trùng" });
     }
   } catch (error) {
     res.status(400).json({ trang_thai: false, message: error.message });

@@ -105,7 +105,7 @@ const themDonHangOffline = async (
         }
 
         // Find the user data
-        const user = await modelUser.findOne({ ma_khach_hang: ma_khach_hang });
+        const user = await modelUser.findOne({ _id: ma_khach_hang });
 
         const duLieu = {
             id_user: user._id,
@@ -464,7 +464,7 @@ const capNhatTrangThai = async (id_don_hang, ma_trang_thai) => {
                 };
 
                 user.tich_diem += donHang.so_diem_tich_luy;
-                user.doi_diem = doi_diem;
+                user.doi_diem.push(doi_diem);
                 user.diem_tich_luy += donHang.so_diem_tich_luy;
                 user.diem_thanh_vien += donHang.so_diem_tich_luy;
 

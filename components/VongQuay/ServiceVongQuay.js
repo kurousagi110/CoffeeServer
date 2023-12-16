@@ -9,7 +9,7 @@ const suDungVongQuay = async (id_user) => {
         if (!user) {
             return false;
         }
-        if (user.diem < 100) {
+        if (user.tich_diem < 100) {
             return false;
         }
         user.tich_diem = user.tich_diem - 100;

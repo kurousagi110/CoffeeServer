@@ -104,17 +104,7 @@ const loginAdminChiNhanh = async (tai_khoan, mat_khau) => {
 const dangKyAdminChiNhanh = async (tai_khoan, mat_khau, id_chi_nhanh) => {
     try {
         const result = await userModel.findOne({ tai_khoan: tai_khoan });
-        if (result & result.status == 10) {
-            return false;
-        } else if (result & result.status == 0) {
-            const salt = await bcrypt.genSalt(10);
-            const hashPassword = await bcrypt.hash(mat_khau, salt);
-            result.mat_khau = hashPassword;
-            result.status = 10;
-            await result.save();
-            return result;
-        }
-        else {
+        if (!result) {
             const chi_nhanh = await chiNhanhModel.findOne({ _id: id_chi_nhanh });
             if (!chi_nhanh) {
                 return false;
@@ -137,6 +127,16 @@ const dangKyAdminChiNhanh = async (tai_khoan, mat_khau, id_chi_nhanh) => {
                 version: 1,
             });
             return user;
+        }
+        if (result && result.status == 10) {
+            return false;
+        } else if (result & result.status == 0) {
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(mat_khau, salt);
+            result.mat_khau = hashPassword;
+            result.status = 10;
+            await result.save();
+            return result;
         }
     } catch (error) {
         console.log('Lỗi tại dangKyAdminChiNhanh service: ', error)
@@ -529,6 +529,9 @@ const dangNhapBangSoDienThoai = async (so_dien_thoai, mat_khau) => {
 const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_thoai) => {
     try {
         const result = await userModel.findOne({ tai_khoan: tai_khoan });
+        if (result.email == email) {
+            return false;
+        }
         if (email) {
             sendOTPThongBao(email, mat_khau, tai_khoan);
         }
@@ -572,7 +575,7 @@ const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_th
 const dangNhapBangUsername = async (tai_khoan, mat_khau) => {
     try {
         const user = await userModel.findOne({ tai_khoan: tai_khoan });
-        if(user.status == 0){
+        if (user.status == 0) {
             return 10;
         }
         if (user) {
@@ -598,8 +601,8 @@ const loginEmail = async (email, avatar, ho_ten) => {
     try {
         let user = await userModel.findOne({ email: email });
         await user.save();
-        
-        if(user.status == 0){
+
+        if (user.status == 0) {
             return 10;
         }
         console.log(user);

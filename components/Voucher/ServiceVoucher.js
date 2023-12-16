@@ -167,6 +167,11 @@ const doiDiemThanhVoucher = async (id_user, id_voucher) => {
     try {
         const user = await modelUser.findById(id_user);
         const checkVoucher = await modelVoucher.findById(id_voucher);
+        for(let i = 0; i < user.voucher_user.length; i++){
+            if(user.voucher_user[i].id_voucher === id_voucher){
+                return false;
+            }
+        }
         let doiDiemDate = new Date();
         doiDiemDate.setHours(doiDiemDate.getHours() + 7);
         console.log(checkVoucher);
