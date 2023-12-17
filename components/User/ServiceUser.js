@@ -555,11 +555,7 @@ const dangKyBangUsername = async (
   try {
     const result = await userModel.findOne({ tai_khoan: tai_khoan });
     const emai = await userModel.findOne({ email: email });
-    if (emai) {
-      return false;
-    }
-
-    if (result) {
+    if (result || emai) {
       return false;
     } else {
       const count = await userModel.countDocuments({});
@@ -590,11 +586,16 @@ const dangKyBangUsername = async (
         version: 1,
       });
 
+      const id = await userModel.findOne({ tai_khoan: tai_khoan });
+      console.log("User service dangKyBangUsername: ", id);
+      let ketqua = id._id.toString();
+      console.log("ket qua: ", ketqua);
       //create new notification
       const notification = await ModelNotification.create({
-        id_user: result._id,
+        id_user: ketqua,
         notification: [],
       });
+      console.log("notifications  : ", notification);
       if (email) {
         sendOTPThongBao(email, mat_khau, tai_khoan);
       }
