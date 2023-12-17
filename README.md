@@ -1,8 +1,9 @@
 This is the link test API: https://www.postman.com/coffeelove/workspace/coffee-love/collection/25672379-f967dc6f-aba0-4bef-99eb-15b6e717df79?action=share&creator=25672379
 
-Step 1: ![image](https://github.com/kurousagi110/CoffeeServer/assets/110773925/a08e33f4-84ee-4d78-93f2-d7505d1511a3)
+Step 1: using API dang nhap bang username and get Token 
+![image](https://github.com/kurousagi110/CoffeeServer/assets/110773925/a08e33f4-84ee-4d78-93f2-d7505d1511a3)
 
-using API dang nhap bang username and get Token 
+
 
 Step 2: copy the token and use it at Bearer Token
 ![image](https://github.com/kurousagi110/CoffeeServer/assets/110773925/4ae6d993-d198-4860-b7ee-042d40c37473)
