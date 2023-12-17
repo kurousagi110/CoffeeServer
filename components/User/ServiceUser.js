@@ -554,12 +554,11 @@ const dangKyBangUsername = async (
 ) => {
   try {
     const result = await userModel.findOne({ tai_khoan: tai_khoan });
-    if (result && result.email === email) {
+    const emai = await userModel.findOne({ email: email });
+    if (emai) {
       return false;
     }
-    if (email) {
-      sendOTPThongBao(email, mat_khau, tai_khoan);
-    }
+
     if (result) {
       return false;
     } else {
@@ -596,7 +595,9 @@ const dangKyBangUsername = async (
         id_user: result._id,
         notification: [],
       });
-
+      if (email) {
+        sendOTPThongBao(email, mat_khau, tai_khoan);
+      }
       return user;
     }
   } catch (error) {
