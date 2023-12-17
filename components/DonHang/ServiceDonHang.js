@@ -103,10 +103,10 @@ const themDonHangOffline = async (
         if (ma_khach_hang === "") {
             ma_khach_hang = id_chi_nhanh;
         }
-
+        console.log("ma_khach_hang" + ma_khach_hang);
         // Find the user data
-        const user = await modelUser.findOne({ _id: ma_khach_hang });
-
+        const user = await modelUser.findOne({ ma_khach_hang: ma_khach_hang });
+        console.log("user" + user);
         const duLieu = {
             id_user: user._id,
             id_chi_nhanh: id_chi_nhanh,
@@ -176,7 +176,7 @@ const themDonHangOffline = async (
             } else if (diem_thanh_vien < 5000) {
                 user.hang_thanh_vien = "Hạng kim cương";
             } else {
-                user.hang_thanh_vien = "Khách hàng VIP";
+                user.hang_thanh_vien = "Hạng kim cương";
             }
 
             await Promise.all([user.save(), donHang.save()]);

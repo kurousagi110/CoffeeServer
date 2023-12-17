@@ -434,7 +434,7 @@ const suaThongTinUser = async (id_user, ho_ten, avatar, email, so_dien_thoai, de
             user.avatar = avatar || user.avatar;
             user.email = email || user.email;
             user.so_dien_thoai = so_dien_thoai || user.so_dien_thoai;
-            user.device_token = device_token || user.device_token;
+            user.device_token = device_token || ""
             await user.save();
             return user;
         }
@@ -529,7 +529,7 @@ const dangNhapBangSoDienThoai = async (so_dien_thoai, mat_khau) => {
 const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_thoai) => {
     try {
         const result = await userModel.findOne({ tai_khoan: tai_khoan });
-        if (result.email == email) {
+        if (result && result.email === email) {
             return false;
         }
         if (email) {

@@ -578,7 +578,7 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
     result_san_pham.mo_ta = san_pham.mo_ta || result_san_pham.mo_ta;
     result_san_pham.size = size || result_san_pham.size;
     result_san_pham.loai_san_pham = san_pham.loai_san_pham || result_san_pham.loai_san_pham;
-    result_san_pham.hinh_anh_sp = san_pham.hinh_anh_sp || result_san_pham.hinh_anh_sp;
+    result_san_pham.hinh_anh_sp = san_pham.hinh_anh_sp === "" ? result_san_pham.hinh_anh_sp : san_pham.hinh_anh_sp;
     await result_san_pham.save();
     return result_san_pham;
 
