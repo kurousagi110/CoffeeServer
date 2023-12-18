@@ -71,7 +71,7 @@ const danhSachDanhGiaTheoSanPham = async (id_san_pham) => {
 //danh sách sản phẩm đánh giá tốt nhất giới hạn 10 sản phẩm
 const danhSachSanPhamDanhGiaTotNhat = async () => {
   try {
-    const san_pham = await sanPhamModel.find({status : 1 }).sort({ tong_sao: -1 }).limit(5);
+    const san_pham = await sanPhamModel.find({ status: 1 }).sort({ tong_sao: -1 }).limit(5);
     return san_pham;
   } catch (error) {
     console.log("Lỗi tại danhSachSanPhamDanhGiaTotNhat service: ", error);
@@ -83,7 +83,7 @@ const danhSachSanPhamDanhGiaTotNhat = async () => {
 //trả về sản phẩm theo list category
 const timKiemSanPhamTheoListCategory = async () => {
   try {
-    const san_pham = await sanPhamModel.find({status : 1});
+    const san_pham = await sanPhamModel.find({ status: 1 });
     const result = [];
 
     san_pham.forEach((item) => {
@@ -133,7 +133,7 @@ const timKiemSanPham = async (ten_san_pham) => {
       .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
       .replace(/\s+/g, ""); // Remove spaces
 
-    const all_products = await sanPhamModel.find({status : 1});
+    const all_products = await sanPhamModel.find({ status: 1 });
     const tat_ca_san_pham = all_products.map((item) => {
       return { ...item._doc };
     });
@@ -187,7 +187,7 @@ const timKiemSanPham = async (ten_san_pham) => {
 //lọc sản phẩm theo giá từ thấp đến cao
 const locSanPhamTheoGiaTuThapDenCao = async () => {
   try {
-    const san_pham = await sanPhamModel.find({status:1}).sort({ gia: 1 });
+    const san_pham = await sanPhamModel.find({ status: 1 }).sort({ gia: 1 });
     return san_pham;
   } catch (error) {
     console.log("Lỗi tại locSanPhamTheoGiaTuThapDenCao service: ", error);
@@ -208,7 +208,7 @@ const getSanPhamById = async (id_san_pham) => {
 //get sản phẩm giảm giá
 const getSanPhamGiamGia = async () => {
   try {
-    const san_pham = await sanPhamModel.find({ check_gia_giam: true ,status : 1 });
+    const san_pham = await sanPhamModel.find({ check_gia_giam: true, status: 1 });
     return san_pham;
   } catch (error) {
     console.log("Lỗi tại getSanPhamGiamGia service: ", error);
@@ -287,7 +287,7 @@ const getAllSanPham = async () => {
       }
     }
     // Return all products
-    return await sanPhamModel.find({ status: 1});
+    return await sanPhamModel.find({ status: 1 });
   } catch (error) {
     console.error("Error in getAllSanPham service:", error);
     return false;
@@ -564,6 +564,13 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
     let size = [];
     for (let i = 0; i < san_pham.size.length; i++) {
 
+      let select = false;
+      if (san_pham.size[i].ten_size === "M") {
+        select = true;
+        check = true;
+      } else {
+        select = false;
+      }
       size.push({
         ten_size: san_pham.size[i].ten_size,
         gia: san_pham.size[i].gia,
@@ -571,8 +578,12 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
         gia_da_giam:
           san_pham.size[i].gia -
           (san_pham.size[i].gia * san_pham.size[i].giam_gia) / 100,
-        isSelected: san_pham.size[i].isSelected,
+        isSelected: select,
       });
+
+    }
+    if (!check) {
+      size[0].isSelected = true;
     }
     result_san_pham.ten_san_pham = san_pham.ten_san_pham || result_san_pham.ten_san_pham;
     result_san_pham.mo_ta = san_pham.mo_ta || result_san_pham.mo_ta;
