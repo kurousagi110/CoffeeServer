@@ -41,7 +41,7 @@ const themVoucherUser = async (id_user, id_vong_quay) => {
         if (vongquay.diem > 0) {
             let themVoucherDate = new Date();
             themVoucherDate.setHours(themVoucherDate.getHours() + 7);
-            user.diem = user.diem + vongquay.diem;
+            user.tich_diem = user.tich_diem + vongquay.diem;
             user.doi_diem.push({
                 ngay_doi: themVoucherDate,
                 ten_doi_diem: "Nhận điểm từ vòng quay",

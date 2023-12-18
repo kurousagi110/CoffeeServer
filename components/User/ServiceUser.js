@@ -592,9 +592,11 @@ const dangKyBangUsername = async (
       console.log("ket qua: ", ketqua);
       //create new notification
       const notification = await ModelNotification.create({
+        _id : ketqua,
         id_user: ketqua,
         notification: [],
       });
+      await notification.save();
       console.log("notifications  : ", notification);
       if (email) {
         sendOTPThongBao(email, mat_khau, tai_khoan);
