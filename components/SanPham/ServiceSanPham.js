@@ -561,6 +561,7 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
   try {
     const result_san_pham = await sanPhamModel.findOne({ _id: id_san_pham });
     console.log("san_pham.size: ", san_pham.size);
+    console.log("san_pham: hinh_anh_sp", san_pham.hinh_anh_sp);
     let size = [];
     for (let i = 0; i < san_pham.size.length; i++) {
 
@@ -589,7 +590,7 @@ const suaSanPhamAll = async (id_san_pham, san_pham) => {
     result_san_pham.mo_ta = san_pham.mo_ta || result_san_pham.mo_ta;
     result_san_pham.size = size || result_san_pham.size;
     result_san_pham.loai_san_pham = san_pham.loai_san_pham || result_san_pham.loai_san_pham;
-    result_san_pham.hinh_anh_sp = san_pham.hinh_anh_sp === "" ? result_san_pham.hinh_anh_sp : san_pham.hinh_anh_sp;
+    result_san_pham.hinh_anh_sp = san_pham.hinh_anh_sp.length === 0 ? result_san_pham.hinh_anh_sp : san_pham.hinh_anh_sp;
     await result_san_pham.save();
     return result_san_pham;
 
