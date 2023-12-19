@@ -453,7 +453,7 @@ const suaThongTinUser = async (
       user.avatar = avatar || user.avatar;
       user.email = email || user.email;
       user.so_dien_thoai = so_dien_thoai || user.so_dien_thoai;
-      user.device_token = device_token || "";
+      user.device_token = device_token.length > 0 ? device_token : "";
       await user.save();
       return user;
     }

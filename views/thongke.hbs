@@ -319,17 +319,15 @@
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Ngày bắt đầu không được lớn hơn ngày kết thúc',
-                    showCancelButton: true,
                     cancelButtonText: 'OK',
                     allowOutsideClick: false,
                 });
                 return;
-            } else if (ngayBatDau === 'Invalid Date' || ngayKetThuc === null) {
+            } else if (ngayBatDau === null || ngayKetThuc === null) {
                 await Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Vui lòng chọn ngày bắt đầu và ngày kết thúc',
-                    showCancelButton: true,
                     cancelButtonText: 'OK',
                     allowOutsideClick: false,
                 });
