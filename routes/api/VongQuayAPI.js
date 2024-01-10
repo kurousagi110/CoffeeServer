@@ -89,8 +89,8 @@ router.get('/lay-danh-sach-vong-quay',AuthenToken, async function (req, res, nex
 //http://localhost:3000/api/vong-quay/them-vong-quay
 router.post('/them-vong-quay', async function (req, res, next) {
     try {
-        const { ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh } = req.body;
-        const result = await serviceVongQuay.themVongQuay(ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh );
+        const { ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh, giam_gia } = req.body;
+        const result = await serviceVongQuay.themVongQuay(ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh, giam_gia );
         if (result) {
             res.status(200).json({
                 status: true,
@@ -117,8 +117,8 @@ router.post('/them-vong-quay', async function (req, res, next) {
 //http://localhost:3000/api/vong-quay/cap-nhat-vong-quay
 router.post('/cap-nhat-vong-quay', async function (req, res, next) {
     try {
-        const { id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh } = req.body;
-        const result = await serviceVongQuay.suaVongQuay(id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh);
+        const { id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh, giam_gia } = req.body;
+        const result = await serviceVongQuay.suaVongQuay(id_vong_quay, ten_vong_quay, mo_ta, ten_voucher ,ma_voucher ,diem ,gia_tri, hinh_anh, giam_gia);
         if (result) {
             res.status(200).json({
                 status: true,

@@ -46,8 +46,8 @@ router.get('/lay-loai-san-pham-theo-id/:id_loai_san_pham', async function (req, 
 //http://localhost:3000/api/loai-san-pham/them-loai-san-pham
 router.post('/them-loai-san-pham', async function (req, res, next) {
     try {
-        const { ten_loai_san_pham, ma_loai_san_pham } = req.body;
-        const result = await LoaiSanPhamController.themLoaiSanPham(ten_loai_san_pham, ma_loai_san_pham);
+        const { ten_loai_san_pham } = req.body;
+        const result = await LoaiSanPhamController.themLoaiSanPham(ten_loai_san_pham);
 
         if (result) {
             res.status(200).json({

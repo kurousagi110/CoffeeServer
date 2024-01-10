@@ -22,9 +22,9 @@ const layLoaiSanPhamTheoId = async (id_loai_san_pham) => {
 };
 
 //thêm loại sản phẩm
-const themLoaiSanPham = async (ten_loai_san_pham, ma_loai_san_pham) => {
+const themLoaiSanPham = async (ten_loai_san_pham) => {
     try {
-        const san_pham = await serviceLoaiSanPham.themLoaiSanPham(ten_loai_san_pham, ma_loai_san_pham);
+        const san_pham = await serviceLoaiSanPham.themLoaiSanPham(ten_loai_san_pham);
         if (san_pham) {
             return san_pham;
         }

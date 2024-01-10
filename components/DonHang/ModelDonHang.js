@@ -25,6 +25,7 @@ const schema = new Schema({
             ten_topping: { type: String },
             gia: { type: Number },
         }],
+        hinh_anh_sp: { type: String },
     }],
     ghi_chu: { type: String },
     so_diem_tich_luy: { type: Number },
@@ -33,12 +34,12 @@ const schema = new Schema({
     tong_tien: { type: Number },
     ma_trang_thai: { type: Number },
     ten_trang_thai: { type: String },
-    ngay_cap_nhat_0: { type: String, default: "0" } ,
-    ngay_cap_nhat_1: { type: String, default: "0" } ,
-    ngay_cap_nhat_2: { type: String, default: "0" } ,
-    ngay_cap_nhat_3: { type: String, default: "0" } ,
-    ngay_cap_nhat_4: { type: String, default: "0" } ,
-    ngay_cap_nhat_5: { type: String, default: "0" } ,
+    ngay_cap_nhat_0: { type: Date } ,
+    ngay_cap_nhat_1: { type: Date } ,
+    ngay_cap_nhat_2: { type: Date } ,
+    ngay_cap_nhat_3: { type: Date} ,
+    ngay_cap_nhat_4: { type: Date } ,
+    ngay_cap_nhat_5: { type: Date } ,
     tong_san_pham: { type: Number },
     thanh_tien: { type: Number },
     so_sao: { type: Number },
@@ -48,8 +49,14 @@ const schema = new Schema({
     }],
     email: { type: String },
     ten_user: { type: String },
+    hinh_anh_user: { type: String },
     ngay_danh_gia: { type: Date },
     status: { type: Number },
+    thanh_toan: {
+        ten_thanh_toan: {type: String},
+        ma_thanh_toan: {type: String},
+        trang_thai: {type: Number},
+    }
 });
 
 module.exports = mongoose.models.donhangs || mongoose.model('donhang', schema);

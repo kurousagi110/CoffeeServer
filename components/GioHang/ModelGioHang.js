@@ -12,13 +12,19 @@ const schema = new Schema({
             ten_san_pham: {type: String},
             size : {type: String},
             gia: {type: Number},
+            giam_gia: {type: Number},
+            gia_da_giam: {type: Number},
             so_luong: {type: Number},
             topping: [
                 {
                     ten_topping: {type: String},
                     gia: {type: Number},
                 }
-            ]
+            ],
+            hinh_anh_sp:[{
+                id_hinh_anh_sp: {type: ObjectID},
+                hinh_anh_sp: {type: String},
+            }],
         }
     ]
 });

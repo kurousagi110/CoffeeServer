@@ -1,6 +1,41 @@
 
 const userServices = require('./ServiceUser');
 
+
+
+//login admin chi nhánh
+const loginAdminChiNhanh = async (tai_khoan, mat_khau) => {
+    try {
+        const user = await userServices.loginAdminChiNhanh(tai_khoan, mat_khau);
+        if (user) {
+            return user;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+};
+
+
+
+
+//đăng ký admin chi nhánh
+const dangKyAdminChiNhanh = async (tai_khoan, mat_khau, id_chi_nhanh) => {
+    try {
+        const user = await userServices.dangKyAdminChiNhanh(tai_khoan, mat_khau, id_chi_nhanh);
+        if (user) {
+            return user;
+        }
+    } catch (error) {
+        throw error;
+    }
+    return false;
+
+}
+
+
+
+
 //thêm lịch sử tìm kiếm
 const themLichSuTimKiem = async (id_user, tu_khoa) => {
     try {
@@ -80,9 +115,9 @@ const chinhDiaChiMacDinh = async (id_user, id_dia_chi) => {
     return false;
 };
 //thêm xóa sửa địa chỉ
-const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan) => {
+const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , nguoi_nhan, latitude, longitude) => {
     try {
-        const user = await userServices.themDiaChi(id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan);
+        const user = await userServices.themDiaChi(id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh , nguoi_nhan, latitude, longitude);
         if (user) {
             return user;
         }
@@ -92,9 +127,9 @@ const themDiaChi = async (id_user, ten_dia_chi, so_dien_thoai , so_nha, tinh, ng
     return false;
 };
 
-const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan) => {
+const suaDiaChi = async (id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude) => {
     try {
-        const user = await userServices.suaDiaChi(id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan);
+        const user = await userServices.suaDiaChi(id_user, id_dia_chi, ten_dia_chi, so_dien_thoai , so_nha, tinh, nguoi_nhan,latitude, longitude);
         if (user) {
             return user;
         }
@@ -142,9 +177,9 @@ const layThongTinUser = async (id_user) => {
     return false;
 };
 //sửa thông tin user
-const suaThongTinUser = async (id_user, ho_ten, avatar , email, so_dien_thoai) => {
+const suaThongTinUser = async (id_user, ho_ten, avatar , email, so_dien_thoai, device_token) => {
     try {
-        const user = await userServices.suaThongTinUser(id_user, ho_ten, avatar , email, so_dien_thoai);
+        const user = await userServices.suaThongTinUser(id_user, ho_ten, avatar , email, so_dien_thoai, device_token);
         if (user) {
             return user;
         }
@@ -204,9 +239,9 @@ const dangNhapBangSoDienThoai = async (so_dien_thoai, mat_khau) => {
     return false;
 };
 
-const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten) => {
+const dangKyBangUsername = async (tai_khoan, mat_khau, ho_ten, email, so_dien_thoai) => {
     try {
-        const user = await userServices.dangKyBangUsername(tai_khoan, mat_khau, ho_ten);
+        const user = await userServices.dangKyBangUsername(tai_khoan, mat_khau, ho_ten, email, so_dien_thoai);
         if (user) {
             return user;
         }
@@ -280,10 +315,24 @@ const doiMatKhauOTP = async (email, mat_khau,otp) => {
     }
 }
 
+//lấy thông tin admin chi nhánh
+const layThongTinAdminChiNhanh = async () => {
+    try {
+        const result = await userServices.layThongTinAdminChiNhanh();
+        if (result) {
+            return result;
+        }
+        return false;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = { sendOTP, loginEmail, dangNhapBangUsername, 
                     dangKyBangUsername, dangNhapBangSoDienThoai, 
                     dangKyBangSoDienThoai, layThongTinUser, layThongTinTatCaUser, 
                     themDiaChi, suaDiaChi, xoaDiaChi, suaThongTinUser, xoaTaiKhoan, 
                     tichDiem, doiMatKhauOTP, doiMatKhau, suDungDiem, themLichSuTimKiem,
-                    xoaLichSuTimKiem, kiemTraOTP, layLichSuDiem, chinhDiaChiMacDinh
+                    xoaLichSuTimKiem, kiemTraOTP, layLichSuDiem, chinhDiaChiMacDinh,
+                    loginAdminChiNhanh, dangKyAdminChiNhanh, layThongTinAdminChiNhanh
                     };

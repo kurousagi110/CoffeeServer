@@ -31,9 +31,9 @@ const xoaTopping = async (id_user, id_san_pham, size, ten_topping) => {
 
 
 //thêm danh sách giỏ hàng
-const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san_pham, gia, topping) => {
+const themDanhSachGioHang = async (id_user, id_san_pham, size, so_luong, ten_san_pham, topping) => {
     try {
-        const result = await serviceGioHang.themDanhSachGioHang(id_user, id_san_pham, size, so_luong, ten_san_pham, gia, topping);
+        const result = await serviceGioHang.themDanhSachGioHang(id_user, id_san_pham, size, so_luong, ten_san_pham, topping);
         if (result) {
             return result;
         }
@@ -70,9 +70,22 @@ const layDanhSachGioHang = async (id_user) => {
 };
 
 //cập nhật số lượng sản phẩm giỏ hàng
-const capNhatSoLuongSanPhamGioHang = async (id_user, id_san_pham, size, so_luong,topping,gia, ten_san_pham) => {
+const capNhatSoLuongSanPhamGioHang = async (id_user, _id, id_san_pham, size, so_luong,topping) => {
     try {
-        const result = await serviceGioHang.capNhatSoLuongSanPhamGioHang(id_user, id_san_pham, size, so_luong,topping,gia, ten_san_pham);
+        const result = await serviceGioHang.capNhatSoLuongSanPhamGioHang(id_user, _id, id_san_pham, size, so_luong,topping);
+        if (result) {
+            return result;
+        }
+        return false;
+    } catch (error) {
+        throw error;
+    }
+};
+
+//xóa giỏ hàng
+const xoaGioHang = async (id_user) => {
+    try {
+        const result = await serviceGioHang.xoaGioHang(id_user);
         if (result) {
             return result;
         }
@@ -83,4 +96,4 @@ const capNhatSoLuongSanPhamGioHang = async (id_user, id_san_pham, size, so_luong
 };
 
 module.exports = { themDanhSachGioHang, layDanhSachGioHang, xoaSanPhamGioHang, capNhatSoLuongSanPhamGioHang
-                    , themTopping, xoaTopping };
+                    , themTopping, xoaTopping, xoaGioHang };

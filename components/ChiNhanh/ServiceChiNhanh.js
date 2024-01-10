@@ -2,11 +2,11 @@ const modelChiNhanh = require('./ModelChiNhanh');
 
 
 
-
 //lấy danh sách chi nhánh
 const layDanhSachChiNhanh = async () => {
     try {
-        const result = await modelChiNhanh.find();
+        const result = await modelChiNhanh.find({ status: { $ne: 0 } });
+        // Use { status: { $ne: 0 } } to exclude documents where status is 0
         if (result) {
             return result;
         }
@@ -49,11 +49,20 @@ const layChiNhanhTheoTen = async (ten_chi_nhanh) => {
 const themChiNhanh = async (ten_chi_nhanh, dia_chi, location) => {
     try {
         const check = await modelChiNhanh.findOne({ ten_chi_nhanh: ten_chi_nhanh });
-        if (check) {
+        if (check && check.status != 0) {
             return false;
+        } else if (check && check.status == 0) {
+            check.ten_chi_nhanh = ten_chi_nhanh || check.ten_chi_nhanh;
+            check.dia_chi = dia_chi || check.dia_chi;
+            check.location = location || check.location;
+            check.status = 1;
+            await check.save();
+            console.log('check: ', check);
+            return check;
         }
-        const result = await modelChiNhanh.create({ 
-            ten_chi_nhanh, 
+
+        const result = await modelChiNhanh.create({
+            ten_chi_nhanh,
             dia_chi,
             status: 1,
             location: location
@@ -61,7 +70,7 @@ const themChiNhanh = async (ten_chi_nhanh, dia_chi, location) => {
         if (result) {
             return result;
         }
-        
+
         return false;
     } catch (error) {
         console.log('themChiNhanh error: ', error);
@@ -86,7 +95,7 @@ const suaChiNhanh = async (id_chi_nhanh, ten_chi_nhanh, dia_chi, location) => {
         chiNhanh.location = location || chiNhanh.location;
         await chiNhanh.save();
         return chiNhanh;
-      
+
     } catch (error) {
         console.log('suaChiNhanh error: ', error);
         throw error;
@@ -190,7 +199,7 @@ const themAll = async (ten_chi_nhanh, dia_chi, danh_sach_ban, location) => {
             dia_chi: dia_chi,
             ban: [],
             status: 1,
-            location:  location
+            location: location
         };
         danh_sach_ban.forEach((ban) => {
             chiNhanh.ban.push({
@@ -212,6 +221,8 @@ const themAll = async (ten_chi_nhanh, dia_chi, danh_sach_ban, location) => {
     }
 };
 
-module.exports = { layDanhSachChiNhanh, layChiNhanhTheoID, layChiNhanhTheoTen, 
-                    themChiNhanh, suaChiNhanh, xoaChiNhanh, 
-                    themBan, suaBan, xoaBan, themAll };
+module.exports = {
+    layDanhSachChiNhanh, layChiNhanhTheoID, layChiNhanhTheoTen,
+    themChiNhanh, suaChiNhanh, xoaChiNhanh,
+    themBan, suaBan, xoaBan, themAll
+};

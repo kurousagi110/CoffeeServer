@@ -1,3 +1,7 @@
+const { Amplify } = require ('aws-amplify');
+const config = require ('./src/amplifyconfiguration.json');
+Amplify.configure(config);
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -20,7 +24,16 @@ var toppingRouter = require('./routes/api/ToppingAPI');
 var voucherRouter = require('./routes/api/VoucherAPI');
 var vongQuayRouter = require('./routes/api/VongQuayAPI');
 var sanPhamTheoNgayRouter = require('./routes/api/SanPhamTheoNgayAPI');
-
+var sanPhamCpanelRouter = require('./routes/cpanel/SanPhamCpanel');
+var notificationRouter = require('./routes/api/FCMNofitication');
+var chiNhanhCpanelRouter = require('./routes/cpanel/ChiNhanhCpanel');
+var toppingCpanelRouter = require('./routes/cpanel/ToppingCpanel');
+var vongQuayCpanelRouter = require('./routes/cpanel/VongQuayCpanel');
+var voucherCpanelRouter = require('./routes/cpanel/VoucherCpanel');
+var userCpanelRouter = require('./routes/cpanel/UserCpanel');
+var taiKhoanCpanelRouter = require('./routes/cpanel/TaiKhoanCpanel');
+var thongKeCpanelRouter = require('./routes/cpanel/ThongKeCpanel');
+var loaiSanPhamCpanelRouter = require('./routes/cpanel/LoaiSanPhamCpanel');
 
 var app = express();
 
@@ -75,7 +88,16 @@ app.use('/api/topping', toppingRouter);
 app.use('/api/voucher', voucherRouter);
 app.use('/api/vong-quay', vongQuayRouter);
 app.use('/api/san-pham-theo-ngay', sanPhamTheoNgayRouter);
-
+app.use('/cpanel/san-pham', sanPhamCpanelRouter);
+app.use('/api/notification', notificationRouter);
+app.use('/cpanel/chi-nhanh', chiNhanhCpanelRouter);
+app.use('/cpanel/topping', toppingCpanelRouter);
+app.use('/cpanel/vong-quay', vongQuayCpanelRouter);
+app.use('/cpanel/voucher', voucherCpanelRouter);
+app.use('/cpanel/user', userCpanelRouter);
+app.use('/cpanel/tai-khoan', taiKhoanCpanelRouter);
+app.use('/cpanel/thong-ke', thongKeCpanelRouter);
+app.use('/cpanel/loai-san-pham', loaiSanPhamCpanelRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

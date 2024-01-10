@@ -1,0 +1,119 @@
+
+
+<div class="limiter" >
+	<div class="container-login100" style="padding-top: 80px;background-image: url(images/AdobeStock_99836027_Preview.jpeg); background-size: cover; background-repeat: no-repeat; height: 100vh;">
+		<div class="wrap-login100" style="">
+			<div class="login100-form-title" style="background-image: url(images/bg-01.jpg);">
+				<span class="login100-form-title-1">
+					Sign In
+				</span>
+			</div>
+
+			<form class="login100-form validate-form" class="user" action="/login" method="post">
+				<div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+					<span class="label-input100">Username</span>
+					<input class="input100" type="text" name="username" placeholder="Enter username">
+					<span class="focus-input100"></span>
+				</div>
+
+				<div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+					<span class="label-input100">Password</span>
+					<input class="input100" type="password" name="password" placeholder="Enter password">
+					<span class="focus-input100"></span>
+				</div>
+
+				<div class="flex-sb-m w-full p-b-30">
+					<div class="contact100-form-checkbox">
+						<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+						<label class="label-checkbox100" for="ckb1">
+							Remember me
+						</label>
+					</div>
+
+					<div>
+						<a href="#" class="txt1">
+							Forgot Password?
+						</a>
+					</div>
+				</div>
+
+				<div class="container-login100-form-btn">
+					<button class="login100-form-btn" onclick="validateLogin()">
+						Login
+					</button>
+				</div>
+				<div id="errorMessage" class="error-message"></div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+	async function validateLogin() {
+		// Get the form data
+		const username = document.querySelector('input[name="username"]').value;
+		const password = document.querySelector('input[name="password"]').value;
+
+		// Check if username and password are empty
+		if (!username || !password) {
+			// Show a SweetAlert error dialog for empty fields
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Tài khoản hoặc mật khẩu không được để trống',
+			});
+			return; // Stop further processing
+		}
+
+		// Call the login API
+		try {
+			const response = await fetch('/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ username, password }),
+			});
+
+			if (response.status === 200) {
+				// Redirect to the dashboard after successful login
+				location.href = '/cpanel/san-pham';
+			} else {
+				// Handle failed login attempts
+				let errorMessage;
+				switch (response.status) {
+					case 400:
+						errorMessage = 'Tài khoản hoặc mật khẩu không đúng';
+						break;
+					case 401:
+						errorMessage = 'Tài khoản không có quyền truy cập';
+						break;
+					default:
+						errorMessage = 'Có lỗi xảy ra';
+						break;
+				}
+
+				// Display an error dialog for failed login attempts
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: errorMessage,
+					timer: 5000, // Set the timer to 5 seconds
+					showConfirmButton: false, // Hide the confirm button
+					willClose: () => {
+						location.reload(); // Reload the page after the dialog closes
+					},
+				});
+			}
+		} catch (error) {
+			console.error(error);
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Có lỗi xảy ra',
+			});
+		}
+	}
+</script>

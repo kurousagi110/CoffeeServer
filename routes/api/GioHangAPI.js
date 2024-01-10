@@ -4,7 +4,33 @@ const giohangController = require('../../components/GioHang/ControllerGioHang');
 const AuthenToken = require('../../components/MiddleWare/AuthenToken');
 
 
-
+//xóa giỏ hàng
+//http://localhost:3000/api/gio-hang/xoa-gio-hang/:id_user
+router.get('/xoa-gio-hang/:id_user', AuthenToken, async function (req, res, next) {
+    try {
+        const { id_user } = req.params;
+        const result = await giohangController.xoaGioHang(id_user);
+        if (result) {
+            res.status(200).json({
+                status: true,
+                message: 'Xóa giỏ hàng thành công!',
+                result: result
+            });
+        }
+        else {
+            res.status(200).json({
+                status: false,
+                message: 'Xóa giỏ hàng thất bại!',
+                result: []
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            status: false,
+            message: error.message
+        });
+    }
+});
 
 
 //thêm topping
@@ -69,8 +95,8 @@ router.post('/xoa-topping', AuthenToken, async function (req, res, next) {
 //http://localhost:3000/api/gio-hang/them-gio-hang
 router.post('/them-gio-hang', AuthenToken, async function (req, res, next) {
     try {
-        const { id_user, id_san_pham, size, so_luong, ten_san_pham, gia, topping } = req.body;
-        const result = await giohangController.themDanhSachGioHang(id_user, id_san_pham, size, so_luong, ten_san_pham, gia, topping);
+        const { id_user, id_san_pham, size, so_luong, ten_san_pham, topping } = req.body;
+        const result = await giohangController.themDanhSachGioHang(id_user, id_san_pham, size, so_luong, ten_san_pham, topping);
         if (result) {
             res.status(200).json({
                 status: true,
@@ -154,8 +180,8 @@ router.get('/lay-danh-sach-gio-hang/:id_user', AuthenToken, async function (req,
 //http://localhost:3000/api/gio-hang/cap-nhat-gio-hang
 router.post('/cap-nhat-gio-hang', AuthenToken, async function (req, res, next) {
     try {
-        const { id_user, _id, size, so_luong,topping,gia, ten_san_pham } = req.body;
-        const result = await giohangController.capNhatSoLuongSanPhamGioHang(id_user, _id, size, so_luong,topping,gia, ten_san_pham);
+        const { id_user, _id, id_san_pham, size, so_luong,topping } = req.body;
+        const result = await giohangController.capNhatSoLuongSanPhamGioHang(id_user, _id, id_san_pham, size, so_luong,topping);
         if (result) {
             res.status(200).json({
                 status: true,
