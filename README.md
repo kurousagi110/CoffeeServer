@@ -17,7 +17,7 @@ This is the link Cpanel: https://coffee.thaihoa.software/
 
 username is admin
 
-password is admin
+password is 123
 
 You can log in and test my Cpanel
 
