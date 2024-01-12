@@ -12,7 +12,7 @@ Warning: All APIs need Tokens to be able to use them
 
 
 
-This is the link Cpanel: https://coffee.thaihoa.software/
+This is the link Cpanel: https://coffeelove.thaihoa.software/
 ![image](https://github.com/kurousagi110/CoffeeServer/assets/110773925/286e6f50-7f9e-4dee-ac1d-285027873ecd)
 
 username is admin
