@@ -68,7 +68,11 @@ app.listen(PORT, () => {
   console.log('>>>>>>>>>> Server is running on port ' + PORT + ' <<<<<<<<<<');
 });
 
-mongoose.connect('mongodb+srv://hoatrinh14020:KFPqSyMahPWlJ5qV@coffee.zdrgcwk.mongodb.net/?retryWrites=true&w=majority', {
+
+//mongodb+srv://hoatrinh14020:KFPqSyMahPWlJ5qV@coffee.zdrgcwk.mongodb.net/
+
+
+mongoose.connect('mongodb+srv://hoatrinh14020:PapgzQIqiIZachni@coffee.zdrgcwk.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
